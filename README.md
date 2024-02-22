@@ -2,8 +2,7 @@
 
 
 # Screenshots
-![](https://imagizer.imageshack.com/a/img922/3522/l28gY7.gif)
-
+![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGI2cDVvaDFmZHNiMjBqZWM3ZGh5aGQ3MWgyZGhyYnJhYXY1OTltdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ESMzjbFrHfjjZhZSYs/giphy.gif)
 # Overview
 
 Realistic Terrain Generation Plus is a fork of RTG that adds extensive and immersive variety to forests, which vary in tree composition, height, and density. It adds on to RTG's extensive terrain variabiliy, broad navigable rivers and lakes, soaring mountains, rolling hills, and sweeping plains.
