@@ -2,7 +2,7 @@
 
 
 # Screenshots
-![](https://imagizer.imageshack.com/img922/3522/l28gY7.gif)
+![](https://imagizer.imageshack.com/a/img922/3522/l28gY7.gif)
 
 # Overview
 
