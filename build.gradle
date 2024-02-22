@@ -1,0 +1,91 @@
+buildscript {
+    repositories {
+        maven {
+            name = "forge"
+            url = 'https://maven.minecraftforge.net'
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply from: 'build-common.gradle'
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+group = 'org.teamrtg'
+archivesBaseName = "${project.name}-${project.mc_version}"
+version = (project.prerelease != '') ? "${project.mod_version}-${project.prerelease}" : "${project.mod_version}"
+
+repositories {
+    maven { url 'https://maven.minecraftforge.net' } //BiomesOPlenty
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
+    compileOnly "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:${project.bop_version}:deobf"
+}
+
+minecraft {
+    mappings channel: project.mapping_channel, version: project.mapping_version
+    accessTransformer = sourceSets.main.resources.files.find{it.name == 'rtg_at.cfg'}
+    runs {
+        client {
+            taskName 'RTG-Client'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+        }
+        client_nosurfaces {
+            taskName 'RTG-ClientNoSurfaces'
+            parent runs.client
+            property 'rtg.disableSurfaces', 'true'
+        }
+        server {
+            taskName 'RTG-Server'
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        filter tokens: [
+            'version' : project.version as String,
+            'mcversion': project.mc_version as String
+        ], org.apache.tools.ant.filters.ReplaceTokens
+    }
+    duplicatesStrategy = 'include'
+}
+
+def replaced = file("${project.buildDir}/replaced")
+task replaceTokens(type: Copy) {
+    from(sourceSets.main.java) {
+        filter tokens: [
+            'MOD_VERSION' : project.version as String,
+            'API_VERSION' : project.api_version as String,
+            'FORGE_MINVER': project.forge_minver as String,
+            'MOD_DEPS'    : (project.depstring != '') ? project.depstring as String : ''
+        ], org.apache.tools.ant.filters.ReplaceTokens
+    }
+    into replaced
+}
+
+compileJava {
+    source = replaced
+    dependsOn 'replaceTokens'
+}
+
+jar {
+    manifest.attributes([
+        'Implementation-Vendor'   : 'Team-RTG',
+        'Implementation-Title'    : project.name,
+        'Implementation-Version'  : project.version,
+        'Implementation-Timestamp': java.time.OffsetDateTime.now() as String,
+        'FMLAT'                   : 'rtg_at.cfg',
+    ])
+    finalizedBy 'reobfJar'
+}

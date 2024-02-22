@@ -1,0 +1,29 @@
+task cleanOutputs(type: Delete) {
+    def files
+    if (!(files = project.tasks.getByName("compileJava").getOutputs().getFiles()).empty) { delete(files) }
+    if (!(files = project.tasks.getByName("processResources").getOutputs().getFiles()).empty) { delete(files) }
+    if ((files = project.buildDir.toPath().resolve("libs").toFile()).exists()) { delete(files) }
+    doFirst {
+        targetFiles.each {f -> logger.lifecycle "removing: $f.canonicalPath"}
+    }
+}
+
+// log project header during certain tasks
+def dumpProjectInfo = {
+    def name = "Project      : ${project.name}"
+    def ver  = "Version      : ${project.mod_version} (API: ${project.api_version})"
+    def mcver= "MC Version   : ${project.mc_version}"
+    def fver = "Forge Version: ${project.forge_version}"
+    def maps = "Mappings     : ${project.mapping_channel}_${project.mapping_version}"
+    def ts   = "Started at   : ${java.time.OffsetDateTime.now().toString()}"
+    def sep  = new String(new char[10 + ts.length()]).replace('\0', '~')
+    logger.lifecycle "-=[ ${sep} ]=-"
+    logger.lifecycle "-=[     ${name}${(new String(new char[7 + ts.length() - name.length()]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[     ${ver}${(new String(new char[7 + ts.length() - ver.length()]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[     ${mcver}${(new String(new char[7 + ts.length() - mcver.length()]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[     ${fver}${(new String(new char[7 + ts.length() - fver.length()]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[     ${maps}${(new String(new char[7 + ts.length() - maps.length()]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[     ${ts}${(new String(new char[7]).replace('\0', ' '))}]=-"
+    logger.lifecycle "-=[ ${sep} ]=-\n"
+}
+project.gradle.taskGraph.whenReady{dumpProjectInfo.call()}

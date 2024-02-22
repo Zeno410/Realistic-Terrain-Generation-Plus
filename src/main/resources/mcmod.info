@@ -1,0 +1,12 @@
+[{
+  "modid": "rtg",
+  "name": "Realistic Terrain Generation",
+  "description": "Adds a new world type which generates realistic terrain for Overworld biomes.",
+  "version": "@version@",
+  "mcversion": "@mcversion@",
+  "url": "https://github.com/Team-RTG/Realistic-Terrain-Generation",
+  "updateUrl": "",
+  "authorList": ["Team-RTG"],
+  "credits": "Forked from RWG by ted80. OpenSimplex Noise by KdotJPG.",
+  "logoFile": "rtg-logo.png"
+}]
