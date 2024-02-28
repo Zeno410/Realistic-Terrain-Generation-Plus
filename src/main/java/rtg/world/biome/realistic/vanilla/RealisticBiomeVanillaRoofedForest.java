@@ -69,7 +69,7 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeBase {
         decoMushrooms.setRandomType(DecoMushrooms.RandomType.ALWAYS_GENERATE);
         this.addDeco(decoMushrooms);
 
-        TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata(3, 4, 5f, 0.32f, 0.1f);
+        TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata();
         mucronataTree.setLogBlock(BlockUtil.getStateLog(EnumType.DARK_OAK));
         mucronataTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
         mucronataTree.setMaxAllowedObstruction(TreeRTG.ROOFED_FOREST_LIGHT_OBSTRUCTION_LIMIT);

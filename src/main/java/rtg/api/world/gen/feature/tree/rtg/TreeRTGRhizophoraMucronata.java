@@ -61,11 +61,10 @@ public class TreeRTGRhizophoraMucronata extends TreeRTG {
 
         this.minBranches = 3;
         this.maxBranches = 4;
-        this.branchLength = 13f;
+        this.branchLength = 5f;
         this.verStart = 0.32f;
         this.verRand = 0.1f;
     }
-
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
 

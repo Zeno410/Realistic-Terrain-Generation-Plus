@@ -66,6 +66,10 @@ abstract public class DecoVariableTree extends DecoTree {
 		heightNoiseVariability += change;
 	}
 	
+	public int smallestSaplingHeight() {
+		return largestVanillaTree() + 1;
+	}
+	
     @Override
     public void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInfo) {
     	// duped from DecoTree to add debuggers
@@ -192,9 +196,6 @@ abstract public class DecoVariableTree extends DecoTree {
 			if (treesRemaining.allowed(0.7f, rand))  {
 			    new WorldGenShrubRTG(actualHeight,materials.log,materials.leaves,false).generate(world, rand, pos);
 			}
-		}
-		if (treesRemaining.notDone()==false&&treesRemaining.treesSoFar==0) {
-			Logger.info("Empty: Height {} type {} ", actualHeight,this.getClass().getName());
 		}
 	return;
 }

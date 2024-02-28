@@ -3,9 +3,11 @@
 
 # Screenshots
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGI2cDVvaDFmZHNiMjBqZWM3ZGh5aGQ3MWgyZGhyYnJhYXY1OTltdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ESMzjbFrHfjjZhZSYs/giphy.gif)
+
+Pictures from a modded game ([journaled](https://www.minecraftforum.net/forums/minecraft-java-edition/survival-mode/3188970-zenos-improved-generation-journal) on Minecraft Forums) including Geographicraft, Underground Biomes, Serene Seasons, Better Creatures, and Harvestcraft.
 # Overview
 
-Realistic Terrain Generation Plus is a fork of RTG that adds extensive and immersive variety to forests, which vary in tree composition, height, and density. It adds on to RTG's extensive terrain variabiliy, broad navigable rivers and lakes, soaring mountains, rolling hills, and sweeping plains.
+Realistic Terrain Generation Plus is a fork of RTG that adds extensive and immersive variety to forests, which vary in tree composition, height, and density. It adds on to RTG's extensive terrain variability, broad navigable rivers and lakes, soaring mountains, rolling hills, and sweeping plains. The current version of Geographicraft is strongly recommended for increased landscape variety, but RTG+ is still great with vanilla layout.
 
 ## Wiki
 Check out the **[Wiki](https://github.com/Team-RTG/Realistic-Terrain-Generation/wiki)** for an **[FAQ](https://github.com/Team-RTG/Realistic-Terrain-Generation/wiki/FAQ)** and info on:

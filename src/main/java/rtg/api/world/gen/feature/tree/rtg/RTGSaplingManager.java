@@ -15,7 +15,6 @@ public class RTGSaplingManager {
 	public boolean manages(IBlockState sapling) {
 		if (!sapling.getBlock().equals(Blocks.SAPLING)) return false;
 		
-		Logger.info ("{} {}", sapling, Blocks.SAPLING.getDefaultState());
 		if (similar(sapling, Blocks.SAPLING.getDefaultState())) return true;//Oak
 		if (similar(sapling, Blocks.SAPLING.getStateFromMeta(1))) return true;//Spruce
 		if (similar(sapling, Blocks.SAPLING.getStateFromMeta(2))) return true;//Birch
@@ -24,7 +23,7 @@ public class RTGSaplingManager {
 		return false;
 	}
 	
-	public boolean reject2x2(IBlockState sapling) {
+	public boolean rejectIf2x2(IBlockState sapling) {
 		if (similar(sapling, Blocks.SAPLING.getStateFromMeta(1))) return true;//Spruce
 		if (similar(sapling, Blocks.SAPLING.getStateFromMeta(3))) return true;//Jungle
 		if (similar(sapling, Blocks.SAPLING.getStateFromMeta(5))) return true;//Dark Oak

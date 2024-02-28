@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import rtg.api.util.Logger;
 import rtg.RTGConfig;
 
 
@@ -145,7 +146,7 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         }
     }
 
-    @Override
+    /*@Override
     protected boolean isGroundValid(World world, BlockPos trunkPos, boolean sandAllowed) {
 
         int x = trunkPos.getX();
@@ -156,16 +157,24 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         boolean earth = false;
         boolean water = false;
 
+        Logger.info("acceptable");
+        for (IBlockState example: validGroundBlocks) {
+            Logger.info("{}",example.toString());
+        }
+        Logger.info("end");
         for (int c1 = -2; c1 <= 2; c1++) {
             for (int c3 = -2; c3 <= 2; c3++) {
                 for (int c2 = -1; c2 <= 1; c2++) {
                     posTemp = new BlockPos(x + c1, y + c2, z + c3);
                     cb = world.getBlockState(posTemp);
-                    if (this.validGroundBlocks.contains(cb)) {
-                        earth = true;
-                    }
-                    else if (cb == Blocks.WATER.getDefaultState()) {
+                    if (cb == Blocks.WATER.getDefaultState()) {
                         water = true;
+                    } else {
+	                    for (IBlockState example: validGroundBlocks) {
+	                        boolean match = example.equals(cb);
+	                        if (match) earth = true;
+	                        Logger.info("{} {} {}",example.toString(), cb.toString(), match);
+	                    }
                     }
                 }
             }
@@ -176,5 +185,5 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         }
 
         return true;
-    }
+    }*/
 }

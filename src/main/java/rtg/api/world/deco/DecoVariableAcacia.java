@@ -127,6 +127,10 @@ public class DecoVariableAcacia extends DecoVariableTree {
         else if (RTGConfig.enableDebugging()) {
         }
     }
+    
+	public int smallestSaplingHeight() {
+		return largestVanillaTree() - 1;
+	}
 
 	protected WorldGenAbstractTree vanillaTree() {
 		return new WorldGenSavannaTree(false);

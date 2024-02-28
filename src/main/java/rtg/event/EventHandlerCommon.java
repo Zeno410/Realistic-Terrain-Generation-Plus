@@ -85,111 +85,13 @@ public final class EventHandlerCommon
         }
     }
 
-    // TERRAIN_GEN_BUS
-    @SuppressWarnings("deprecation")
-    //@SubscribeEvent
-    //  Deprecated
-    public static void saplingGrowTreeRTG(SaplingGrowTreeEvent event) {
-
-        final World world = event.getWorld();
-
-        // skip if RTG saplings are disabled or this world does not use BiomeProviderRTG
-        if (!RTGConfig.rtgTreesFromSaplings() || !(world.getBiomeProvider() instanceof BiomeProviderRTG)) {
-            Logger.debug("[SaplingGrowTreeEvent] Aborting: RTG trees are disabled, or not an RTG dimension");
-            return;
-        }
-
-        final BlockPos pos = event.getPos();
-        final IBlockState saplingBlock = world.getBlockState(pos);
-        Logger.trace("Handling SaplingGrowTreeEvent in dim: {}, at: {}, for: {}", world.provider.getDimension(), pos, saplingBlock);
-
-        // Are we dealing with a sapling? Sounds like a silly question, but apparently it's one that needs to be asked.
-        if (!(saplingBlock.getBlock() instanceof BlockSapling)) {
-            Logger.debug("[SaplingGrowTreeEvent] Aborting: Sapling is not a sapling block ({})", saplingBlock.getBlock().getClass().getName());
-            return;
-        }
-
-        final Random rand = event.getRand();
-
-        // Should we generate a vanilla tree instead?
-        int chance = RTGConfig.rtgTreeChance();
-        if (rand.nextInt(chance < 1 ? 1 : chance) != 0) {
-            Logger.debug("[SaplingGrowTreeEvent] Aborting RTG tree generation: random chance");
-            return;
-        }
-
-        final IRealisticBiome rtgBiome = RTGAPI.getRTGBiome(world.getBiome(pos));
-        Collection<TreeRTG> biomeTrees = rtgBiome.getTrees();
-
-        if (biomeTrees.isEmpty()) {
-            Logger.debug("[SaplingGrowTreeEvent] Aborting RTG tree generation: No RTG trees to generate in Biome: {}", rtgBiome.baseBiomeResLoc());
-            return;
-        }
-
-        // First, let's get all of the trees in this biome that match the sapling on the ground.
-        List<TreeRTG> validTrees = biomeTrees.stream()
-            .filter(tree-> saplingBlock.getBlock() == tree.getSaplingBlock().getBlock() &&
-                BlockUtil.getTypeFromSapling(saplingBlock) == BlockUtil.getTypeFromSapling(tree.getSaplingBlock()))
-            .collect(Collectors.toList());
-
-        // Abort if there are no valid trees.
-        if (validTrees.isEmpty()) {
-            Logger.debug("[SaplingGrowTreeEvent] No RTG trees found for sapling, so generating original tree instead");
-            return;
-        }
-
-        // Get a random tree from the list of valid trees.
-        TreeRTG tree = validTrees.get(rand.nextInt(validTrees.size()));
-
-        // Set the trunk size if min/max values have been set.
-        if (tree.getMinTrunkSize() > 0 && tree.getMaxTrunkSize() > tree.getMinTrunkSize()) {
-            tree.setTrunkSize(DecoBase.getRangedRandom(rand, tree.getMinTrunkSize(), tree.getMaxTrunkSize()));
-        }
-
-        // Set the crown size if min/max values have been set.
-        if (tree.getMinCrownSize() > 0 && tree.getMaxCrownSize() > tree.getMinCrownSize()) {
-            tree.setCrownSize(DecoBase.getRangedRandom(rand, tree.getMinCrownSize(), tree.getMaxCrownSize()));
-        }
-
-        int treeHeight = tree.getTrunkSize() + tree.getCrownSize();
-        if (treeHeight < 1) {
-            Logger.debug("[SaplingGrowTreeEvent] Unable to grow RTG tree with no height: {}[logblock={}, leafblock={}, saplingblock={}]",
-                tree.getClass().getSimpleName(), tree.getLogBlock(), tree.getLeavesBlock(), tree.getSaplingBlock());
-            return;
-        }
-
-        if (!BlockUtil.checkVerticalMaterials(BlockUtil.MatchType.ALL_IGNORE_REPLACEABLE, world, pos.up(), treeHeight - 1)) {
-            Logger.debug("[SaplingGrowTreeEvent] Aborting RTG tree generation: not enough space above");
-            return;
-        }
-
-        /*
-         * Set the generateFlag to what it needs to be for growing trees from saplings,
-         * generate the tree, and then set it back to what it was before.
-         *
-         * TODO: Does this affect the generation of normal RTG trees? - Pink
-         */
-        int oldFlag = tree.getGenerateFlag();
-        tree.setGenerateFlag(19);
-        boolean generated = tree.generate(world, rand, pos);
-        tree.setGenerateFlag(oldFlag);
-
-        if (generated) {
-            event.setResult(Event.Result.DENY);
-            // Sometimes we have to remove the sapling manually because some trees grow around it, leaving the original sapling.
-            if (world.getBlockState(pos) == saplingBlock) {
-                world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-            }
-        }
-        Logger.trace("Finished handling SaplingGrowTreeEvent in Biome: {}, with sapling: {}", rtgBiome.baseBiomeResLoc(), saplingBlock);
-    }
  // TERRAIN_GEN_BUS
     @SubscribeEvent
     public static void variableSaplingGrowTreeRTG(SaplingGrowTreeEvent event) {
 
         final World world = event.getWorld();
         
-        Logger.info("trying RTG trees", "");
+        //Logger.info("trying RTG trees", "");
 
         // skip if RTG saplings are disabled or this world does not use BiomeProviderRTG
         if (!RTGConfig.rtgTreesFromSaplings() || !(world.getBiomeProvider() instanceof BiomeProviderRTG)) {
@@ -199,7 +101,7 @@ public final class EventHandlerCommon
 
         final BlockPos pos = event.getPos();
         final IBlockState saplingBlock = world.getBlockState(pos);
-        Logger.trace("Handling SaplingGrowTreeEvent in dim: {}, at: {}, for: {}", world.provider.getDimension(), pos, saplingBlock);
+        //Logger.trace("Handling SaplingGrowTreeEvent in dim: {}, at: {}, for: {}", world.provider.getDimension(), pos, saplingBlock);
 
         // Are we dealing with a sapling? Sounds like a silly question, but apparently it's one that needs to be asked.
         if (!(saplingBlock.getBlock() instanceof BlockSapling)) {
@@ -214,19 +116,17 @@ public final class EventHandlerCommon
         
         RTGSaplingManager saplingManager = new RTGSaplingManager();//not saving this due to sapling growth being so infrequent
         
-
-        Logger.info("managing", "");
         
         if (!saplingManager.manages(saplingBlock)) return;// do nothing if weren't not handling this sapling type
         
         int groupSize = countSaplingGroup(world,pos,saplingBlock);
         
-        Logger.info("group size{}", groupSize);
+        //Logger.info("group size{}", groupSize);
         if (groupSize == 1) return; // lone saplings grow as vanilla
         
         if (groupSize ==4) {
-        	// check for 4x4, which we will hand to vanilla for some trees
-        	if (saplingManager.reject2x2(saplingBlock)) {
+        	// check for 2x2, which we will hand to vanilla for some trees
+        	if (saplingManager.rejectIf2x2(saplingBlock)) {
         		if (is2x2(world,pos,saplingBlock)) return;
         	}
         }
@@ -239,20 +139,20 @@ public final class EventHandlerCommon
         	BlockPos testLocation = direction.moved(pos);
         	int testCount = countSaplingGroup(world,testLocation,saplingBlock);
 
-            Logger.info("test size {} {} {}", testCount, pos, testLocation);
+            //Logger.info("test size {} {} {}", testCount, pos, testLocation);
         	if (testCount > groupSize) {
         		groupSize = testCount;
         		trunkLocation = testLocation;
         	}
         }
 
-        Logger.info("group size{}", groupSize);
+        //Logger.info("group size{}", groupSize);
         
         // Swamp Willow special code
         if (saplingManager.couldBeSwampWillow(saplingBlock)) {
         	if (groupSize == 3) {
             	if (obtuseAngle(world,trunkLocation,saplingBlock)) {
-            		new TreeRTGSalixMyrtilloides().generateSaplings(world, rand, pos);
+            		new TreeRTGSalixMyrtilloides().generate(world, rand, pos);
             		finishGeneration(event,world,trunkLocation,saplingBlock);
             		return;
             	}
@@ -261,30 +161,30 @@ public final class EventHandlerCommon
         
         // Roofed Forest Tree Special Code
         if (saplingManager.darkOak(saplingBlock)) {
-        	if (groupSize == 5) {        
-        		TreeRTG pentandraTree = new TreeRTGCeibaPentandra(13f, 3, 0.32f, 0.1f);;
+        	if (groupSize == 2) {        
+        		TreeRTG pentandraTree = new TreeRTGCeibaPentandra();;
 	            pentandraTree.setLogBlock(BlockUtil.getStateLog(EnumType.DARK_OAK));
 	            pentandraTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
 	            pentandraTree.setMaxAllowedObstruction(TreeRTG.ROOFED_FOREST_LIGHT_OBSTRUCTION_LIMIT);
 	            pentandraTree.setMinTrunkSize(2);
 	            pentandraTree.setMaxTrunkSize(3);
-	            pentandraTree.setMinCrownSize(9);
-	            pentandraTree.setMaxCrownSize(18);
+	            pentandraTree.setMinCrownSize(5);
+	            pentandraTree.setMaxCrownSize(8);
 	            pentandraTree.setNoLeaves(false);
 	            pentandraTree.randomizeTreeSize(rand);
 	            pentandraTree.generate(world, rand, pos);
         		finishGeneration(event,world,trunkLocation,saplingBlock);
         		return;
         	}
-        	if (groupSize == 6) {
-                TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata(3, 4, 13f, 0.32f, 0.1f);
+        	if (groupSize == 3) {
+                TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata();
                 mucronataTree.setLogBlock(BlockUtil.getStateLog(EnumType.DARK_OAK));
                 mucronataTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
                 mucronataTree.setMaxAllowedObstruction(TreeRTG.ROOFED_FOREST_LIGHT_OBSTRUCTION_LIMIT);
                 mucronataTree.setMinTrunkSize(2);
                 mucronataTree.setMaxTrunkSize(3);
-                mucronataTree.setMinCrownSize(9);
-                mucronataTree.setMaxCrownSize(18);
+                mucronataTree.setMinCrownSize(5);
+                mucronataTree.setMaxCrownSize(8);
                 mucronataTree.setNoLeaves(false);
                 mucronataTree.randomizeTreeSize(rand);
                 mucronataTree.generate(world, rand, pos);
@@ -315,7 +215,6 @@ public final class EventHandlerCommon
         }
     	for (Direction direction: Direction.list()) {
     		BlockPos adjacent = direction.moved(trunkLocation);
-    		Logger.info("{} {}", world.getBlockState(adjacent),saplingBlock);
             if (RTGSaplingManager.similar(world.getBlockState(adjacent), saplingBlock)) {
                 world.setBlockState(adjacent, Blocks.AIR.getDefaultState(), 2);
             }
