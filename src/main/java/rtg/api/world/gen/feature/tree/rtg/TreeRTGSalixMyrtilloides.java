@@ -67,8 +67,8 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         for (int i = 0; i < height; i++) {
             this.placeTrunkBlock(world, new BlockPos(x, y + i, z), this.generateFlag, lightTracker);
         }
-        createLeavesAroundBranch(world, rand, x, y + height, z, 3, 2, lightTracker);
         createTrunk(world, rand, x, y, z, lightTracker);
+        createLeavesAroundBranch(world, rand, x, y + height, z, 3, 2, lightTracker);
 
         int dir = rand.nextInt((int) (360f / branches));
         int bl;
@@ -83,16 +83,21 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
             m = false;
 
             while (c < branchLenght) {
-                if (c > branchLenght / 2 && !m) {
-                    m = true;
-                    createLeavesAroundBranch(world, rand, x + (int) (c * xd), y + (int) hd, z + (int) (c * yd), 2, 1, lightTracker);
-                }
                 c++;
                 hd += 0.5f;
 
                 this.placeLogBlock(world,
                     new BlockPos(x + (int) (c * xd), y + (int) hd, z + (int) (c * yd)), this.trunkLog, this.generateFlag, lightTracker
                 );
+            }
+
+            while (c < branchLenght) {
+                if (c > branchLenght / 2 && !m) {
+                    m = true;
+                    createLeavesAroundBranch(world, rand, x + (int) (c * xd), y + (int) hd, z + (int) (c * yd), 2, 1, lightTracker);
+                }
+                c++;
+                hd += 0.5f;
             }
             createLeavesAroundBranch(world, rand, x + (int) (c * xd), y + (int) hd, z + (int) (c * yd), 2, 1, lightTracker);
         }
@@ -114,7 +119,8 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
 
                                 this.placeLeavesBlock(world, new BlockPos(x + i, y + j, z + k), this.leavesBlock, this.generateFlag, lightTracker);
                                 if (j < -(s - 2) && rand.nextInt(3) != 0) {
-                                    createVine(world, rand, x + i, y + j, z + k, lightTracker);
+                                    int distanceFromLog = Math.abs(i)+Math.abs(k)+ Math.abs(j);
+                                    createVine(world, rand, x + i, y + j, z + k, 6 -distanceFromLog, lightTracker);//6-distance is how far leaves can go
                                 }
                             }
                         }
@@ -124,9 +130,9 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         }
     }
 
-    private void createVine(World world, Random rand, int x, int y, int z, SkylightTracker lightTracker) {
+    private void createVine(World world, Random rand, int x, int y, int z, int maxLength, SkylightTracker lightTracker) {
 
-        int r = rand.nextInt(3) + 5;
+        int r = maxLength - rand.nextInt(3);
         for (int i = -1; i > -r; i--) {
             this.placeLeavesBlock(world, new BlockPos(x, y + i, z), this.leavesBlock, this.generateFlag, lightTracker);
         }
