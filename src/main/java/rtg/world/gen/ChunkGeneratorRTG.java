@@ -1,5 +1,6 @@
 package rtg.world.gen;
 
+import org.dimdev.jeid.INewChunk;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +25,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraftforge.fml.common.Loader;
 import rtg.RTG;
 import rtg.RTGConfig;
 import rtg.api.RTGAPI;
@@ -31,6 +33,7 @@ import rtg.api.util.LimitedArrayCacheMap;
 import rtg.api.util.Logger;
 import rtg.api.util.noise.ISimplexData2D;
 import rtg.api.util.noise.SimplexData2D;
+import rtg.api.util.storage.SparseList;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.gen.RTGChunkGenSettings;
@@ -41,6 +44,8 @@ import rtg.world.biome.realistic.vanilla.RealisticBiomeVanillaMesaPlateau;
 import rtg.world.gen.structure.WoodlandMansionRTG;
 
 import javax.annotation.Nullable;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,13 +175,23 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         // store in the in process pile
         Chunk chunk = new Chunk(this.world, primer, cx, cz);
 
-        byte[] abyte1 = chunk.getBiomeArray();
-        for (int i = 0; i < abyte1.length; ++i) {
+        int[] intBiomeArray = new int[256];
+        Arrays.fill(intBiomeArray, -1);
+
+        byte[] byteBiomeArray = new byte[256];
+
+        for (int i = 0; i < intBiomeArray.length; ++i) {
             // Biomes are y-first and terrain x-first
-            byte b = (byte) Biome.getIdForBiome(this.baseBiomesList[this.xyinverted[i]]);
-            abyte1[i] = b;
+            intBiomeArray[i] = Biome.getIdForBiome(this.baseBiomesList[this.xyinverted[i]]);
+            byteBiomeArray[i] = (byte) intBiomeArray[i];
         }
-        chunk.setBiomeArray(abyte1);
+
+        if (Loader.isModLoaded("jeid")) {
+            //noinspection ConstantConditions
+            ((INewChunk) chunk).setIntBiomeArray(intBiomeArray);
+        } else {
+            chunk.setBiomeArray(byteBiomeArray);
+        }
 
         chunk.generateSkylightMap();
 
@@ -526,7 +541,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     private synchronized ChunkLandscape generateLandscape(BiomeProvider biomeProvider, BlockPos blockPos) {
         final ChunkLandscape landscape = new ChunkLandscape();
         getNewerNoise(biomeProvider, blockPos.getX(), blockPos.getZ(), landscape);
-        Biome[] biomes = new Biome[256];
+        Biome[] biomes = new Biome [256];
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 biomes[x * 16 + z] = biomeProvider.getBiome(blockPos.add(x, 0, z));
@@ -537,12 +552,16 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     }
 
     private synchronized void getNewerNoise(final BiomeProvider biomeProvider, final int worldX, final int worldZ, ChunkLandscape landscape) {
-       float[] weightedBiomes = new float[256];
-
+    	List<Float> weightedBiomes = new SparseList<Float>() {{
+	        for (int i = 0; i < 256; i++) {
+	            set(i, 0F);
+	        }
+       }};
         // get area biome map
         for (int x = -sampleSize; x < sampleSize + 5; x++) {
             for (int z = -sampleSize; z < sampleSize + 5; z++) {
-                biomeData[(x + sampleSize) * sampleArraySize + (z + sampleSize)] = Biome.getIdForBiome(biomeProvider.getBiome(new BlockPos(worldX + ((x * 8)), 0, worldZ + ((z * 8)))));
+                biomeData[(x + sampleSize) * sampleArraySize + (z + sampleSize)] =
+                        Biome.getIdForBiome(biomeProvider.getBiome(new BlockPos(worldX + ((x * 8)), 0, worldZ + ((z * 8)))));
             }
         }
 
@@ -556,14 +575,21 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
                         float weight = weightings[mapX * sampleArraySize + mapZ][x * 16 + z];
                         if (weight > 0) {
                             totalWeight += weight;
-                            weightedBiomes[biomeData[mapX * sampleArraySize + mapZ]] += weight;
+                            final int biomeId = biomeData[mapX * sampleArraySize + mapZ];
+                            Float existingWeight = weightedBiomes.get(biomeId);
+                            existingWeight = (existingWeight == null ? 0F : existingWeight) + weight;
+                            weightedBiomes.set(biomeId, existingWeight);
                         }
                     }
                 }
 
                 // normalize biome weights
-                for (int biomeIndex = 0; biomeIndex < weightedBiomes.length; biomeIndex++) {
-                    weightedBiomes[biomeIndex] /= totalWeight;
+                final float finalTotalWeight = totalWeight;
+                for (int i1 = 0; i1 < weightedBiomes.size(); i1++) {
+                    Float weight = weightedBiomes.get(i1);
+                    if (weight != null) {
+                        weightedBiomes.set(i1, weight / finalTotalWeight);
+                    }
                 }
 
                 // combine mesa biomes
@@ -573,19 +599,17 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
 
                 float river = TerrainBase.getRiverStrength(mpos.setPos(worldX + x, 0, worldZ + z), rtgWorld);
                 landscape.river[x * 16 + z] = -river;
-                int mesaBryce = Biome.getIdForBiome(Biomes.MUTATED_MESA);
-                for (int i = 0; i < 256; i++) {
 
-                    if (weightedBiomes[i] > 0f) {
-
-                        landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, weightedBiomes[i], river + 1f) * weightedBiomes[i];
-
-                    	//Logger.info("Biome {}: {}",i,landscape.noise[x * 16 + z]);
-                        // 0 for the next column
-                        weightedBiomes[i] = 0f;
+                for (int i = 0; i < weightedBiomes.size(); i++) {
+                    Float v = weightedBiomes.get(i);
+                    if (v != null) {
+                        if (v > 0F) {
+                            landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, v, river + 1F) * v;
+                            v = 0F;
+                        }
+                        weightedBiomes.set(i, v);
                     }
                 }
-                
             }
         }
 
@@ -593,7 +617,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 BlockPos pos = new BlockPos(worldX + (x - 7) * 8 + 4, 0, worldZ + (z - 7) * 8 + 4);
-                landscape.biome[x * 16 + z] = RTGAPI.getRTGBiome(biomeProvider.getBiome(pos));
+                landscape.biome[x * 16 + z]= RTGAPI.getRTGBiome(biomeProvider.getBiome(pos));
             }
         }
     }

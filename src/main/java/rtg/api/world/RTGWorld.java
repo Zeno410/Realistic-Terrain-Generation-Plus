@@ -12,7 +12,7 @@ import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
+import rtg.RTGConfig;
 import rtg.api.RTGAPI;
 import rtg.api.util.Distribution;
 import rtg.api.util.Logger;
@@ -33,9 +33,9 @@ import rtg.api.world.gen.RTGChunkGenSettings;
 @Mod.EventBusSubscriber(modid = RTGAPI.RTG_MOD_ID)
 public final class RTGWorld {
 
-    public static final float ACTUAL_RIVER_PROPORTION = 150f / 1600f;//This value is also used in BiomeAnalyser#riverAdjusted
+    public static final float ACTUAL_RIVER_PROPORTION = 150f / 1600f * RTGConfig.waterFeatureWidthMultiplier();//This value is also used in BiomeAnalyser#riverAdjusted
     public static final float RIVER_FLATTENING_ADDEND = ACTUAL_RIVER_PROPORTION / (1f - ACTUAL_RIVER_PROPORTION);
-    public static final float RIVER_BOTTOM = 57f;
+    public static final float RIVER_BOTTOM = RTGConfig.riverDepth();
     public static final float LAKE_BOTTOM = 53f;
     private static final double RIVER_LARGE_BEND_SIZE_BASE = 140D;
     private static final double RIVER_SMALL_BEND_SIZE_BASE = 30D;

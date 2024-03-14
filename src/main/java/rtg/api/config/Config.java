@@ -1,29 +1,25 @@
 package rtg.api.config;
 
+import net.minecraftforge.common.config.Configuration;
+import org.apache.commons.lang3.ArrayUtils;
+import rtg.api.config.property.*;
+import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayDouble;
+import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayInteger;
+import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayString;
+import rtg.api.util.Logger;
+
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraftforge.common.config.Configuration;
-import org.apache.commons.lang3.ArrayUtils;
-import rtg.api.config.property.ConfigProperty;
-import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayDouble;
-import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayInteger;
-import rtg.api.config.property.ConfigPropertyArray.ConfigPropertyArrayString;
-import rtg.api.config.property.ConfigPropertyBoolean;
-import rtg.api.config.property.ConfigPropertyFloat;
-import rtg.api.config.property.ConfigPropertyInteger;
-import rtg.api.config.property.ConfigPropertyString;
-import rtg.api.util.Logger;
-
 
 public abstract class Config {
 
     static final String BLOCKSTATE_HELP =
-        Configuration.NEW_LINE + "Syntax : <ResourceLocation> [<IProperty name> = <value>, <IProperty name> = <value>, ...]" +
-            Configuration.NEW_LINE + "Example: minecraft:stone[variant=diorite], or minecraft:stained_glass_pane[color=pink,north=true,east=false,south=true,west=false]" +
-            Configuration.NEW_LINE + "For a list of property names and values, see: https://minecraft.gamepedia.com/Block_states";
+            Configuration.NEW_LINE + "Syntax : <ResourceLocation> [<IProperty name> = <value>, <IProperty name> = <value>, ...]" +
+                    Configuration.NEW_LINE + "Example: minecraft:stone[variant=diorite], or minecraft:stained_glass_pane[color=pink,north=true,east=false,south=true,west=false]" +
+                    Configuration.NEW_LINE + "For a list of property names and values, see: https://minecraft.wiki/w/Java_Edition_data_values/Pre-flattening";
 
     private final File configFile;
     protected List<ConfigProperty> properties = new ArrayList<>();
@@ -110,91 +106,89 @@ public abstract class Config {
                     case INTEGER:
                         ConfigPropertyInteger propInt = (ConfigPropertyInteger) prop;
                         propInt.set(config.getInt(
-                            propInt.getName(),
-                            propInt.getCategory(),
-                            propInt.valueInt,
-                            propInt.minValueInt,
-                            propInt.maxValueInt,
-                            propInt.getDescription()
+                                propInt.getName(),
+                                propInt.getCategory(),
+                                propInt.valueInt,
+                                propInt.minValueInt,
+                                propInt.maxValueInt,
+                                propInt.getDescription()
                         ));
                         break;
 
                     case INTEGER_ARRAY:
                         ConfigPropertyArrayInteger propIntArray = (ConfigPropertyArrayInteger) prop;
                         propIntArray.set(ArrayUtils.toObject(
-                            config.get(
-                                propIntArray.getName(),
-                                propIntArray.getCategory(),
-                                propIntArray.getPrimitives(),
-                                propIntArray.getDescription(),
-                                propIntArray.getMinValue(),
-                                propIntArray.getMaxValue()
-                            ).getIntList()
+                                config.get(
+                                        propIntArray.getName(),
+                                        propIntArray.getCategory(),
+                                        propIntArray.getPrimitives(),
+                                        propIntArray.getDescription(),
+                                        propIntArray.getMinValue(),
+                                        propIntArray.getMaxValue()
+                                ).getIntList()
                         ));
                         break;
 
                     case FLOAT:
                         ConfigPropertyFloat propFloat = (ConfigPropertyFloat) prop;
                         propFloat.set(config.getFloat(
-                            propFloat.getName(),
-                            propFloat.getCategory(),
-                            propFloat.valueFloat,
-                            propFloat.minValueFloat,
-                            propFloat.maxValueFloat,
-                            propFloat.getDescription()
+                                propFloat.getName(),
+                                propFloat.getCategory(),
+                                propFloat.valueFloat,
+                                propFloat.minValueFloat,
+                                propFloat.maxValueFloat,
+                                propFloat.getDescription()
                         ));
                         break;
 
                     case DOUBLE_ARRAY:
                         ConfigPropertyArrayDouble propDoubleArray = (ConfigPropertyArrayDouble) prop;
                         propDoubleArray.set(ArrayUtils.toObject(
-                            config.get(
-                                propDoubleArray.getName(),
-                                propDoubleArray.getCategory(),
-                                propDoubleArray.getPrimitives(),
-                                propDoubleArray.getDescription(),
-                                propDoubleArray.getMinValue(),
-                                propDoubleArray.getMaxValue()
-                            ).getDoubleList()
+                                config.get(
+                                        propDoubleArray.getName(),
+                                        propDoubleArray.getCategory(),
+                                        propDoubleArray.getPrimitives(),
+                                        propDoubleArray.getDescription(),
+                                        propDoubleArray.getMinValue(),
+                                        propDoubleArray.getMaxValue()
+                                ).getDoubleList()
                         ));
                         break;
 
                     case BOOLEAN:
                         ConfigPropertyBoolean propBool = (ConfigPropertyBoolean) prop;
                         propBool.set(config.getBoolean(
-                            propBool.getName(),
-                            propBool.getCategory(),
-                            propBool.valueBoolean,
-                            propBool.getDescription()
+                                propBool.getName(),
+                                propBool.getCategory(),
+                                propBool.valueBoolean,
+                                propBool.getDescription()
                         ));
                         break;
 
                     case STRING:
                         ConfigPropertyString propString = (ConfigPropertyString) prop;
                         propString.set(config.getString(
-                            propString.getName(),
-                            propString.getCategory(),
-                            propString.valueString,
-                            propString.getDescription()
+                                propString.getName(),
+                                propString.getCategory(),
+                                propString.valueString,
+                                propString.getDescription()
                         ));
                         break;
 
                     case STRING_ARRAY:
                         ConfigPropertyArrayString propStringArray = (ConfigPropertyArrayString) prop;
                         propStringArray.set(config.get(
-                            propStringArray.getName(),
-                            propStringArray.getCategory(),
-                            propStringArray.getValues(),
-                            propStringArray.getDescription()
+                                propStringArray.getName(),
+                                propStringArray.getCategory(),
+                                propStringArray.getValues(),
+                                propStringArray.getDescription()
                         ).getStringList());
                         break;
                 }
             }
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             Logger.error("RTG had a problem loading config: {}", configFile);
-        }
-        finally {
+        } finally {
             if (config.hasChanged()) {
                 config.save();
             }

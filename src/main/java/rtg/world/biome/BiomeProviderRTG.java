@@ -5,7 +5,7 @@ import net.minecraft.world.gen.layer.GenLayerRiverMix;
 
 import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
-import rtg.util.ModCompat.Mods;
+import rtg.compat.ModCompat.Mods;
 
 
 public class BiomeProviderRTG extends BiomeProvider {

@@ -129,16 +129,19 @@ public final class PlateauUtil {
 
     public static void init() {
         PLATEAU_BIOMES.stream()
-            .map(RTGAPI.RTG_BIOMES::get)
+        .map(b -> RTGAPI.RTG_BIOMES.get(Biome.getIdForBiome(b)))
             .filter(Objects::nonNull)
             .forEach(rtgBiome -> {
-                Collection<String> blocks = getConfigBlocks(rtgBiome);
+                final IRealisticBiome realisticBiome = rtgBiome.getValue();
+                Collection<String> blocks = getConfigBlocks(realisticBiome);
                 List<IBlockState> bands = blocks.stream()
-                    .map(BlockUtil::getBlockStateFromCfgString)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-                if (bands.isEmpty()) { bands.add(DEFAULT_PLATEAU_BLOCK); }
-                BIOME_PLATEAU_BANDS.put(rtgBiome, bands);
+                        .map(BlockUtil::getBlockStateFromCfgString)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+                if (bands.isEmpty()) {
+                    bands.add(DEFAULT_PLATEAU_BLOCK);
+                }
+                BIOME_PLATEAU_BANDS.put(realisticBiome, bands);
             });
     }
 

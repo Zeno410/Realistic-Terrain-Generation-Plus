@@ -19,7 +19,7 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.surface.SurfaceRiverOasis;
 import rtg.api.world.terrain.TerrainBase;
-import rtg.util.ModCompat.Mods;
+import rtg.compat.ModCompat.Mods;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -224,51 +224,6 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         float terrainNoise = terrain.generateNoise(rtgWorld, x, y, border, riverFlattening);
         // place water features
         return this.erodedNoise(rtgWorld, x, y, river, border, terrainNoise);
-    }
-    
-    public float oldrNoise(RTGWorld rtgWorld, int x, int y, float border, float river) {
-
-        // we now have both lakes and rivers lowering land
-        if (!this.getConfig().ALLOW_RIVERS.get()) {
-            float borderForRiver = border * 2;
-            if (borderForRiver > 1f) {
-                borderForRiver = 1;
-            }
-            river = 1f - (1f - borderForRiver) * (1f - river);
-            return terrain.generateNoise(rtgWorld, x, y, border, river);
-        }
-
-        float lakeStrength = lakePressure(rtgWorld, x, y, border, rtgWorld.getLakeFrequency(),
-            rtgWorld.getLakeBendSizeLarge(), rtgWorld.getLakeBendSizeMedium(), rtgWorld.getLakeBendSizeSmall());
-        float lakeFlattening = lakeToRiverProportions(lakeStrength, rtgWorld.getLakeShoreLevel(), rtgWorld.getLakeDepressionLevel());
-        
-        // make the water areas flat for water features
-        // this happens twice: first to make river bottoms flat, then to make lake bottoms flat
-        
-        // combine rivers and lakes
-        if ((river < 1) && (lakeFlattening < 1)) {
-            river = (1f - river) / river + (1f - lakeFlattening) / lakeFlattening;
-            river = (1f / (river + 1f));
-        }
-        else if (lakeFlattening < river) {
-            river = lakeFlattening;
-        }
-
-        // smooth the edges on the top
-        river = 1f - river;
-        river = river * (river / (river + 0.05f) * (1.05f));
-        river = 1f - river;
-
-        // make the water areas flat for water features
-        float riverFlattening = river * (1f + RTGWorld.RIVER_FLATTENING_ADDEND) - RTGWorld.RIVER_FLATTENING_ADDEND;
-        if (riverFlattening < 0) {
-            riverFlattening = 0;
-        }
-
-        // flatten terrain to set up for the water features
-        float terrainNoise = terrain.generateNoise(rtgWorld, x, y, border, riverFlattening);
-        // place water features
-        return this.oldErodedNoise(rtgWorld, x, y, river, border, terrainNoise);
     }
     
     public float erodedNoise(RTGWorld rtgWorld, int x, int y, float river, float border, float biomeHeight) {

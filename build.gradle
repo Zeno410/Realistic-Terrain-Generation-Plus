@@ -4,6 +4,13 @@ buildscript {
             name = "forge"
             url = 'https://maven.minecraftforge.net'
         }
+        maven {
+            name 'CurseMaven'
+            url 'https://cursemaven.com'
+            content {
+                includeGroup 'curse.maven'
+            }
+        }
         mavenCentral()
     }
     dependencies {
@@ -12,6 +19,8 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply from: 'build-common.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -21,11 +30,19 @@ version = (project.prerelease != '') ? "${project.mod_version}-${project.prerele
 
 repositories {
     maven { url 'https://maven.minecraftforge.net' } //BiomesOPlenty
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
     compileOnly "com.github.glitchfiend.biomesoplenty:BiomesOPlenty:${project.bop_version}:deobf"
+    implementation fg.deobf("curse.maven:jeid-296289:2919737")
 }
 
 minecraft {

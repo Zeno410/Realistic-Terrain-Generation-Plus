@@ -1,3 +1,11 @@
+
+warning.rtgStartup1=Realistic Terrain Generation uses a custom world type.
+warning.rtgStartup2=If you want realistic terrain, keep clicking the 'World Type' button
+warning.rtgStartup3=under 'More World Options' until it displays 'Realistic'.
+warning.rtgStartup4=The world type can be used on servers by changing the 'level-type' in
+warning.rtgStartup5=server.properties to 'RTG' (without quotes).
+warning.rtgStartup6=This message will only display once.
+
 #-----------------------------
 # GUI Customize World Screen
 #-----------------------------
@@ -308,7 +316,7 @@ rtgconfig.common.trees.treesCanGenerateOnSand.tooltip=Set this to FALSE to preve
 rtgconfig.common.trees.shrubsBelowSurface=Shrubs Below Surface
 rtgconfig.common.trees.shrubsBelowSurface.tooltip=Set this to FALSE to prevent shrub trunks from generating below the surface.
 rtgconfig.common.trees.barkCoveredLogs=Bark Covered Logs
-rtgconfig.common.trees.barkCoveredLogs.tooltip=Set this to FALSE to prevent the trunks of RTG trees from using the 'all-bark' texture model.\nFor more information, visit http://minecraft.gamepedia.com/Wood#Block_data
+rtgconfig.common.trees.barkCoveredLogs.tooltip=Set this to FALSE to prevent the trunks of RTG trees from using the 'all-bark' texture model.\nFor more information, visit https://minecraft.wiki/w/Java_Edition_data_values/Pre-flattening#Wood
 
 rtg.command.prefix.error=Error
 rtg.command.whereami.error=This command is meant for players in the world

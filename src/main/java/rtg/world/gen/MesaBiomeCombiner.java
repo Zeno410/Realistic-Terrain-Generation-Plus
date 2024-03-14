@@ -1,5 +1,7 @@
 package rtg.world.gen;
 
+import java.util.List;
+
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
@@ -16,26 +18,26 @@ public class MesaBiomeCombiner {
     public final int mesaPlateauM = Biome.getIdForBiome(Biomes.MUTATED_MESA_CLEAR_ROCK);
     public final int mesaPlateauFM = Biome.getIdForBiome(Biomes.MUTATED_MESA_ROCK);
 
-    public void adjust(float[] result) {
-        float mesaBorder = result[mesa];
-        float bryceBorder = result[mesaBryce];
-        float plateauBorder = result[mesaPlateau] + result[mesaPlateauM];
-        float plateauFBorder = result[mesaPlateauF] + result[mesaPlateauFM];
-        result[mesa] = 0;
-        result[mesaPlateauM] = 0;
-        result[mesaPlateauFM] = 0;
+    public void adjust(final List<Float> result) {
+        float mesaBorder = result.get(mesa);
+        float bryceBorder = result.get(mesaBryce);
+        float plateauBorder = result.get(mesaPlateau) + result.get(mesaPlateauM);
+        float plateauFBorder = result.get(mesaPlateauF) + result.get(mesaPlateauFM);
+        result.set(mesa, 0f);
+        result.set(mesaPlateauM, 0f);
+        result.set(mesaPlateauFM, 0f);
         if (plateauBorder > plateauFBorder) {
-            result[mesaPlateau] = mesaBorder + plateauBorder + plateauFBorder;// + bryceBorder;
-            result[mesaPlateauF] = 0;
+        	result.set(mesaPlateau,mesaBorder + plateauBorder + plateauFBorder);// + bryceBorder;
+            result.set(mesaPlateauF,0f);
         }
         else {
-            result[mesaPlateau] = 0;
-            result[mesaPlateauF] = mesaBorder + plateauBorder + plateauFBorder;// + bryceBorder;
+        	result.set(mesaPlateau,0f);
+        	result.set(mesaPlateauF,mesaBorder + plateauBorder + plateauFBorder);// + bryceBorder;
         }
         if (bryceBorder > plateauBorder&& bryceBorder > plateauFBorder) {
-            //result[mesaPlateau] = 0;
-            //result[mesaPlateauF] = 0;
-        	//result[mesaBryce] = mesaBorder + plateauBorder + plateauFBorder + bryceBorder;
+        	result.set(mesaPlateau,0f);
+        	result.set(mesaPlateau,0f);
+        	result.set(mesaBryce,  mesaBorder + plateauBorder + plateauFBorder + bryceBorder);
         }
     }
 }

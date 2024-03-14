@@ -1,4 +1,3 @@
-gui.createWorld.worldtypename=RTG - 真实世界生成
 
 warning.rtgStartup1=真实感地形生成使用自定义的世界类型。
 warning.rtgStartup2=如果你想真实的地形，继续点击下“更多的世
@@ -6,3 +5,315 @@ warning.rtgStartup3=界选项”直到显示“现实主义”的“世界型”
 warning.rtgStartup4=世界类型可以在服务器上通过
 warning.rtgStartup5=server.properties为“RTG”（不带引号）改变“水平型”一起使用。
 warning.rtgStartup6=此消息将只显示一次。
+
+#-----------------------------
+# GUI Customize World Screen
+#-----------------------------
+gui.createWorld.worldtypename=RTG - 真实世界生成
+gui.createWorld.worldtype.line1=使用真实世界生成的自定义世界类型。
+gui.createWorld.worldtype.line2=如果你想使用RTG世界类型，请选择
+gui.createWorld.worldtype.line3=§9世界类型: %s§r 为 §更多的世界选项§r.
+gui.createWorld.worldtype.line4=如果在服务器上使用，请设置
+gui.createWorld.worldtype.line5=在 §9server.properties§r 设置 §9level-type=RTG§r
+
+gui.createWorld.customize.clipboard=复制设置
+gui.createWorld.customize.clipboard.tooltip=点击这个按钮可以把当前的设置复制到剪贴板上，然后粘贴到server.properties的generator-settings中。
+
+gui.createWorld.customize.title.maintitle=真实世界生成自定义设置
+
+gui.createWorld.customize.title.PAGE1=地形和地表设置
+
+gui.createWorld.customize.category.WORLD=世界类型
+gui.createWorld.customize.setting.fixedBiome=单一生物群系
+gui.createWorld.customize.setting.fixedBiome.tooltip=选择单一生物群系的类型
+gui.createWorld.customize.setting.biomeSize=生物群系规模
+gui.createWorld.customize.setting.biomeSize.tooltip=改变生物群落的平均规模
+
+gui.createWorld.customize.category.SURFACE=地表设置
+gui.createWorld.customize.setting.useBoulders=启用巨石
+gui.createWorld.customize.setting.useBoulders.tooltip=启用巨石生成
+gui.createWorld.customize.setting.boulderMult=巨石生成机率(1/x)
+gui.createWorld.customize.setting.boulderMult.tooltip=巨石生成的机率
+gui.createWorld.customize.setting.sandDuneHeight=沙丘高度
+gui.createWorld.customize.setting.sandDuneHeight.tooltip=调整沙丘的高度
+gui.createWorld.customize.setting.snowDuneHeight=雪丘高度
+gui.createWorld.customize.setting.snowDuneHeight.tooltip=调整雪丘的高度
+gui.createWorld.customize.setting.useSnowLayers=雪层
+gui.createWorld.customize.setting.useSnowLayers.tooltip=在雪地中启用雪层
+gui.createWorld.customize.setting.snowLayerTemp=雪层温度
+gui.createWorld.customize.setting.snowLayerTemp.tooltip=雪层产生的温度在
+
+gui.createWorld.customize.category.UNDERGROUND=地下设置
+gui.createWorld.customize.setting.bedrockLayers=基岩层
+gui.createWorld.customize.setting.bedrockLayers.tooltip=设置基岩层的数量
+gui.createWorld.customize.setting.useCaves=洞穴生成
+gui.createWorld.customize.setting.useCaves.tooltip=启用洞穴生成
+gui.createWorld.customize.setting.caveChance=洞穴生成几率
+gui.createWorld.customize.setting.caveChance.tooltip=HIGHER values = FEWER caves
+gui.createWorld.customize.setting.caveDensity=洞穴密度
+gui.createWorld.customize.setting.caveDensity.tooltip=HIGHER values = BIGGER caves
+gui.createWorld.customize.setting.useRavines=山谷生成
+gui.createWorld.customize.setting.useRavines.tooltip=Enable ravine generation
+gui.createWorld.customize.setting.ravineChance=山谷生成几率
+gui.createWorld.customize.setting.ravineChance.tooltip=HIGHER values = FEWER ravines
+
+gui.createWorld.customize.title.PAGE2=含水景观设置
+
+gui.createWorld.customize.category.RIVERS=河流设置
+gui.createWorld.customize.setting.riverSize=尺寸
+gui.createWorld.customize.setting.riverSize.tooltip=调整河流尺寸（宽度）
+gui.createWorld.customize.setting.riverFrequency=生成几率
+gui.createWorld.customize.setting.riverFrequency.tooltip=调整河流产生的几率
+gui.createWorld.customize.setting.riverBendMult=弯曲程度
+gui.createWorld.customize.setting.riverBendMult.tooltip=调整河流的弯曲程度
+gui.createWorld.customize.setting.riverCutOffAmpl=切断幅度
+gui.createWorld.customize.setting.riverCutOffAmpl.tooltip=使用更高的数值使截断噪声有更大幅度影响
+gui.createWorld.customize.setting.riverCutOffScale=切断规模
+gui.createWorld.customize.setting.riverCutOffScale.tooltip=使用更高的数值使河流附近的草区更大，但也使河流更加罕见
+
+gui.createWorld.customize.category.RTGLAKES=RTG湖泊设置
+gui.createWorld.customize.setting.RTGlakeSizeMult=尺寸
+gui.createWorld.customize.setting.RTGlakeSizeMult.tooltip=RTG湖泊的尺寸（湖泊生物群系）
+gui.createWorld.customize.setting.RTGlakeFreqMult=生成几率
+gui.createWorld.customize.setting.RTGlakeFreqMult.tooltip=设置RTG湖泊产生的几率
+gui.createWorld.customize.setting.RTGlakeShoreBend=岸边弯曲频率
+gui.createWorld.customize.setting.RTGlakeShoreBend.tooltip=调整湖岸的弯曲程度
+
+gui.createWorld.customize.category.VANILLASURFACELAKES=原版地表湖泊设置
+gui.createWorld.customize.setting.useWaterLakes=水湖生成
+gui.createWorld.customize.setting.useWaterLakes.tooltip=启用原版的地表水湖
+gui.createWorld.customize.setting.waterLakeChance=原版地表水湖生成几率（1/x）
+gui.createWorld.customize.setting.waterLakeChance.tooltip=调整原版地表水湖生成几率
+gui.createWorld.customize.setting.useLavaLakes=岩浆湖生成
+gui.createWorld.customize.setting.useLavaLakes.tooltip=启用原版地表岩浆湖
+gui.createWorld.customize.setting.lavaLakeChance=原版地表岩浆湖生成几率（1/x）
+gui.createWorld.customize.setting.lavaLakeChance.tooltip=调整原版地表岩浆湖生成几率
+
+gui.createWorld.customize.category.VANILLAUNDERGROUNDLAKES=原版地下湖设置
+gui.createWorld.customize.setting.useWaterUndLakes=地下水湖生成
+gui.createWorld.customize.setting.useWaterUndLakes.tooltip=启用原版的地下水湖
+gui.createWorld.customize.setting.waterUndLakeChance=原版地下水湖生成几率（1/x）
+gui.createWorld.customize.setting.waterUndLakeChance.tooltip=调整原版地下水湖生成几率
+gui.createWorld.customize.setting.useLavaUndLakes=岩浆湖生成
+gui.createWorld.customize.setting.useLavaUndLakes.tooltip=启用原版地下岩浆湖
+gui.createWorld.customize.setting.lavaUndLakeChance=原版地下岩浆湖生成几率（1/x）
+gui.createWorld.customize.setting.lavaUndLakeChance.tooltip=调整原版地下岩浆湖生成几率
+
+gui.createWorld.customize.category.VANILLASPOUTS=泉眼生成几率 (1/x)
+gui.createWorld.customize.setting.waterSpoutChance=水流泉眼几率
+gui.createWorld.customize.setting.waterSpoutChance.tooltip=在山丘或洞穴的一侧有1/x的几率生成水泉眼
+gui.createWorld.customize.setting.lavaSpoutChance=岩浆泉眼
+gui.createWorld.customize.setting.lavaSpoutChance.tooltip=在山丘或洞穴的一侧有1/x的几率生成岩浆泉眼
+
+
+gui.createWorld.customize.title.PAGE3=结构设置
+
+gui.createWorld.customize.category.VILLAGES=村庄设置
+gui.createWorld.customize.setting.useVillages=村庄生成
+gui.createWorld.customize.setting.useVillages.tooltip=启用村庄生成
+gui.createWorld.customize.setting.villageDistance=村庄间隔距离
+gui.createWorld.customize.setting.villageDistance.tooltip=各个村庄之间的最小距离
+gui.createWorld.customize.setting.villageSize=村庄规模
+gui.createWorld.customize.setting.villageSize.tooltip=调整村庄的平均规模
+
+gui.createWorld.customize.category.MINESHAFTS=废弃矿坑设置
+gui.createWorld.customize.setting.useMineShafts=废弃矿坑生成
+gui.createWorld.customize.setting.useMineShafts.tooltip=启用废弃矿坑生成
+gui.createWorld.customize.setting.mineShaftChance=废弃矿坑生成几率
+gui.createWorld.customize.setting.mineShaftChance.tooltip=调整废弃矿坑生成的几率
+
+gui.createWorld.customize.category.DUNGEONS=地牢设置
+gui.createWorld.customize.setting.useDungeons=地牢生成
+gui.createWorld.customize.setting.useDungeons.tooltip=启用地牢生成
+gui.createWorld.customize.setting.dungeonChance=地牢生成几率
+gui.createWorld.customize.setting.dungeonChance.tooltip=调整地牢生成的几率
+
+gui.createWorld.customize.category.TEMPLES=不固定结构设置
+gui.createWorld.customize.setting.useTemples=不固定结构结构生成
+gui.createWorld.customize.setting.useTemples.tooltip=启用不固定结构 (沙漠/丛林神殿、巫师小屋、雪地小屋等)
+gui.createWorld.customize.setting.templeDistance=不固定结构间距
+gui.createWorld.customize.setting.templeDistance.tooltip=不固定结构之间的距离
+
+gui.createWorld.customize.category.MONUMENTS=海洋神殿设置
+gui.createWorld.customize.setting.useMonuments=海洋神殿生成
+gui.createWorld.customize.setting.useMonuments.tooltip=启用海洋神殿生成
+gui.createWorld.customize.setting.monumentSeparation=神殿最小间距
+gui.createWorld.customize.setting.monumentSeparation.tooltip=海洋神殿之间的最小距离
+gui.createWorld.customize.setting.monumentSpacing=神殿最大间距
+gui.createWorld.customize.setting.monumentSpacing.tooltip=海洋神殿之间的最大距离
+
+gui.createWorld.customize.category.MANSIONS=林地府邸设置
+gui.createWorld.customize.setting.useMansions=林地府邸生成
+gui.createWorld.customize.setting.useMansions.tooltip=启用林地府邸生成
+# TODO [1.12]: mansionSeparation and mansionSpacing are likely to be removed
+gui.createWorld.customize.setting.mansionSeparation=府邸最小间距
+gui.createWorld.customize.setting.mansionSeparation.tooltip=各个府邸间的最小间距
+gui.createWorld.customize.setting.mansionSpacing=府邸最大间距
+gui.createWorld.customize.setting.mansionSpacing.tooltip=各个府邸间的最大间距
+
+gui.createWorld.customize.category.STRONGHOLDS=要塞设置
+gui.createWorld.customize.setting.useStrongholds=要塞生成
+gui.createWorld.customize.setting.useStrongholds.tooltip=启用要塞
+gui.createWorld.customize.setting.strongholdCount=要塞数量
+gui.createWorld.customize.setting.strongholdCount.tooltip=此世界生成的要塞总数
+gui.createWorld.customize.setting.strongholdDistance=距离
+gui.createWorld.customize.setting.strongholdDistance.tooltip=要塞间的最小距离
+gui.createWorld.customize.setting.strongholdSpread=分布
+gui.createWorld.customize.setting.strongholdSpread.tooltip=要塞的分布
+
+
+gui.createWorld.customize.title.PAGE4=矿物生成设置
+
+gui.createWorld.customize.category.DIRT=泥土生成设置
+gui.createWorld.customize.setting.dirtSize=泥土尺寸
+gui.createWorld.customize.setting.dirtSize.tooltip=此世界生成的泥土大小
+gui.createWorld.customize.setting.dirtCount=生成数量
+gui.createWorld.customize.setting.dirtCount.tooltip=每一大块泥土包含的泥土数量
+gui.createWorld.customize.setting.dirtMinHeight=泥土最小高度
+gui.createWorld.customize.setting.dirtMinHeight.tooltip=泥土生成的最小高度
+gui.createWorld.customize.setting.dirtMaxHeight=泥土最大高度
+gui.createWorld.customize.setting.dirtMaxHeight.tooltip=泥土生成的最大高度
+
+gui.createWorld.customize.category.GRAVEL=沙砾生成设置
+gui.createWorld.customize.setting.gravelSize=沙砾尺寸
+gui.createWorld.customize.setting.gravelSize.tooltip=此世界生成的沙砾大小
+gui.createWorld.customize.setting.gravelCount=生成数量
+gui.createWorld.customize.setting.gravelCount.tooltip=每一大块沙砾包含的沙砾数量
+gui.createWorld.customize.setting.gravelMinHeight=沙砾最小高度
+gui.createWorld.customize.setting.gravelMinHeight.tooltip=沙砾生成的最小高度
+gui.createWorld.customize.setting.gravelMaxHeight=沙砾最大高度
+gui.createWorld.customize.setting.gravelMaxHeight.tooltip=沙砾生成的最大高度
+
+gui.createWorld.customize.category.GRANITE=花岗岩生成设置
+gui.createWorld.customize.setting.graniteSize=花岗岩尺寸
+gui.createWorld.customize.setting.graniteSize.tooltip=此世界生成的花岗岩大小
+gui.createWorld.customize.setting.graniteCount=生成数量
+gui.createWorld.customize.setting.graniteCount.tooltip=每一大块花岗岩包含的花岗岩数量
+gui.createWorld.customize.setting.graniteMinHeight=花岗岩最小高度
+gui.createWorld.customize.setting.graniteMinHeight.tooltip=花岗岩生成的最小高度
+gui.createWorld.customize.setting.graniteMaxHeight=花岗岩最大高度
+gui.createWorld.customize.setting.graniteMaxHeight.tooltip=花岗岩生成的最大高度
+
+gui.createWorld.customize.category.DIORITE=闪长岩设置
+gui.createWorld.customize.setting.dioriteSize=闪长岩尺寸
+gui.createWorld.customize.setting.dioriteSize.tooltip=此世界生成的闪长岩大小
+gui.createWorld.customize.setting.dioriteCount=生成数量
+gui.createWorld.customize.setting.dioriteCount.tooltip=每一大块闪长岩包含的闪长岩数量
+gui.createWorld.customize.setting.dioriteMinHeight=闪长岩最小高度
+gui.createWorld.customize.setting.dioriteMinHeight.tooltip=闪长岩生成的最小高度
+gui.createWorld.customize.setting.dioriteMaxHeight=闪长岩最大高度
+gui.createWorld.customize.setting.dioriteMaxHeight.tooltip=闪长岩生成的最大高度
+
+gui.createWorld.customize.category.ANDESITE=安山岩设置
+gui.createWorld.customize.setting.andesiteSize=安山岩尺寸
+gui.createWorld.customize.setting.andesiteSize.tooltip=此世界生成的安山岩大小
+gui.createWorld.customize.setting.andesiteCount=生成数量
+gui.createWorld.customize.setting.andesiteCount.tooltip=每一大块安山岩包含的安山岩数量
+gui.createWorld.customize.setting.andesiteMinHeight=安山岩最小高度
+gui.createWorld.customize.setting.andesiteMinHeight.tooltip=安山岩生成的最小高度
+gui.createWorld.customize.setting.andesiteMaxHeight=安山岩最大高度
+gui.createWorld.customize.setting.andesiteMaxHeight.tooltip=安山岩生成的最大高度煤矿
+
+gui.createWorld.customize.category.COAL=煤矿设置
+gui.createWorld.customize.setting.coalSize=煤矿尺寸
+gui.createWorld.customize.setting.coalSize.tooltip=此世界生成的煤矿大小
+gui.createWorld.customize.setting.coalCount=生成数量
+gui.createWorld.customize.setting.coalCount.tooltip=每一大块煤矿包含的煤矿数量
+gui.createWorld.customize.setting.coalMinHeight=煤矿最小高度
+gui.createWorld.customize.setting.coalMinHeight.tooltip=煤矿生成的最小高度
+gui.createWorld.customize.setting.coalMaxHeight=煤矿最大高度
+gui.createWorld.customize.setting.coalMaxHeight.tooltip=煤矿生成的最大高度
+
+gui.createWorld.customize.category.IRON=铁矿设置
+gui.createWorld.customize.setting.ironSize=铁矿尺寸
+gui.createWorld.customize.setting.ironSize.tooltip=此世界生成的铁矿大小
+gui.createWorld.customize.setting.ironCount=生成数量
+gui.createWorld.customize.setting.ironCount.tooltip=每一大块铁矿包含的铁矿数量
+gui.createWorld.customize.setting.ironMinHeight=铁矿最小高度
+gui.createWorld.customize.setting.ironMinHeight.tooltip=铁矿生成的最小高度
+gui.createWorld.customize.setting.ironMaxHeight=铁矿最大高度
+gui.createWorld.customize.setting.ironMaxHeight.tooltip=铁矿生成的最大高度
+
+gui.createWorld.customize.category.GOLD=金矿设置
+gui.createWorld.customize.setting.goldSize=金矿尺寸
+gui.createWorld.customize.setting.goldSize.tooltip=此世界生成的金矿大小
+gui.createWorld.customize.setting.goldCount=生成数量
+gui.createWorld.customize.setting.goldCount.tooltip=每一大块金矿包含的金矿数量
+gui.createWorld.customize.setting.goldMinHeight=金矿最小高度
+gui.createWorld.customize.setting.goldMinHeight.tooltip=金矿生成的最小高度
+gui.createWorld.customize.setting.goldMaxHeight=金矿最大高度
+gui.createWorld.customize.setting.goldMaxHeight.tooltip=金矿生成的最大高度
+
+gui.createWorld.customize.category.REDSTONE=红石设置
+gui.createWorld.customize.setting.redstoneSize=红石尺寸
+gui.createWorld.customize.setting.redstoneSize.tooltip=此世界生成的红石大小
+gui.createWorld.customize.setting.redstoneCount=生成数量
+gui.createWorld.customize.setting.redstoneCount.tooltip=每一大块红石包含的红石数量
+gui.createWorld.customize.setting.redstoneMinHeight=红石最小高度
+gui.createWorld.customize.setting.redstoneMinHeight.tooltip=红石生成的最小高度
+gui.createWorld.customize.setting.redstoneMaxHeight=红石最大高度
+gui.createWorld.customize.setting.redstoneMaxHeight.tooltip=红石生成的最大高度
+
+gui.createWorld.customize.category.DIAMOND=钻石设置
+gui.createWorld.customize.setting.diamondSize=钻石尺寸
+gui.createWorld.customize.setting.diamondSize.tooltip=此世界生成的钻石大小
+gui.createWorld.customize.setting.diamondCount=生成数量
+gui.createWorld.customize.setting.diamondCount.tooltip=每一大块钻石包含的钻石数量
+gui.createWorld.customize.setting.diamondMinHeight=钻石最小高度
+gui.createWorld.customize.setting.diamondMinHeight.tooltip=钻石生成的最小高度
+gui.createWorld.customize.setting.diamondMaxHeight=钻石最大高度
+gui.createWorld.customize.setting.diamondMaxHeight.tooltip=钻石生成的最大高度
+
+gui.createWorld.customize.category.LAPIS=青金石设置
+gui.createWorld.customize.setting.lapisSize=青金石尺寸
+gui.createWorld.customize.setting.lapisSize.tooltip=此世界生成的青金石大小
+gui.createWorld.customize.setting.lapisCount=生成数量
+gui.createWorld.customize.setting.lapisCount.tooltip=每一大块青金石包含的青金石数量
+gui.createWorld.customize.setting.lapisCenterHeight=青金石最小高度
+gui.createWorld.customize.setting.lapisCenterHeight.tooltip=青金石生成的最小高度
+gui.createWorld.customize.setting.lapisSpread=青金石最大高度
+gui.createWorld.customize.setting.lapisSpread.tooltip=青金石生成的最大高度
+
+
+#-----------------------------
+# GUI Config (Note: tooltips that are blank should remain blank)
+#-----------------------------
+rtgconfig.title=RTG全局设置
+rtgconfig.client=客户端设置
+rtgconfig.client.tooltip=与客户端有关的设置
+rtgconfig.client.worldTypeNotification=世界类型通知
+rtgconfig.client.worldTypeNotification.tooltip=启用后，当进入自定义世界屏幕时，这将显示一条关于RTG的信息。这将显示一次并自动关闭。
+rtgconfig.client.rtgWorldTypeByDefault=将RTG设为默认世界类型
+rtgconfig.client.rtgWorldTypeByDefault.tooltip=在创建世界时世界类型默认设置为RTG
+rtgconfig.common=常见设置
+rtgconfig.common.tooltip=与服务器有关的设置
+rtgconfig.common.debug=Debug设置
+rtgconfig.common.debug.tooltip=
+rtgconfig.common.debug.enableDebugging=启用特殊调试日志
+rtgconfig.common.debug.enableDebugging.tooltip=!这个设置对性能有很大的影响。只有在你知道自己在做什么的情况下才能启用!!!!!!!!!
+rtgconfig.common.debug.patchBiome=补充生物群系
+rtgconfig.common.debug.patchBiome.tooltip=如果RTG遇到一个不支持的生物群落，它将生成这个生物群系来代替它（定位格式：mod_id:biome_registry_name）
+rtgconfig.common.surface=生物群系地表设置
+rtgconfig.common.surface.tooltip=
+rtgconfig.common.surface.lushRiverbanksInDesert=沙漠中有生机河岸
+rtgconfig.common.surface.lushRiverbanksInDesert.tooltip=将此设置为FALSE，以防止RTG在沙漠生物群系中生成有有生机的河岸，如沙漠和恶地。生机的河岸包括高草、树木、灌木和其他植物群。（后面翻译不动了）
+rtgconfig.common.surface.surfaceBleedRadius=Surface Blend Radius
+rtgconfig.common.surface.surfaceBleedRadius.tooltip=The maximum distance surfaces will blend into eacother if enabled for two adjacent biomes.\nBy default, surface blending is only enabled for beaches. You can control that in biome settings
+rtgconfig.common.surface.shadowStoneBlock=Shadow Stone Block
+rtgconfig.common.surface.shadowStoneBlock.tooltip=The block to use for stone terrain shadowing, typically seen on the cliffs of stone mountains.
+rtgconfig.common.surface.shadowDesertBlock=Shadow Desert Block
+rtgconfig.common.surface.shadowDesertBlock.tooltip=The block to use for desert terrain shadowing, typically seen on the cliffs of desert mountains.
+rtgconfig.common.trees=RTG Tree Settings
+rtgconfig.common.trees.tooltip=
+rtgconfig.common.trees.rtgTreesFromSaplings=RTG Trees From Saplings
+rtgconfig.common.trees.rtgTreesFromSaplings.tooltip=Set this to TRUE to allow RTG's custom trees to grow from vanilla saplings.\nRTG's custom trees can be grown only from the saplings that their leaves would drop, and only in the biomes where they naturally generate.
+rtgconfig.common.trees.rtgTreeChance=RTG Tree Chance
+rtgconfig.common.trees.rtgTreeChance.tooltip=A 1/x chance that a vanilla sapling will grow an RTG custom tree.
+rtgconfig.common.trees.treeDensityMultiplier=Tree Density Multiplier
+rtgconfig.common.trees.treeDensityMultiplier.tooltip=This setting allows you to increase/decrease the number of RTG trees that generate globally.\nThis setting only affects trees generated by RTG. Trees generated by a biome's decorator will adhere to their own density rules. You can override this setting on a per-biome basis by using the biome configs.
+rtgconfig.common.trees.treesCanGenerateOnSand=Trees Can Generate On Sand
+rtgconfig.common.trees.treesCanGenerateOnSand.tooltip=Set this to FALSE to prevent trees from generating on sand.\nThis setting only affects trees generated by RTG. Trees generated by a biome's decorator will adhere to their own generation rules. (RTG's Palm Trees ignore this setting.)
+rtgconfig.common.trees.shrubsBelowSurface=Shrubs Below Surface
+rtgconfig.common.trees.shrubsBelowSurface.tooltip=Set this to FALSE to prevent shrub trunks from generating below the surface.
+rtgconfig.common.trees.barkCoveredLogs=Bark Covered Logs
+rtgconfig.common.trees.barkCoveredLogs.tooltip=Set this to FALSE to prevent the trunks of RTG trees from using the 'all-bark' texture model.\nFor more information, visit https://minecraft.wiki/w/Java_Edition_data_values/Pre-flattening#Wood
