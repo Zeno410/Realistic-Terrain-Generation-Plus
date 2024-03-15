@@ -299,7 +299,7 @@ public final class RTGConfig {
                 true, true),
 
         surfaceBlendRadius(Type.INTEGER, Category.surface,
-                "The maximum distance surfaces will blend into eacother if enabled for two adjacent biomes.\n" +
+                "The maximum distance surfaces will blend into each other if enabled for two adjacent biomes.\n" +
                         "By default, surface blending is only enabled for beaches. You can control that in biome settings",
                 32, 8, 32),
 
@@ -314,7 +314,7 @@ public final class RTGConfig {
                 "minecraft:stained_hardened_clay[color=gray]", true),
 
         rtgTreesFromSaplings(Type.BOOLEAN, Category.trees,
-                "Set this to TRUE to allow RTG's custom trees to grow from groups of vanilla saplings.n" +
+                "Set this to TRUE to allow RTG's custom trees to grow from groups of vanilla saplings.\n" +
                         "Otherwise RTG's custom trees cannot be grown",
                 true),
 

@@ -26,17 +26,14 @@ import java.util.Random;
 
 public class RealisticBiomeVanillaMesaPlateau extends RealisticBiomeBase {
 
-    public static Biome biome = Biomes.MESA_CLEAR_ROCK;
-    public static Biome river = Biomes.RIVER;
-
     public RealisticBiomeVanillaMesaPlateau() {
 
-        super(biome);
+        super(Biomes.MESA_CLEAR_ROCK);
     }
 
     @Override
     public Biome preferredBeach() {
-        return biome;
+        return baseBiome();
     }
 
     @Override
@@ -59,7 +56,7 @@ public class RealisticBiomeVanillaMesaPlateau extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaMesaPlateau(getConfig(), biome.topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0);
+        return new SurfaceVanillaMesaPlateau(getConfig(), baseBiome().topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0);
     }
 
     @Override
@@ -121,10 +118,6 @@ public class RealisticBiomeVanillaMesaPlateau extends RealisticBiomeBase {
             float simplex = baseSimplex * bordercap * rivercap + bumpiness;
             float added = PlateauUtil.stepIncrease(simplex, stepStart, stepFinish, stepHeight) / border;
             float result = riverized(base + TerrainBase.groundNoise(x, y, groundNoise, rtgWorld), river) + added;
-            if (border> .1) {
-                //Logger.info("Mesa ({},{}) Simplex {} added {} border {} result {}",passedX, passedY,simplex,added,border, result);
-                
-           } 
             return result;//64f + 100f*simplex;//result;
         }
 

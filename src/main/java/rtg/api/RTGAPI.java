@@ -43,7 +43,6 @@ public final class RTGAPI {
             shadowStoneBlock = null,
             shadowDesertBlock = null;
 
-
     private RTGAPI() {
 
     }
@@ -111,7 +110,7 @@ public final class RTGAPI {
                 RTG_BIOMES.set(Biome.getIdForBiome(baseBiome), new AbstractMap.SimpleEntry<>(baseBiome, biome));
             }
         }
-    }
+    }   
 
     public static void initPatchBiome(Biome biome) {
         IRealisticBiome rtgBiome = getRTGBiome(biome);

@@ -75,8 +75,8 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     private int[] xyinverted = analyzer.xyinverted();
     private boolean mapFeaturesEnabled;
     private Random rand;
-    private Biome[] baseBiomesList;
-    private TerrainBase mesaPlateau = new RealisticBiomeVanillaMesaPlateau.TerrainRTGMesaPlateau(67);
+    private Biome[] baseBiomesList;    
+    private boolean[] mesaPlateauBiome ;  
 
     public ChunkGeneratorRTG(RTGWorld rtgWorld) {
 
@@ -104,6 +104,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         this.baseBiomesList = new Biome[256];
 
         setWeightings();// landscape generator init
+        setMesaPlauteauBiomes();//mark plateau biomes to combine mesas
 
         Logger.debug("FINISHED instantiating CPRTG.");
     }
@@ -552,11 +553,6 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     }
 
     private synchronized void getNewerNoise(final BiomeProvider biomeProvider, final int worldX, final int worldZ, ChunkLandscape landscape) {
-    	List<Float> weightedBiomes = new SparseList<Float>() {{
-	        for (int i = 0; i < 256; i++) {
-	            set(i, 0F);
-	        }
-       }};
         // get area biome map
         for (int x = -sampleSize; x < sampleSize + 5; x++) {
             for (int z = -sampleSize; z < sampleSize + 5; z++) {
@@ -570,6 +566,11 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 float totalWeight = 0;
+            	List<Float> weightedBiomes = new SparseList<Float>() {{
+        	        for (int i = 0; i < 256; i++) {
+        	            //set(i, 0F);
+        	        }
+               }};
                 for (int mapX = 0; mapX < sampleArraySize; mapX++) {
                     for (int mapZ = 0; mapZ < sampleArraySize; mapZ++) {
                         float weight = weightings[mapX * sampleArraySize + mapZ][x * 16 + z];
@@ -592,8 +593,17 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
                     }
                 }
 
-                // combine mesa biomes
-                mesaCombiner.adjust(weightedBiomes);
+                // combine mesa biomes     
+                float mesaPlateauWeight = 0f;
+                for (int i = 0; i < weightedBiomes.size(); i++) {
+                	if (isMesaPlateau(i) ) {
+                        Float v = weightedBiomes.get(i);
+                        if (v != null) {
+                            mesaPlateauWeight += v;
+                        }
+                   }
+                }
+                //mesaCombiner.adjust(weightedBiomes);
 
                 landscape.noise[x * 16 + z] = 0f;
 
@@ -604,10 +614,14 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
                     Float v = weightedBiomes.get(i);
                     if (v != null) {
                         if (v > 0F) {
-                            landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, v, river + 1F) * v;
-                            v = 0F;
+                        	if (isMesaPlateau(i)) {
+                                landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, mesaPlateauWeight, river + 1F) * v;
+                        	} else {
+                                landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, v, river + 1F) * v;
+                            }
+                            //v = 0F;
                         }
-                        weightedBiomes.set(i, v);
+                        //weightedBiomes.set(i, v);
                     }
                 }
             }
@@ -620,6 +634,20 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
                 landscape.biome[x * 16 + z]= RTGAPI.getRTGBiome(biomeProvider.getBiome(pos));
             }
         }
+    }  
+    
+    private void setMesaPlauteauBiomes() {
+    	mesaPlateauBiome = new boolean[256];
+    	mesaPlateauBiome[Biome.getIdForBiome(Biomes.MESA_CLEAR_ROCK)]  = true;
+    	mesaPlateauBiome[Biome.getIdForBiome(Biomes.MESA_ROCK)]  = true;
+    	mesaPlateauBiome[Biome.getIdForBiome(Biomes.MUTATED_MESA)]  = true;
+    	mesaPlateauBiome[Biome.getIdForBiome(Biomes.MUTATED_MESA_CLEAR_ROCK)]  = true;
+    	mesaPlateauBiome[Biome.getIdForBiome(Biomes.MUTATED_MESA_ROCK)]  = true;
+    }
+    
+    private boolean isMesaPlateau(int Id) {
+    	if ((Id > 255)|(Id <0 )) return false;
+    	return (mesaPlateauBiome[Id]);
     }
 
     // A helper class to generate settings maps to configure the vanilla structure classes

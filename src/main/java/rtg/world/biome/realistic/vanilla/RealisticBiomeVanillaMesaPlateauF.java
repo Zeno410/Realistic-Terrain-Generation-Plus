@@ -26,17 +26,15 @@ import java.util.Random;
 
 public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeBase {
 
-    public static Biome biome = Biomes.MESA_ROCK;
-    public static Biome river = Biomes.RIVER;
 
     public RealisticBiomeVanillaMesaPlateauF() {
 
-        super(biome);
+        super(Biomes.MESA_ROCK);
     }
 
     @Override
     public Biome preferredBeach() {
-        return biome;
+        return baseBiome();
     }
 
     @Override
@@ -61,7 +59,7 @@ public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaMesaPlateauF(getConfig(), biome.topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0, 0.2f, 0.6f);
+        return new SurfaceVanillaMesaPlateauF(getConfig(), baseBiome().topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0, 0.2f, 0.6f);
     }
 
     @Override

@@ -23,21 +23,24 @@ public class MesaBiomeCombiner {
         float bryceBorder = result.get(mesaBryce);
         float plateauBorder = result.get(mesaPlateau) + result.get(mesaPlateauM);
         float plateauFBorder = result.get(mesaPlateauF) + result.get(mesaPlateauFM);
-        result.set(mesa, 0f);
+        //result.set(mesa, 0f);
         result.set(mesaPlateauM, 0f);
         result.set(mesaPlateauFM, 0f);
-        if (plateauBorder > plateauFBorder) {
-        	result.set(mesaPlateau,mesaBorder + plateauBorder + plateauFBorder);// + bryceBorder;
+
+        if (bryceBorder > plateauBorder&& bryceBorder > plateauFBorder) {
+        	result.set(mesaPlateau,0f);
+        	result.set(mesaPlateauF,0f);
+        	result.set(mesaBryce,  plateauBorder + plateauFBorder+ bryceBorder);
+        }
+        else if (plateauBorder > plateauFBorder) {
+        	result.set(mesaPlateau,plateauBorder + plateauFBorder+ bryceBorder);// ;
             result.set(mesaPlateauF,0f);
+        	result.set(mesaBryce,  0f);
         }
         else {
         	result.set(mesaPlateau,0f);
-        	result.set(mesaPlateauF,mesaBorder + plateauBorder + plateauFBorder);// + bryceBorder;
-        }
-        if (bryceBorder > plateauBorder&& bryceBorder > plateauFBorder) {
-        	result.set(mesaPlateau,0f);
-        	result.set(mesaPlateau,0f);
-        	result.set(mesaBryce,  mesaBorder + plateauBorder + plateauFBorder + bryceBorder);
+        	result.set(mesaPlateauF,plateauBorder + plateauFBorder+ bryceBorder);// ;
+        	result.set(mesaBryce,  0f);
         }
     }
 }

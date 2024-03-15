@@ -24,20 +24,16 @@ import rtg.api.world.terrain.heighteffect.VoronoiPlateauEffect;
 
 import java.util.Random;
 
-
 public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
-
-    public static Biome biome = Biomes.MUTATED_MESA;
-    public static Biome river = Biomes.RIVER;
 
     public RealisticBiomeVanillaMesaBryce() {
 
-        super(biome);
+        super(Biomes.MUTATED_MESA);
     }
 
     @Override
     public Biome preferredBeach() {
-        return biome;
+        return baseBiome();
     }
 
     @Override
@@ -58,7 +54,7 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaMesaBryce(getConfig(), biome.topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0);
+        return new SurfaceVanillaMesaBryce(getConfig(), baseBiome().topBlock, BlockUtil.getStateClay(EnumDyeColor.ORANGE), 0);
     }
 
     @Override
@@ -90,10 +86,11 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
     
     public static class TerrainRTGBrycePlateau extends TerrainBase {
 
-        private static final float stepStart = 0.25f;
-        private static final float stepFinish = 0.4f;
+        private static final float stepStart = 0.4f;
+        private static final float stepFinish = 0.7f;
         private static final float stepHeight = 32;
         private static final float hoodooStepStart = .05f;
+        private static final float hoodooStepFinish = .45f;
         final VoronoiPlateauEffect plateau;
         final int groundNoise;
         private float jitterWavelength = 30;
@@ -119,7 +116,7 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
             float bumpiness = rtgWorld.simplexInstance(2).noise2f(x / bumpinessWavelength, y / bumpinessWavelength) * bumpinessMultiplier;
             float simplex = plateau.added(rtgWorld, x, y) * bordercap * rivercap + bumpiness;
             float added = PlateauUtil.stepIncrease(simplex, stepStart, stepFinish, stepHeight)/ border;
-            float hoodooTop = PlateauUtil.stepIncrease(simplex, hoodooStepStart, stepFinish, stepHeight) / border;
+            float hoodooTop = PlateauUtil.stepIncrease(simplex, hoodooStepStart, hoodooStepFinish, stepHeight) / border;
             if (hoodooTop>added) {
             	added += hoodooHeight(x,y,rtgWorld,hoodooTop-added);
             }
@@ -130,18 +127,24 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
         public static float hoodooHeight(float x, float y, RTGWorld rtgWorld, float height) {
 
             SimplexNoise simplex = rtgWorld.simplexInstance(0);
-            float sn = simplex.noise2f(x / 2f, y / 2f) * 0.5f + 0.5f;
-            sn += simplex.noise2f(x, y) * 0.2 + 0.2;
-            sn += simplex.noise2f(x / 4f, y / 4f) * 4f + 4f;
-            sn += simplex.noise2f(x / 8f, y / 8f) * 2f + 2f;
+            float sn = simplex.noise2f(x / 2f, y / 2f) * 0.5f;
+            sn += simplex.noise2f(x, y) * 0.2;
+            sn += simplex.noise2f(x / 4f, y / 4f) * 2f;
+            sn += simplex.noise2f(x / 8f, y / 8f) * 2f;
+            sn += simplex.noise2f(x / 16f, y / 16f) * 2f;
             sn = sn*2/6.7f;// adjust to [-1,1]
             // extremify
-            if (sn < 1) {
-            	sn = - bayesianAdjustment(-sn,1);
-            } else {
-            	sn = bayesianAdjustment(sn,1);
-            }
+            // adjust to [0,1]
             sn = sn/2 + .5f;
+            if (sn < 1) {
+            	sn = bayesianAdjustment(sn,1.5f);
+            } 
+            // back to [-1,1]
+            sn = (sn *2f) -1.0f;
+            // make more of it flat
+            sn = sn - .4f;
+            sn = sn/.6f;
+            if (sn < 0) sn = 0;
             float n = height * sn;
             //float n = height / sn * 2;
             //n += simplex.noise2f(x / 64f, y / 64f) * 4f;
