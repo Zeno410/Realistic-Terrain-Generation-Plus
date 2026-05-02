@@ -88,6 +88,24 @@ public final class BiomeAnalyzer {
                 Logger.debug("Assigning " + biome.getRegistryName() + " to land flag.");
             }
 
+            // Set land biome for biomes that are also river, ocean, or swamp
+            String tags = "";
+            if ((biomeFlags & LAND_FLAG) != 0) {
+            	// already set.
+            } else if (BiomeDictionary.hasType(biome, Type.FOREST)) {
+                biomeFlags |= LAND_FLAG;
+                Logger.debug("Assigning " + biome.getRegistryName() + " to land flag. for forest");
+            } else if (BiomeDictionary.hasType(biome, Type.PLAINS)) {
+                biomeFlags |= LAND_FLAG;
+                Logger.debug("Assigning " + biome.getRegistryName() + " to land flag. for plains");
+            } else if (BiomeDictionary.hasType(biome, Type.HILLS)) {
+                biomeFlags |= LAND_FLAG;
+                Logger.debug("Assigning " + biome.getRegistryName() + " to land flag. for hills");
+            } else if (BiomeDictionary.hasType(biome, Type.MOUNTAIN)) {
+                biomeFlags |= LAND_FLAG;
+                Logger.debug("Assigning " + biome.getRegistryName() + " to land flag. for mountain");
+            }
+            
             biomeFlagList.set(id, biomeFlags);
         }
     }
@@ -195,6 +213,9 @@ public final class BiomeAnalyzer {
             if ((biomeFlagList.get(biomeID) & SWAMP_FLAG) != 0) {
                 continue;// swamps are acceptable at beach level
             }
+            if (((biomeFlagList.get(biomeID) & LAND_FLAG) != 0)&&((biomeFlagList.get(biomeID) & OCEAN_FLAG) != 0)) {
+                continue;// biome acceptable at all levels
+            }
             if (beachSearch.isNotHunted()) {
                 beachSearch.hunt(biomeNeighborhood);
                 landSearch.hunt(biomeNeighborhood);
@@ -203,7 +224,12 @@ public final class BiomeAnalyzer {
             if (foundBiome != NO_BIOME) {
                 int nearestLandBiome = landSearch.biomeIDs.get(i);
                 if (nearestLandBiome > -1) {
-                    foundBiome = preferredBeach.get(nearestLandBiome);
+                	Integer beachReplacement = preferredBeach.get(nearestLandBiome);
+                	if (beachReplacement != null) {
+                       foundBiome = preferredBeach.get(nearestLandBiome);
+                	} else {
+                		foundBiome = nearestLandBiome;
+                	}
                 }
                 jitteredBiomes[i] = RTGAPI.getRTGBiome(foundBiome);
             }
