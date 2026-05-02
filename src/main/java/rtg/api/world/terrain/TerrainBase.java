@@ -291,7 +291,7 @@ public abstract class TerrainBase {
 
     public static float terrainHighland(float x, float y, RTGWorld rtgWorld, float river, float start, float width, float height, float baseAdjust) {
 
-        float h = rtgWorld.simplexInstance(0).noise2f(x / width, y / width) * height * river; //-140 to 140
+        float h = rtgWorld.simplexInstance(0).noise2f(x / width, y / width) * height ;//*river //-140 to 140
         h = h < start ? start + ((h - start) / 4.5f) : h;
 
         if (h < 0f) {
@@ -300,7 +300,7 @@ public abstract class TerrainBase {
         if (h > 0f) {
             float st = h * 1.5f > 15f ? 15f : h * 1.5f;// 0 to 15
             h += rtgWorld.simplexInstance(4).noise3f(x / 70f, y / 70f, 1f) * st;// 0 to 155
-            h = h * river;
+            //h = h * river;
         }
 
         h += blendedHillHeight(rtgWorld.simplexInstance(0).noise2f(x / 20f, y / 20f), 0f) * 4f;
@@ -315,7 +315,8 @@ public abstract class TerrainBase {
             h = (h + 3f) / 2f - 3f;
         }
 
-        return getTerrainBase(river) + (h + baseAdjust) * river;
+        //return getTerrainBase(river) + (h + baseAdjust) * river;
+        return riverized(getTerrainBase() + h + baseAdjust, river);
     }
 
     public static float terrainLonelyMountain(int x, int y, RTGWorld rtgWorld, float river, float strength, float width, float terrainHeight) {
@@ -533,7 +534,7 @@ public abstract class TerrainBase {
         SimplexNoise simplex = rtgWorld.simplexInstance(0);
         CellularNoise cellularNoise = rtgWorld.cellularInstance(0);
 
-        float st = 15f - (float) (cellularNoise.eval2D(x / 500d, y / 500d).getShortestDistance() * 42d) + (simplex.noise2f(x / 30f, y / 30f) * 2f);
+        float st = 15f - (float) (cellularNoise.eval2D(x / 500d, y / 500d).getShortestDistanceSq() * 42d) + (simplex.noise2f(x / 30f, y / 30f) * 2f);
 
         float h = st < 0f ? 0f : st;
         h = h < 0f ? 0f : h;
@@ -541,7 +542,7 @@ public abstract class TerrainBase {
 
         if (h > 10f) {
             float d2 = (h - 10f) / 1.5f > 30f ? 30f : (h - 10f) / 1.5f;
-            h += cellularNoise.eval2D(x / 25D, y / 25D).getShortestDistance() * d2;
+            h += cellularNoise.eval2D(x / 25D, y / 25D).getShortestDistanceSq() * d2;
         }
 
         h += simplex.noise2f(x / 18f, y / 18f) * 3;
@@ -550,7 +551,7 @@ public abstract class TerrainBase {
         return baseHeight + h * border;
     }
 
-    public static float getRiverStrength(final BlockPos blockPos, final RTGWorld rtgWorld) {
+    private static float getRiverStrength(final BlockPos blockPos, final RTGWorld rtgWorld) {
 
         final int worldX = blockPos.getX();
         final int worldZ = blockPos.getZ();
@@ -570,7 +571,7 @@ public abstract class TerrainBase {
         pX /= rtgWorld.getRiverSeparation();
         pZ /= rtgWorld.getRiverSeparation();
 
-        //New cellular noise.
+        //New cellular noise. river
         double riverFactor = rtgWorld.cellularInstance(0).eval2D(pX, pZ).interiorValue();
 
         // the output is a curved function of relative distance from the center, so adjust to make it flatter
@@ -581,6 +582,71 @@ public abstract class TerrainBase {
         return (float) (riverFactor / rtgWorld.getRiverValleyLevel() - 1d);
     }
 
+	// constant to get the new river distances similar to the old basin comparisons.
+    // monte carlo'd and then adjusted to taste.
+	private static float BORDER_TO_RIVER_TOP_DIVISOR =  0.10f;
+
+	private static float BORDER_TO_RIVER_TOP_MULTIPLIER =  1f/BORDER_TO_RIVER_TOP_DIVISOR;
+    public static float getRiverDistanceStrength(BlockPos blockPos, final RTGWorld rtgWorld) {
+
+        final int worldX = blockPos.getX();
+        final int worldZ = blockPos.getZ();
+        double pX = worldX;
+        double pZ = worldZ;
+        ISimplexData2D jitterData = SimplexData2D.newDisk();
+
+        //New river curve function. No longer creates worldwide curve correlations along cardinal axes.
+        rtgWorld.simplexInstance(1).multiEval2D((float) worldX / 240.0, (float) worldZ / 240.0, jitterData);
+        pX += jitterData.getDeltaX() * rtgWorld.getRiverLargeBendSize();
+        pZ += jitterData.getDeltaY() * rtgWorld.getRiverLargeBendSize();
+        rtgWorld.simplexInstance(2).multiEval2D((float) worldX / 80.0, (float) worldZ / 80.0, jitterData);
+        pX += jitterData.getDeltaX() * rtgWorld.getRiverSmallBendSize();
+        pZ += jitterData.getDeltaY() * rtgWorld.getRiverSmallBendSize();
+        pX /= rtgWorld.getRiverSeparation();
+        pZ /= rtgWorld.getRiverSeparation();
+        
+        //New cellular noise.
+        double riverFactor = rtgWorld.cellularInstance(0).eval2D(pX, pZ).borderDistance();
+
+        riverFactor *= BORDER_TO_RIVER_TOP_MULTIPLIER;
+        riverFactor *= riverVariation(blockPos, rtgWorld);
+        if (riverFactor > rtgWorld.getRiverValleyLevel()) {
+            return 0;
+        }// no river effect
+        //return getRiverStrength(blockPos,rtgWorld);
+        return (float) (riverFactor / rtgWorld.getRiverValleyLevel() - 1d);
+    }
+    
+    private static final double RIVER_VARIATION_PITCH_1 = 16090;
+    private static final double RIVER_VARIATION_PITCH_2 = 991;
+    
+    public static double riverVariation(BlockPos blockPos, final RTGWorld rtgWorld) {
+    	final int worldX = blockPos.getX();
+	    final int worldZ = blockPos.getZ();
+	    double pX = worldX;
+	    double pZ = worldZ;
+    	double result = rtgWorld.simplexInstance(rtgWorld.RIVER_VARIATION_SIMPLEX_1).
+    			noise2d(pX/RIVER_VARIATION_PITCH_1, pZ/RIVER_VARIATION_PITCH_1);
+        result += rtgWorld.simplexInstance(rtgWorld.RIVER_VARIATION_SIMPLEX_2).
+   			noise2d(pX/RIVER_VARIATION_PITCH_2, pZ/RIVER_VARIATION_PITCH_2);
+        // now to extremify the result
+        // map to [0,1]
+        result = result/4.0 + 0.5;
+        // to bayesian evidence, skipping extrema
+        if (result == 0) return .5;
+        if (result == 1) return 2;
+        double evidence = result/(1.0 -result);
+        // average with square
+        evidence += evidence * evidence;
+        evidence /= 2.0;
+        // back to [0.1]
+        double shift = evidence/(1.0 + evidence);
+        // 0 = .5, .5 = 1, 1 = 2
+        // using a parabola approximation because of performance concerns with the obvious exponentiation
+        result = shift * shift + shift * 0.5 + 0.5;
+    	return result;
+    }
+    
     public static float calcCliff(int x, int z, float[] noise, float river) {
         float cliff = 0f;
         

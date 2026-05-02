@@ -53,6 +53,10 @@ public final class RTGWorld {
     private static final float TREE_MATERIALS_DIVISOR = 631;// the noise divisor for tree material noise (repeats over this distance)
 
     private static final Map<World, RTGWorld> INSTANCE_CACHE = new HashMap<>();
+    
+    // moving to a system where used instances are logged
+    public static final int RIVER_VARIATION_SIMPLEX_1 = 8;
+    public static final int RIVER_VARIATION_SIMPLEX_2 = 9;
 
     private final World world;
     private final RTGChunkGenSettings generatorSettings;

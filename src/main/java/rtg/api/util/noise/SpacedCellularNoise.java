@@ -103,46 +103,46 @@ public class SpacedCellularNoise implements CellularNoise {
         result.evaluate(this.areaPoints(square), x, y);
 
         // now horizontally adjacent squares as appropriate
-        double distance = y - yInt;
-        if (distance != result.getNextDistance()) {
+        double distance = (y - yInt)*(y - yInt);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt, yInt - 1)), x, y);
-        }
+        //}
 
-        distance = x - xInt;
-        if (distance != result.getNextDistance()) {
+        distance = (x - xInt)*(x - xInt);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt - 1, yInt)), x, y);
-        }
+        //}
 
-        distance = yInt - y + 1.0;
-        if (distance != result.getNextDistance()) {
+        distance = (yInt - y + 1.0)*(yInt - y + 1.0);
+        //if (distance <result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt, yInt + 1)), x, y);
-        }
+        //}
 
-        distance = xInt - x + 1.0;
-        if (distance != result.getNextDistance()) {
+        distance = (xInt - x + 1.0)*(xInt - x + 1.0);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt + 1, yInt)), x, y);
-        }
+        //}
 
         // now diagonally adjacent squares
-        distance = Math.min(y - yInt, x - xInt);
-        if (distance != result.getNextDistance()) {
+        distance = (x - xInt)*(x - xInt)+(y - yInt)*(y - yInt);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt - 1, yInt - 1)), x, y);
-        }
+        //}
 
-        distance = Math.min(yInt - y + 1.0, x - xInt);
-        if (distance != result.getNextDistance()) {
+        distance =  (yInt - y + 1.0)*(yInt - y + 1.0)+(x - xInt)*(x - xInt);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt - 1, yInt + 1)), x, y);
-        }
+        //}
 
-        distance = Math.min(yInt - y + 1.0, xInt - x + 1.0);
-        if (distance != result.getNextDistance()) {
+        //distance = (yInt - y + 1.0)*(yInt - y + 1.0)+ (xInt - x + 1.0)*(xInt - x + 1.0);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt + 1, yInt + 1)), x, y);
-        }
+        //}
 
-        distance = Math.min(y - yInt, xInt - x + 1.0);
-        if (distance != result.getNextDistance()) {
+        distance = (y - yInt)*(y - yInt)+ (xInt - x + 1.0)*(xInt - x + 1.0);
+        //if (distance < result.getThirdDistanceSq()) {
             result.evaluate(this.areaPoints(new Point(xInt + 1, yInt - 1)), x, y);
-        }
+        //}
 
         return result;
     }

@@ -237,7 +237,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
             for (int z = 0; z < 16; z++) {
                 mpos.setPos(worldX + x, 0, worldZ + z);
 
-                float river = -TerrainBase.getRiverStrength(mpos, rtgWorld);
+                float river = -TerrainBase.getRiverDistanceStrength(mpos, rtgWorld);
                 int depth = -1;
                 biomes[x * 16 + z].rReplace(primer, mpos, x, z, depth, rtgWorld, noise, river, base);
 
@@ -346,7 +346,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
             }
         }
 
-        float river = -TerrainBase.getRiverStrength(blockPos.add(16, 0, 16), rtgWorld);
+        float river = -TerrainBase.getRiverDistanceStrength(blockPos.add(16, 0, 16), rtgWorld);
 
         if (RTG.decorationsDisable() || biome.getConfig().DISABLE_RTG_DECORATIONS.get()) {
             if (river > 0.9f) {
@@ -607,7 +607,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
 
                 landscape.noise[x * 16 + z] = 0f;
 
-                float river = TerrainBase.getRiverStrength(mpos.setPos(worldX + x, 0, worldZ + z), rtgWorld);
+                float river = TerrainBase.getRiverDistanceStrength(mpos.setPos(worldX + x, 0, worldZ + z), rtgWorld);
                 landscape.river[x * 16 + z] = -river;
 
                 for (int i = 0; i < weightedBiomes.size(); i++) {
@@ -624,6 +624,8 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
                         //weightedBiomes.set(i, v);
                     }
                 }
+                // for river debugging
+                //landscape.noise[x * 16 + z] = 80f + river*15f;
             }
         }
 
