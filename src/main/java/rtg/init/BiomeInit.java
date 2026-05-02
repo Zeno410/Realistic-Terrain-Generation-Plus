@@ -195,8 +195,10 @@ import rtg.world.biome.realistic.environs.RealisticBiomeENVEndShrubland;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVExtremeJungle;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVIcyHills;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVMoor;
+import rtg.world.biome.realistic.environs.RealisticBiomeENVOvergrownPlains;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVPineTaiga;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVPineTaigaHills;
+import rtg.world.biome.realistic.environs.RealisticBiomeENVSandstoneRanges;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVSilkglades;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVSparseEndForest;
 import rtg.world.biome.realistic.environs.RealisticBiomeENVStoneFlats;
@@ -364,7 +366,9 @@ import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVAutumnalWoodedHills;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVAutumnalWoods;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVBadlands;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVBirchForestedHills;
+import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVCanyon;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVCliffs;
+import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVCragCliffs;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVDesertShrubland;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVForestedHills;
 import rtg.world.biome.realistic.traverse.RealisticBiomeTRAVGlacier;
@@ -1226,6 +1230,62 @@ public final class BiomeInit {
         if ((biome = getBiome(Mods.environs.getResourceLocation("icy_hills"))) != null) {
             RTGAPI.addRTGBiomes(new RealisticBiomeENVIcyHills(biome));
         }
+        
+        // alterations for Environs++
+        if ((biome = getBiome(Mods.environs.getResourceLocation("pine_taiga"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVPineTaiga(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("pine_taiga_m"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVPineTaigaHills(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("floating_end_forest"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVSparseEndForest(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("silk_wetland"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVSilkglades(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("stone_basin"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVPineTaiga(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("stone_hills"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVPineTaigaHills(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("tall_oak_forest_m"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVPineTaigaHills(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("roofed_swamp"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVSilkglades(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("mushroom_rainforest"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVExtremeJungle(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("overgrown_plains"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVOvergrownPlains(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("kakadu"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVEndShrubland(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("lush_forest"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVTallOakForest(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("dry_oak_forest"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVDeadOakForest(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("dry_oak_forest_m"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVDeadOakForestHills(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("sandstone_ranges"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVSandstoneRanges(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("canyon"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVEmeraldCliffs(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("cold_pine_taiga"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVTallOakForest(biome));
+        }
+        if ((biome = getBiome(Mods.environs.getResourceLocation("cold_pine_taiga_m"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeENVTallOakForestHills(biome));
+        }
     }
 
     private static void init_explorercraft() {
@@ -1838,8 +1898,14 @@ public final class BiomeInit {
         if ((biome = getBiome(Mods.traverse.getResourceLocation("autumnal_wooded_hills"))) != null) {
             RTGAPI.addRTGBiomes(new RealisticBiomeTRAVAutumnalWoodedHills(biome));
         }
+        if ((biome = getBiome(Mods.traverse.getResourceLocation("canyon"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeTRAVCanyon(biome));
+        }
         if ((biome = getBiome(Mods.traverse.getResourceLocation("cliffs"))) != null) {
             RTGAPI.addRTGBiomes(new RealisticBiomeTRAVCliffs(biome));
+        }
+        if ((biome = getBiome(Mods.traverse.getResourceLocation("crag_cliffs"))) != null) {
+            RTGAPI.addRTGBiomes(new RealisticBiomeTRAVCragCliffs(biome));
         }
         if ((biome = getBiome(Mods.traverse.getResourceLocation("glacier"))) != null) {
             RTGAPI.addRTGBiomes(new RealisticBiomeTRAVGlacier(biome));
