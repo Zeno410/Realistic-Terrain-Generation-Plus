@@ -7,25 +7,32 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Post;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkEvent.Load;
 
 import rtg.RTGConfig;
 import rtg.api.RTGAPI;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.ChunkTracker;
 import rtg.api.util.Direction;
 import rtg.api.util.Logger;
 import rtg.api.util.UtilityClass;
@@ -48,19 +55,117 @@ public final class EventHandlerCommon
 
     public static void init() {
         MinecraftForge.TERRAIN_GEN_BUS.register(EventHandlerCommon.class);
+        MinecraftForge.EVENT_BUS.register(EventHandlerCommon.class);
     }
 
+    @SubscribeEvent
+    public static void fixLightingOnLoad(ChunkEvent.Load loadEvent) {
+    	if (loadEvent.getWorld().isRemote) return;
+    	for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16 ; z++) {
+				//fixLighting(loadEvent.getChunk(),x,z);
+			}
+		}
+	}
+	    
+    
     // TERRAIN_GEN_BUS
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onDecorateBiome(final DecorateBiomeEvent.Decorate event) {
 
         final World world = event.getWorld();
+    	if (world.isRemote) return;
         if (world.getBiomeProvider() instanceof BiomeProviderRTG) {
             final Decorate.EventType eventType = event.getType();
             if (eventType == Decorate.EventType.LAKE_WATER || eventType == Decorate.EventType.LAKE_LAVA) {
                 event.setResult(Event.Result.DENY);
                 generateFalls(world, event.getRand(), event.getChunkPos(), eventType);
             }
+        }
+    }
+    
+    private static ChunkTracker lightChecked = new ChunkTracker(1500);
+    
+    private static void fixLighting(World world, ChunkPos chunkPos) {
+    	
+    	// abort if we've done this chunk before
+    	//if (!lightChecked.addIfNeeded(world, chunkPos)) return;
+        Chunk chunk = world.getChunk(chunkPos.x,chunkPos.z);
+        //chunk.generateSkylightMap();
+        //chunk.checkLight();
+    	//Logger.error("Relighting ChunkPos "+ chunkPos.x + "," + chunkPos.z, "Relighting ChunkPos "+ chunkPos.x + "," + chunkPos.z);
+    	for (int x = 0; x < 16; x++) {
+    		for (int z = 0; z < 16 ; z++) {
+    			fixLighting(chunk,x,z);
+    		}
+    	}
+    	//chunk.markDirty();
+    	//chunk.setModified(true);
+    }
+    
+    private static void fixLighting(Chunk chunk, int x, int z) {
+    	BlockPos start = new BlockPos(x,255,z);
+    	if (chunk.getBlockState(x, 255, z).getBlock() != Blocks.AIR) return;
+    	boolean lastChecked = false;
+    	int lastAir = 255;
+    	for (int y = 255; y > 48; y--) {
+    		IBlockState state  = chunk.getBlockState(x, y, z);
+    		Block block = state.getBlock();
+    		if (block == Blocks.AIR) {
+    			lastAir = y;
+    			lastChecked = true;
+    			continue;
+    		}
+    		if (state.isOpaqueCube()) {
+    	    	BlockPos lastAirLocation = new BlockPos(x,lastAir,z);
+    	    	int lighting = chunk.getLightFor(EnumSkyBlock.SKY, lastAirLocation);
+    	    	if (lighting < getAdjacentBlockLight(chunk,x,lastAir,z) -1 ) {
+    	    		chunk.getWorld().setBlockState(chunk.getPos().getBlock(x, lastAir, z), Blocks.WOOL.getDefaultState(), 3);
+    	    		chunk.getWorld().setBlockToAir(chunk.getPos().getBlock(x, lastAir, z));
+    	    	} 
+    	    	lastChecked = false;
+    			continue;
+    		}
+    	}
+    }
+    
+    private static int getAdjacentBlockLight(Chunk chunk, int x, int y, int z) {
+    	int result = getBlockLight(chunk,x+1,y,z);
+    	result = Math.max(getBlockLight(chunk,x+1,y,z+1), result);
+    	result = Math.max(getBlockLight(chunk,x-1,y,z+1), result);
+    	result = Math.max(getBlockLight(chunk,x-1,y,z-1), result);
+    	return result;
+    }
+    
+    private static int getBlockLight(Chunk chunk, int x, int y, int z) {
+    	if ((x <0)||(x>15)||(z <0)||(z>15)) return 0;
+    	return chunk.getLightFor(EnumSkyBlock.SKY, new BlockPos(x,y,z));
+    }
+    
+    public static void fixLightingAround(World world, ChunkPos pos) {
+
+        if (world.getBiomeProvider() instanceof BiomeProviderRTG) {
+        	Chunk targeted;
+        	if (world.isChunkGeneratedAt(pos.x+1,pos.z+1)) {
+        		targeted = world.getChunk(pos.x+1,pos.z+1);
+        		if (targeted.isPopulated())
+            	    fixLighting(world,new ChunkPos(pos.x+1,pos.z+1));
+        	}
+        	if (world.isChunkGeneratedAt(pos.x-1,pos.z+1)) {
+            	targeted = world.getChunk(pos.x-1,pos.z+1);
+        		if (targeted.isPopulated())
+            	    fixLighting(world,new ChunkPos(pos.x-1,pos.z+1));
+    	    }
+        	if (world.isChunkGeneratedAt(pos.x-1,pos.z-1)) {
+            	targeted = world.getChunk(pos.x-1,pos.z-1);
+        		if (targeted.isPopulated())
+            	    fixLighting(world,new ChunkPos(pos.x-1,pos.z-1));
+    	    }
+        	if (world.isChunkGeneratedAt(pos.x+1,pos.z-1)) {
+            	targeted = world.getChunk(pos.x+1,pos.z-1);
+        		if (targeted.isPopulated())
+            	    fixLighting(world,new ChunkPos(pos.x+1,pos.z-1));
+    	    }
         }
     }
 
@@ -219,7 +324,8 @@ public final class EventHandlerCommon
                 world.setBlockState(adjacent, Blocks.AIR.getDefaultState(), 2);
             }
     	}
-    	
+    	ChunkPos chunkPos = new ChunkPos(trunkLocation);
+    	fixLighting(world,chunkPos);
     }
     
     private static int countSaplingGroup(World world, BlockPos pos,IBlockState saplingBlock) {

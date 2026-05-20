@@ -39,6 +39,7 @@ import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.gen.RTGChunkGenSettings;
 import rtg.api.world.gen.feature.WorldGenPond;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 import rtg.world.biome.BiomeAnalyzer;
 import rtg.world.biome.realistic.vanilla.RealisticBiomeVanillaMesaPlateau;
 import rtg.world.gen.structure.WoodlandMansionRTG;
@@ -403,6 +404,8 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         }
 
         ForgeEventFactory.onChunkPopulate(false, this, this.world, this.rand, chunkX, chunkZ, hasVillage);
+        
+        EventHandlerCommon.fixLightingAround(world, chunkPos);
 
         BlockFalling.fallInstantly = false;
     }
