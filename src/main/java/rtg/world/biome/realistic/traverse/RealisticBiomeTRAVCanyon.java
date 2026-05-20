@@ -86,7 +86,7 @@ public class RealisticBiomeTRAVCanyon extends RealisticBiomeTRAVBase {
 
             onTop.hillHeight = 60;
             onTop.hillWavelength = 80;
-            onTop.hillsEverywhere = true;
+            onTop.hillsEverywhere = false;
             onTop.spikeHeight = 40;
             onTop.spikeWavelength = 15;
 

@@ -86,10 +86,10 @@ public class RealisticBiomeTRAVCragCliffs extends RealisticBiomeTRAVBase {
 
             onTop.hillHeight = 40;
             onTop.hillWavelength = 80;
-            onTop.hillsEverywhere = true;
+            onTop.hillsEverywhere = false;
             onTop.spikeHeight = 30;
             onTop.spikeWavelength = 15;
-            onTop.spikesEverywhere = true;
+            onTop.spikesEverywhere = false;
 
             withJitter = new JitterEffect();
             withJitter.amplitude = 4;

@@ -16,8 +16,10 @@ public class BumpyHillsEffect extends HeightEffect {
     // a trio of parameters frequently used together
     public float hillHeight = Integer.MAX_VALUE;
     public float hillWavelength = 0;
+    public boolean hillsEverywhere = false;
     public float spikeHeight = Integer.MAX_VALUE;
     public float spikeWavelength = 0;
+    public boolean spikesEverywhere = false;
 
 
     // octaves are standardized so they don't need to be set
@@ -27,9 +29,16 @@ public class BumpyHillsEffect extends HeightEffect {
     @Override
     public final float added(RTGWorld rtgWorld, float x, float y) {
         float noise = rtgWorld.simplexInstance(hillOctave).noise2f(x / hillWavelength, y / hillWavelength);
-        noise = TerrainBase.blendedHillHeight(noise);
+        if (hillsEverywhere) {
+        	noise = Math.abs(noise);
+        } else {
+             noise = TerrainBase.blendedHillHeight(noise);
+        }
         float spikeNoise = rtgWorld.simplexInstance(spikeOctave).noise2f(x / spikeWavelength, y / spikeWavelength);
-        spikeNoise = TerrainBase.blendedHillHeight(spikeNoise * noise);
+        if (spikesEverywhere) {spikeNoise = Math.abs(spikeNoise);
+        } else {
+            spikeNoise = TerrainBase.blendedHillHeight(spikeNoise * noise);
+        }
         return noise * hillHeight + spikeNoise * spikeHeight;
     }
 }
