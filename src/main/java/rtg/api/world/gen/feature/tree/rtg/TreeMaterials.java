@@ -2,9 +2,11 @@ package rtg.api.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import rtg.api.util.BlockUtil;
 import rtg.api.world.RTGWorld;
 
 public class TreeMaterials {
@@ -49,6 +51,12 @@ public class TreeMaterials {
 				Blocks.LOG2.getStateFromMeta(0),
 				Blocks.LEAVES2.getStateFromMeta(0),
 				Blocks.LOG2.getStateFromMeta(12));
+		
+		public static final TreeMaterials darkOak = new TreeMaterials(
+				"Acacia",
+				BlockUtil.getStateLog(EnumType.DARK_OAK),
+				BlockUtil.getStateLeaf(EnumType.DARK_OAK),
+				Blocks.LOG2.getStateFromMeta(13));
 		
 		public final TreeMaterials forNoise(float noise) {
 			if (noise <= -1) return spruce;

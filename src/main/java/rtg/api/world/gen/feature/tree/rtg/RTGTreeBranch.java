@@ -1,8 +1,8 @@
 package rtg.api.world.gen.feature.tree.rtg;
 
 import net.minecraft.util.math.BlockPos;
+import rtg.api.util.FractionalBlockPos;
 import rtg.api.util.Logger;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG.FractionalBlockPos;
 
 class RTGTreeBranch {
 	static int reports = 0;
@@ -36,7 +36,7 @@ class RTGTreeBranch {
 	
 	BlockPos moved() {
 		direction.move(branchLocation);
-		remainingLength -= direction.length;
+		remainingLength -= direction.horizontalLength;
 		return branchLocation.location();
 	}
 	
@@ -47,7 +47,7 @@ class RTGTreeBranch {
 		double oldZ = branchLocation.z;
 		double multiplier = multiplierToNextBlock() + .0001; // fudge factor for rounding errors
 		direction.moveFractionally(branchLocation,multiplierToNextBlock());
-		remainingLength -= Math.abs(multiplier)/direction.length;
+		remainingLength -= Math.abs(multiplier)/direction.horizontalLength;
 		BlockPos newPos = branchLocation.location();
 		int differences = 0;
 		if (oldPos.getX() != newPos.getX()) differences ++;

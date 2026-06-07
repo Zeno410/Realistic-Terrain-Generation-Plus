@@ -219,6 +219,22 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         return false;
     }
     
+    protected boolean placeLogBlock(World world, BlockPos pos, int generateFlag, SkylightTracker tracker) {
+
+        if (this.isReplaceable(world, pos)) {
+        	return tracker.testPlace(world, pos, logBlock, generateFlag);
+        }
+        return placeLogBlock(world,pos,this.branchBlock,generateFlag,tracker);
+    }
+    
+    protected boolean placeLogBlock(World world, BlockPos pos, SkylightTracker tracker) {
+
+        if (this.isReplaceable(world, pos)) {
+        	return tracker.testPlace(world, pos, logBlock, 3);
+        }
+        return placeLogBlock(world,pos,this.branchBlock,generateFlag,tracker);
+    }
+    
     protected boolean debugPlaceLogBlock(World world, BlockPos pos, IBlockState logBlock, int generateFlag, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
@@ -235,6 +251,14 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         return false;
     }
     
+    protected boolean placeTrunkBlock(World world, BlockPos pos, SkylightTracker tracker) {
+
+        if (this.isReplaceable(world, pos)) {
+        	return tracker.testTrunk(world, pos, logBlock, 3);
+        }
+        return false;
+    }
+    
     protected boolean placeLeavesBlock(World world, BlockPos pos, IBlockState leavesBlock, int generateFlag, SkylightTracker tracker) {
 
         if (world.isAirBlock(pos)) {
@@ -244,6 +268,14 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         // count as successful if already that tree. Logs and branches don't block because of problems getting away from the base trunk
     }
 
+    protected boolean placeLeavesBlock(World world, BlockPos pos, int generateFlag, SkylightTracker tracker) {
+        return placeLeavesBlock(world,pos,this.leavesBlock,generateFlag,tracker);
+    }
+    
+    protected boolean placeLeavesBlock(World world, BlockPos pos, SkylightTracker tracker) {
+        return placeLeavesBlock(world,pos,this.leavesBlock,3,tracker);
+    }
+    
     @Override
     public boolean isReplaceable(World world, BlockPos pos) {
 
@@ -467,27 +499,20 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     	this.crownSize = DecoBase.getRangedRandom(rand, minCrownSize, maxCrownSize);
     }
     
-    protected static class FractionalBlockPos {
-    	double x;
-    	double y;
-    	double z;
-    	
-    	FractionalBlockPos(BlockPos start) {
-    		x = (double)start.getX() + 0.5;
-    		y = (double)start.getY() + 0.5;
-    		z = (double)start.getZ() + 0.5;
-    	}
-    	
-    	FractionalBlockPos(FractionalBlockPos copied) {
-    		this.x = copied.x;
-    		this.y = copied.y;
-    		this.z = copied.z;
-    	}
-    	
-    	BlockPos location() {
-    		return new BlockPos(Math.floor(x),(int)y,Math.floor(z));
-    	}
-    
+    protected boolean inAir(World world, BlockPos below) {
+    	IBlockState state = world.getBlockState(below);
+    	if (state.getLightOpacity()<15) return true;
+    	if (state.getBlock().equals(Blocks.LOG)) return true;
+    	if (state.getBlock().equals(Blocks.LOG2)) return true;
+    	return false;
     }
-    
+    protected BlockPos dropToGround(World world, BlockPos pos) {
+    	BlockPos result = pos;
+    	BlockPos below = pos.add(0, -1, 0);
+    	while (inAir(world,below)&&below.getY()>50) {
+    		result = below;
+    		below = below.add(0, -1, 0);;
+    	}
+    	return result;
+    }
 }

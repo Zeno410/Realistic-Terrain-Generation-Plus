@@ -1,13 +1,14 @@
 package rtg.api.world.gen.feature.tree.rtg;
 
 import net.minecraft.util.math.BlockPos;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG.FractionalBlockPos;
+import net.minecraft.util.math.Vec3d;
+import rtg.api.util.FractionalBlockPos;
 
 class BranchVector {
 	final double dx;
 	final double dy;
 	final double dz;
-    final double length;
+    final double horizontalLength;
 	
 	
 	BranchVector (double horizontalDirection, float verticalShift) {
@@ -20,7 +21,21 @@ class BranchVector {
 		dx = trialDx/longestDirection;
 		dy = trialDy/longestDirection;
 		dz = trialDz/longestDirection;
-		length = Math.sqrt(dx*dx+dy*dy+dz*dz);
+		horizontalLength = Math.sqrt(dx*dx+dy*dy+dz*dz);
+	}
+
+	public BranchVector(Vec3d vector) {
+		double trialDx = vector.x;
+		double trialDz = vector.z;
+		double trialDy  = vector.y;
+		// adjust lengths so the vector goes to the edge of a unit cube
+		double longestDirection =Math.max(Math.abs(trialDx),Math.abs(trialDy));
+		longestDirection = Math.max(longestDirection,Math.abs(trialDz));
+		dx = trialDx/longestDirection;
+		dy = trialDy/longestDirection;
+		dz = trialDz/longestDirection;
+		horizontalLength = Math.sqrt(dx*dx+dz*dz);
+		
 	}
 	
     void move(FractionalBlockPos moved) {

@@ -233,6 +233,7 @@ abstract public class DecoVariableTree extends DecoTree {
 		mediumTree.setBranchBlock(materials.branches);
         mediumTree.setTrunkSize(trunkHeight);
         mediumTree.setCrownSize(actualHeight-trunkHeight);
+        //mediumTree.setCrownSize(2);
         mediumTree.setNoLeaves(false);
         if (treesRemaining.allowed(mediumTree.estimatedSize(), random)) {
              mediumTree.generate(world, random, pos);
@@ -249,6 +250,7 @@ abstract public class DecoVariableTree extends DecoTree {
 		smallTree.setBranchBlock(materials.branches);
 		smallTree.setTrunkSize(trunkHeight);
 	    smallTree.setCrownSize(actualHeight-trunkHeight+2);// need a bit more crown for this algo
+	    //smallTree.setCrownSize(2);
 	    smallTree.setNoLeaves(false);
 	    if (treesRemaining.allowed(smallTree.estimatedSize(), random)){
 		    smallTree.generate(world, random, pos);

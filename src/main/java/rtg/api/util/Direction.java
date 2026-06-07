@@ -21,6 +21,9 @@ public  class Direction {
    public final int xOffset;
    public final int zOffset;
    public final int index;
+
+   private static final float TAU = 2f*(float)Math.PI;
+   
    private Direction (int _xMultiple, int _zMultiple, int _index) {
        xOffset = _xMultiple;
        zOffset = _zMultiple;
@@ -75,5 +78,14 @@ public  class Direction {
    
    public Direction reversed() {
 	   return storedDirections.get((index + 4)%8);
+   }
+   
+   public static Direction nearestDiagonal(float radians) {
+	   int cycles = (int) Math.floor(radians/TAU);
+	   if (cycles !=0) radians -= TAU*cycles;
+	   if (radians < TAU/4f) return DOWN_RIGHT;
+	   if (radians < TAU/2f) return DOWN_LEFT;
+	   if (radians < 3f*TAU/4f) return UP_LEFT;
+	   return UP_RIGHT;
    }
 }

@@ -16,6 +16,7 @@ import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionRoofedForest;
 import rtg.api.world.deco.helper.DecoHelperRandomSplit;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -59,9 +60,13 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeBase {
 
         return new SurfaceVanillaRoofedForest(getConfig(), biome.topBlock, biome.fillerBlock, 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(BlockDirt.DirtType.PODZOL), 0.15f);
     }
-
+    
     @Override
     public void initDecos() {
+        this.addDecoCollection(new DecoCollectionRoofedForest(this.getConfig()));
+    }
+
+    public void oldInitDecos() {
 
         DecoMushrooms decoMushrooms = new DecoMushrooms();
         decoMushrooms.setChance(4);

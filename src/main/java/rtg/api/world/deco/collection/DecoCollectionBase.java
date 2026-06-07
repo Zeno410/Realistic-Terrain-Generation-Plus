@@ -27,6 +27,8 @@ public class DecoCollectionBase {
         this.decos = new ArrayList<DecoBase>();
         this.rtgTrees = new ArrayList<TreeRTG>();
     }
+    
+    protected BiomeConfig getConfig() { return config;}
 
     public DecoCollectionBase addDeco(DecoBase deco) {
 
