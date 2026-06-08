@@ -31,7 +31,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         sitchensisTree.setMaxTrunkSize(9);
         sitchensisTree.setMinCrownSize(5);
         sitchensisTree.setMaxCrownSize(14);
-        this.addTree(sitchensisTree);
 
         DecoTree smallPines = new DecoTree(sitchensisTree);
         smallPines.setStrengthNoiseFactorXForLoops(true);
@@ -48,7 +47,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         pungensTree.setMaxTrunkSize(7);
         pungensTree.setMinCrownSize(6);
         pungensTree.setMaxCrownSize(17);
-        this.addTree(pungensTree);
 
         DecoTree spruceTrees = new DecoTree(pungensTree);
         spruceTrees.setStrengthNoiseFactorXForLoops(true);
@@ -65,7 +63,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         ponderosaTree.setMaxTrunkSize(21);
         ponderosaTree.setMinCrownSize(15);
         ponderosaTree.setMaxCrownSize(29);
-        this.addTree(ponderosaTree);
 
         DecoTree oakPines = new DecoTree(ponderosaTree);
         oakPines.setStrengthNoiseFactorXForLoops(true);

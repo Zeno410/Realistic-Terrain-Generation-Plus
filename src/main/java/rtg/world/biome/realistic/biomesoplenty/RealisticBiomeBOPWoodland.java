@@ -184,8 +184,6 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
             pinusPonderosa.setMinCrownSize(8);
             pinusPonderosa.setMaxCrownSize(20);
 
-            this.addTree(pinusPonderosa);
-
             return new DecoTree(pinusPonderosa)
                 .setStrengthFactorForLoops(6f)
                 .setTreeType(DecoTree.TreeType.RTG_TREE)
@@ -213,8 +211,6 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
                 .setMaxTrunkSize(9)
                 .setMinCrownSize(6)
                 .setMaxCrownSize(13);
-
-            this.addTree(piceaSitchensis);
 
             return new DecoTree(piceaSitchensis)
                 .setStrengthFactorForLoops(6f)

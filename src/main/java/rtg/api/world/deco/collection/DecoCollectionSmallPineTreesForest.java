@@ -28,7 +28,6 @@ public class DecoCollectionSmallPineTreesForest extends DecoCollectionBase {
         sitchensisTree.setMaxTrunkSize(10);
         sitchensisTree.setMinCrownSize(6);
         sitchensisTree.setMaxCrownSize(14);
-        this.addTree(sitchensisTree);
 
         DecoTree oakPine = new DecoTree(sitchensisTree);
         oakPine.setStrengthFactorForLoops(3f);

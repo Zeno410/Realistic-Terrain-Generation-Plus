@@ -34,8 +34,6 @@ public class DecoCollectionExtremeHillsPlus extends DecoCollectionBase {
         nigraTree.setMinCrownSize(minCrownSize);
         nigraTree.setMaxCrownSize(maxCrownSize);
 
-        this.addTree(nigraTree);
-
         DecoTree nigraDeco = new DecoTree(nigraTree);
         nigraDeco.setStrengthFactorForLoops(4f);
         nigraDeco.setStrengthNoiseFactorXForLoops(true);

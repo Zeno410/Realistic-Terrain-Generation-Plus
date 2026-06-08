@@ -19,7 +19,7 @@ import java.util.Random;
  *
  * @author WhichOnesPink
  */
-public abstract class DecoBase {
+public abstract class DecoBase extends AbstractDeco {
 
     private boolean checkRiver;
     private float minRiver; // Minimum river value required to generate.

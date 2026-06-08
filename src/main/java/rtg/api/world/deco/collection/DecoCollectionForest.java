@@ -141,8 +141,6 @@ public class DecoCollectionForest extends DecoCollectionBase {
             .setMinCrownSize(5)
             .setMaxCrownSize(8);
 
-        this.addTree(piceaPungens);
-
         return new DecoTree(piceaPungens)
             .setStrengthFactorForLoops(3f)
             .setTreeType(TreeType.RTG_TREE)

@@ -1,9 +1,15 @@
 package rtg.api.world.deco.collection;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.ChunkPos;
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.ChunkInfo;
+import rtg.api.world.RTGWorld;
+import rtg.api.world.biome.IRealisticBiome;
+import rtg.api.world.deco.AbstractDeco;
 import rtg.api.world.deco.DecoBase;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
@@ -15,17 +21,15 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 //              are added the same as in IRealisticBiome#addDeco
 // Zeno: Restored. Nobody is ever going to do this.
 
-public class DecoCollectionBase {
+public class DecoCollectionBase extends AbstractDeco {
 
     public ArrayList<DecoBase> decos;
-    public ArrayList<TreeRTG> rtgTrees;
     protected BiomeConfig config;
 
     public DecoCollectionBase(BiomeConfig config) {
 
         this.config = config;
         this.decos = new ArrayList<DecoBase>();
-        this.rtgTrees = new ArrayList<TreeRTG>();
     }
     
     protected BiomeConfig getConfig() { return config;}
@@ -50,19 +54,10 @@ public class DecoCollectionBase {
         return this;
     }
 
-    /**
-     * Adds a tree to the list of RTG trees associated with this collection.
-     * The 'allowed' parameter allows us to pass biome config booleans dynamically when configuring the trees in the collection.
-     *
-     * @param tree
-     * @param allowed
-     */
-    public void addTree(TreeRTG tree, boolean allowed) {
-
-        if (allowed) {
-
-            this.rtgTrees.add(tree);
-        }
+    public  void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInfo) {
+    	for (AbstractDeco deco: decos) {
+    		deco.generate(biome, rtgWorld, rand, chunkPos, river, hasVillage, chunkInfo);
+    	}
     }
 
     /**
@@ -72,28 +67,7 @@ public class DecoCollectionBase {
      */
     public void addTree(TreeRTG tree) {
 
-        this.addTree(tree, true);
+        //this.addTree(tree, true);
     }
 
-    public ArrayList<IBlockState> treeLogs() {
-
-        ArrayList<IBlockState> logBlocks = new ArrayList<IBlockState>();
-
-        for (int i = 0; i < rtgTrees.size(); i++) {
-            logBlocks.add(rtgTrees.get(i).getLogBlock());
-        }
-
-        return logBlocks;
-    }
-
-    public ArrayList<IBlockState> treeLeaves() {
-
-        ArrayList<IBlockState> leafBlocks = new ArrayList<IBlockState>();
-
-        for (int i = 0; i < rtgTrees.size(); i++) {
-            leafBlocks.add(rtgTrees.get(i).getLeavesBlock());
-        }
-
-        return leafBlocks;
-    }
 }

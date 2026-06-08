@@ -30,7 +30,6 @@ public class DecoCollectionDesertRiver extends DecoCollectionBase {
         acaciaTree.setMaxTrunkSize(4);
         acaciaTree.setMinCrownSize(3);
         acaciaTree.setMaxCrownSize(6);
-        this.addTree(acaciaTree);
 
         DecoTree acaciaTrees = new DecoTree(acaciaTree);
         acaciaTrees.setCheckRiver(true);

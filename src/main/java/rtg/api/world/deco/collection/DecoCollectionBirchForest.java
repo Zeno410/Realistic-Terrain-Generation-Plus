@@ -55,8 +55,6 @@ public class DecoCollectionBirchForest extends DecoCollectionBase {
             .setMinCrownSize(8)
             .setMaxCrownSize(19);
 
-        this.addTree(birchTree);
-
         return new DecoTree(birchTree)
             .setStrengthFactorForLoops(3f)
             .setTreeType(DecoTree.TreeType.RTG_TREE)

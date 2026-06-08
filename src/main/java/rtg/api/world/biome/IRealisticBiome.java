@@ -123,12 +123,6 @@ public interface IRealisticBiome {
             }
         }
 
-        // If there are any tree decos in this collection, then add the individual TreeRTG objects to master tree list.
-        if (decoCollection.rtgTrees.size() > 0) {
-            for (int i = 0; i < decoCollection.rtgTrees.size(); i++) {
-                this.addTree(decoCollection.rtgTrees.get(i));
-            }
-        }
     }
 
     /**

@@ -31,7 +31,6 @@ public class DecoCollectionJungle extends DecoCollectionBase {
         mucronataTree.setMaxTrunkSize(4);
         mucronataTree.setMinCrownSize(10);
         mucronataTree.setMaxCrownSize(27);
-        this.addTree(mucronataTree);
 
         DecoTree mangroves = new DecoTree(new TreeRTGRhizophoraMucronata(4, 5, 13f, 0.32f, 0.2f));
         mangroves.setLoops(3);
@@ -63,7 +62,6 @@ public class DecoCollectionJungle extends DecoCollectionBase {
         nuciferaTree.setMaxTrunkSize(9);
         nuciferaTree.setMinCrownSize(6);
         nuciferaTree.setMaxCrownSize(8);
-        this.addTree(nuciferaTree);
 
         DecoTree palmCustom = new DecoTree(nuciferaTree);
         palmCustom.setLoops(1);

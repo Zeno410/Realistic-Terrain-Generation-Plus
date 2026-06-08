@@ -35,8 +35,6 @@ public class DecoCollectionExtremeHillsPlusM extends DecoCollectionExtremeHillsP
         nigraTree.setMinCrownSize(minCrownSize);
         nigraTree.setMaxCrownSize(maxCrownSize);
 
-        this.addTree(nigraTree);
-
         return new DecoTree(nigraTree)
             .setLoops(3)
             .setTreeType(DecoTree.TreeType.RTG_TREE)

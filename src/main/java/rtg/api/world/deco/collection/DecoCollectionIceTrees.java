@@ -64,8 +64,6 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
         validBlocks.add(Blocks.SNOW.getDefaultState());
         iceSpike.setValidGroundBlocks(validBlocks);
 
-        this.addTree(iceSpike);
-
         return new DecoTree(iceSpike)
             .setStrengthFactorForLoops(1f)
             .setTreeType(TreeType.RTG_TREE)
@@ -98,8 +96,6 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
         validBlocks.add(Blocks.SNOW.getDefaultState());
         shortIceSpike.setValidGroundBlocks(validBlocks);
 
-        this.addTree(shortIceSpike);
-
         return new DecoTree(shortIceSpike)
             .setStrengthFactorForLoops(2f)
             .setTreeType(TreeType.RTG_TREE)
@@ -124,8 +120,6 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
         ArrayList<IBlockState> validBlocks = iceBush.getValidGroundBlocks();
         validBlocks.add(Blocks.SNOW.getDefaultState());
         iceBush.setValidGroundBlocks(validBlocks);
-
-        this.addTree(iceBush);
 
         return new DecoTree(iceBush)
             .setStrengthFactorForLoops(1f)
