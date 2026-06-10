@@ -56,7 +56,6 @@ public class RealisticBiomeNTPoppyMeadow extends RealisticBiomeNTBasePlains {
         roburTree1.setMaxTrunkSize(5);
         roburTree1.setMinCrownSize(7);
         roburTree1.setMaxCrownSize(9);
-        this.addTree(roburTree1);
 
         DecoTree oakTrees = new DecoTree(roburTree1);
         oakTrees.setTreeType(DecoTree.TreeType.RTG_TREE);

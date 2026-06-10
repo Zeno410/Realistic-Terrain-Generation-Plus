@@ -60,7 +60,6 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeBase {
         TreeRTG myrtilloidesTree = new TreeRTGSalixMyrtilloides();
         myrtilloidesTree.setLogBlock(Blocks.LOG.getDefaultState());
         myrtilloidesTree.setLeavesBlock(Blocks.LEAVES.getDefaultState());
-        this.addTree(myrtilloidesTree);
 
         DecoTree decoTrees = new DecoTree(myrtilloidesTree);
         decoTrees.setStrengthNoiseFactorXForLoops(true);
@@ -82,7 +81,6 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeBase {
         ponderosaTree.setMinCrownSize(6);
         ponderosaTree.setMaxCrownSize(14);
         ponderosaTree.setNoLeaves(true);
-        this.addTree(ponderosaTree);
 
         DecoTree deadPineTree = new DecoTree(ponderosaTree);
         deadPineTree.setTreeType(DecoTree.TreeType.RTG_TREE);

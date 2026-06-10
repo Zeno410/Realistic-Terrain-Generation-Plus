@@ -94,7 +94,6 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         roburTree1.setMaxTrunkSize(5);
         roburTree1.setMinCrownSize(7);
         roburTree1.setMaxCrownSize(9);
-        this.addTree(roburTree1);
 
         DecoTree oakTrees = new DecoTree(roburTree1);
         oakTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
@@ -110,7 +109,6 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         roburTree2.setMaxTrunkSize(5);
         roburTree2.setMinCrownSize(7);
         roburTree2.setMaxCrownSize(9);
-        this.addTree(roburTree2);
 
         DecoTree birchTrees = new DecoTree(roburTree2);
         birchTrees.setTreeType(DecoTree.TreeType.RTG_TREE);

@@ -41,10 +41,6 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
     private final SurfaceBase surfaceRiver;
 
     private Collection<DecoBase> decos;
-    // TODO: [1.12] To be removed. All trees need to be a Deco and be added through #addDeco.
-    @Deprecated
-    private Collection<TreeRTG> rtgTrees;
-
 
     public RealisticBiomeBase(@Nonnull final Biome baseBiome) {
         this(baseBiome, RiverType.NORMAL, BeachType.NORMAL);
@@ -80,7 +76,6 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         this.surface = initSurface();
         this.surfaceRiver = new SurfaceRiverOasis(config);
         this.decos = new ArrayList<>();
-        this.rtgTrees = new ArrayList<>();
 
         initDecos();
 
@@ -142,9 +137,6 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         return this.decos;
     }
 
-    @Override
-    public Collection<TreeRTG> getTrees() {
-        return this.rtgTrees;
     }
 
     @Override

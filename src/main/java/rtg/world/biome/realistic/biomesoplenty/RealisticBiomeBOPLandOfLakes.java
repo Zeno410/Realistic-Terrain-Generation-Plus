@@ -67,7 +67,6 @@ public class RealisticBiomeBOPLandOfLakes extends RealisticBiomeBase {
         birchTree.setMaxTrunkSize(10);
         birchTree.setMinCrownSize(8);
         birchTree.setMaxCrownSize(19);
-        this.addTree(birchTree);
 
         DecoTree birchTrees = new DecoTree(birchTree);
         birchTrees.setStrengthFactorForLoops(9f);
@@ -87,7 +86,6 @@ public class RealisticBiomeBOPLandOfLakes extends RealisticBiomeBase {
         sitchensisTree.setMaxTrunkSize(9);
         sitchensisTree.setMinCrownSize(5);
         sitchensisTree.setMaxCrownSize(14);
-        this.addTree(sitchensisTree);
 
         DecoTree smallPine = new DecoTree(sitchensisTree);
         smallPine.setStrengthFactorForLoops(9f);

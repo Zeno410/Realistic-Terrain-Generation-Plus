@@ -68,7 +68,6 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
         mucronataTree.setMaxTrunkSize(4);
         mucronataTree.setMinCrownSize(7);
         mucronataTree.setMaxCrownSize(12);
-        this.addTree(mucronataTree);
 
         DecoTree decoTrees = new DecoTree(mucronataTree);
         decoTrees.setStrengthFactorForLoops(24f);

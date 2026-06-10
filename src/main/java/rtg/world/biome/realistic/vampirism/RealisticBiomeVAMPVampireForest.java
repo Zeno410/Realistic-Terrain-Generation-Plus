@@ -49,9 +49,7 @@ public class RealisticBiomeVAMPVampireForest extends RealisticBiomeVAMPBase {
             .setMaxCrownSize(14);
         
         oakTree.getValidGroundBlocks().add(BlockUtil.getBlockStateFromCfgString("vampirism:cursed_earth", null));
-
-        this.addTree(oakTree);
-
+        
         return new DecoTree(oakTree)
             .setStrengthFactorForLoops(7f)
             .setTreeType(DecoTree.TreeType.RTG_TREE)

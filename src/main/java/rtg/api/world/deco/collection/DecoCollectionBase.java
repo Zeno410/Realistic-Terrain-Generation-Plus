@@ -3,7 +3,6 @@ package rtg.api.world.deco.collection;
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.ChunkPos;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.ChunkInfo;
@@ -11,7 +10,6 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.deco.AbstractDeco;
 import rtg.api.world.deco.DecoBase;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
 
 /**
@@ -58,16 +56,6 @@ public class DecoCollectionBase extends AbstractDeco {
     	for (AbstractDeco deco: decos) {
     		deco.generate(biome, rtgWorld, rand, chunkPos, river, hasVillage, chunkInfo);
     	}
-    }
-
-    /**
-     * Convenience method for addTree() where 'allowed' is assumed to be true.
-     *
-     * @param tree
-     */
-    public void addTree(TreeRTG tree) {
-
-        //this.addTree(tree, true);
     }
 
 }

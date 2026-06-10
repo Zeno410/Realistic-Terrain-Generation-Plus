@@ -63,7 +63,6 @@ public class RealisticBiomeVanillaExtremeHillsEdge extends RealisticBiomeBase {
         nigraTree.setMaxTrunkSize(27);
         nigraTree.setMinCrownSize(7);
         nigraTree.setMaxCrownSize(10);
-        this.addTree(nigraTree);
 
         DecoTree decoTrees = new DecoTree(nigraTree);
         decoTrees.setStrengthFactorForLoops(4f);

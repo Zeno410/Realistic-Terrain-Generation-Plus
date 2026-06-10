@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -125,44 +126,6 @@ public interface IRealisticBiome {
 
     }
 
-    /**
-     * Adds a tree to the list of RTG trees associated with this biome.
-     * The 'allowed' parameter allows us to pass biome config booleans dynamically when configuring the trees in the biome.
-     */
-    // TODO: [1.12] To be removed. All trees need to be a Deco and be added through #addDeco.
-    @Deprecated
-    default void addTree(TreeRTG tree, boolean allowed) {
-
-        if (allowed) {
-
-            // Set the sapling data for this tree before we add it to the list.
-            tree.setSaplingBlock(BlockUtil.getSaplingFromLeaves(tree.getLeavesBlock(), Blocks.SAPLING.getDefaultState()));
-
-            /*
-             * Make sure all leaves delay their decay to prevent insta-despawning of leaves (e.g. Swamp Willow)
-             * The try/catch is a safeguard against trees that use leaves which aren't an instance of BlockLeaves.
-             */
-            try {
-                IBlockState leaves = tree.getLeavesBlock().withProperty(BlockLeaves.CHECK_DECAY, false);
-                tree.setLeavesBlock(leaves);
-            }
-            catch (Exception ignore) {
-                // Do nothing.
-            }
-
-            this.getTrees().add(tree);
-        }
-    }
-
-    /**
-     * Convenience method for addTree() where 'allowed' is assumed to be true.
-     */
-    // TODO: [1.12] To be removed. All trees need to be a Deco and be added through #addDeco.
-    @Deprecated
-    default void addTree(TreeRTG tree) {
-        this.addTree(tree, true);
-    }
-
     default void rDecorate(final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage) {
     	ChunkInfo info = new ChunkInfo(chunkPos,rtgWorld);
         this.getDecos().stream()
@@ -195,4 +158,6 @@ public interface IRealisticBiome {
     SurfaceBase initSurface();
 
     void initConfig();
+    
+    
 }

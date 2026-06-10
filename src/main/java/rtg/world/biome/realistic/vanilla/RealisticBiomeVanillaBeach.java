@@ -60,7 +60,6 @@ public class RealisticBiomeVanillaBeach extends RealisticBiomeBase {
         nuciferaTree.setMaxCrownSize(8);
         nuciferaTree.getValidGroundBlocks().clear();
         nuciferaTree.getValidGroundBlocks().add(Blocks.SAND.getDefaultState());
-        this.addTree(nuciferaTree);
 
         DecoTree palmTrees = new DecoTree(nuciferaTree);
         palmTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
