@@ -16,13 +16,18 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoBoulder;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.collection.trees.bop.DecoCollectionBOPConiferousForest;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPSnowyConiferousForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPSnowyConiferousForest(final Biome biome) { super(biome, RiverType.FROZEN, BeachType.COLD); }
+    public RealisticBiomeBOPSnowyConiferousForest(final Biome biome) { 
+    	super(biome, RiverType.FROZEN, BeachType.COLD); 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
 
     @Override
     public void initConfig() {
@@ -45,6 +50,8 @@ public class RealisticBiomeBOPSnowyConiferousForest extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.treeGenerator = new DecoCollectionBOPConiferousForest(this.getConfig());
+    	
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.COBBLESTONE.getDefaultState());
         decoBoulder.setMaxY(80);

@@ -30,6 +30,17 @@ public class TreeDensityLimiter {
 		return allowed;
 	}
 	
+	public boolean test(float needed, Random rand) {
+		//Logger.info("remaining {} needed {}", treesRemaining,needed);
+		if (treesRemaining <= 0) return false;
+		if (treesRemaining >= needed) {
+			return true;
+		}
+		// conditional, chance equal to the ratio remaining/needed
+		boolean allowed = rand.nextFloat()*needed < treesRemaining;
+		return allowed;
+	}
+	
 	public boolean notDone() {return treesRemaining > 0;}
 	
 	public void occupy(float occupied) {

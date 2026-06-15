@@ -17,12 +17,15 @@ import rtg.api.util.ChunkInfo;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase.BeachType;
 import rtg.api.world.biome.RealisticBiomeBase.RiverType;
+import rtg.api.world.deco.AbstractDeco;
 import rtg.api.world.deco.DecoBase;
 import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
+import rtg.world.biome.TreelessDecorator;
 
 import java.util.Collection;
 import java.util.Random;
@@ -69,10 +72,8 @@ public interface IRealisticBiome {
     public boolean allowVanillaTrees();
 
     Collection<DecoBase> getDecos();
-
-    // TODO: [1.12] To be removed. All trees need to be a Deco and be added through #addDeco.
-    @Deprecated
-    Collection<TreeRTG> getTrees();
+    
+    AbstractDeco getTreeDecos();
 
     /**
      * Adds a deco object to the list of biome decos.
@@ -135,14 +136,23 @@ public interface IRealisticBiome {
         if (overridesHardcoded()) {
             this.baseBiome().decorator.decorate(rtgWorld.world(), rand, baseBiome(), new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
         } else {
+        	BlockPos basePos =  new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16);
         	if (this.allowVanillaTrees()) {
-                this.baseBiome().decorate(rtgWorld.world(), rand, new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
+                this.baseBiome().decorate(rtgWorld.world(), rand, basePos);
         	} else {
         		// have to shut off tree decorations but not the rest
-        		BiomeDecorator decorator = this.baseBiome().decorator;
-        		decorator.extraTreeChance = 0f;
-        		decorator.treesPerChunk = 0;
+        		//TreelessDecorator decorator = new TreelessDecorator();
+        		
+        		BiomeDecorator  biomeDecorator = this.baseBiome().decorator;
+        		biomeDecorator.extraTreeChance = 0f; 
+        		biomeDecorator.treesPerChunk = 0;
+        		biomeDecorator.chunkPos = basePos;
                 this.baseBiome().decorate(rtgWorld.world(), rand, new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
+        		//decorator.decorate(rtgWorld.world(), rand, this.baseBiome(), basePos);
+        		// insert RTG Trees if appropriate
+        		if (EventHandlerCommon.treeGenerationManager.managingBiome(this.baseBiome())) {
+        			this.getTreeDecos().generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
+        		}
         	}
         }
     }

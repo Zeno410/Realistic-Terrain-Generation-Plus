@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 import rtg.api.util.FractionalBlockPos;
 import rtg.api.util.Logger;
 
-class RTGTreeBranch {
+public class RTGTreeBranch {
 	static int reports = 0;
 	final BranchVector direction;
 	final float initialLength;
@@ -14,7 +14,7 @@ class RTGTreeBranch {
 	final int stage;
 	final FractionalBlockPos branchLocation;
 	
-	RTGTreeBranch (double horizontal, float vertical, float length, int stage, BlockPos branchStart) {
+	public RTGTreeBranch (double horizontal, float vertical, float length, int stage, BlockPos branchStart) {
 		initialLength = length;
 		remainingLength = length;
 		initialHorizontal = horizontal;
@@ -24,7 +24,7 @@ class RTGTreeBranch {
 		branchLocation = new FractionalBlockPos(branchStart);
 	}
 	
-	RTGTreeBranch(RTGTreeBranch copied) {
+	public RTGTreeBranch(RTGTreeBranch copied) {
 		initialLength = copied.initialLength;
 		remainingLength = copied.initialLength;
 		initialHorizontal = copied.initialHorizontal;
@@ -34,13 +34,13 @@ class RTGTreeBranch {
 		branchLocation = new FractionalBlockPos(copied.branchLocation);
 	}
 	
-	BlockPos moved() {
+	public BlockPos moved() {
 		direction.move(branchLocation);
 		remainingLength -= direction.horizontalLength;
 		return branchLocation.location();
 	}
 	
-	BlockPos movedOrthogonally() {
+	public BlockPos movedOrthogonally() {
 		BlockPos oldPos = branchLocation.location();
 		double oldX = branchLocation.x;
 		double oldY = branchLocation.y;
@@ -91,8 +91,10 @@ class RTGTreeBranch {
 		
 	}
 	
-	final BlockPos location() {return branchLocation.location();}
+	public final BlockPos location() {return branchLocation.location();}
 	
-	boolean notDone() {return remainingLength > 0;}
+	public float remainingLength() { return remainingLength;}
+	
+	public boolean notDone() {return remainingLength > 0;}
 
 }

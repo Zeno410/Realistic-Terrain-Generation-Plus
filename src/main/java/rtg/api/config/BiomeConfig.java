@@ -54,6 +54,8 @@ public class BiomeConfig extends Config {
     public final ConfigPropertyBoolean ALLOW_SPONGE;
 
     public final ConfigPropertyInteger BASE_BIOME_HEIGHT;
+    
+    public final ConfigPropertyBoolean TAKEOVER_TREES;// true if RTG is to impose its trees even when not generating the chunk
 
     public BiomeConfig(File file) {
         super(file);
@@ -275,6 +277,8 @@ public class BiomeConfig extends Config {
         ALLOW_SPONGE = new ConfigPropertyBoolean("Allow Sponge", "Decorations.Sponge", "", true);
         BASE_BIOME_HEIGHT = new ConfigPropertyInteger("Base Biome Height", "Terrain.Height", 
         		"The base number for the biome's terrain generator.  Actual terrain will typically be higher. Default = 40 for deep ocean", 40, 0, 128);
+
+        TAKEOVER_TREES = new ConfigPropertyBoolean("Takeover Tree Generation", "Trees", "Impose RTG trees outside of RTG", true);
     }
     
     public void loadConfig() {

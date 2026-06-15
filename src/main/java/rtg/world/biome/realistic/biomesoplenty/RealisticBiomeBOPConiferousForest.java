@@ -17,13 +17,18 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoBoulder;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.collection.trees.bop.DecoCollectionBOPConiferousForest;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPConiferousForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPConiferousForest(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPConiferousForest(final Biome biome) { 
+    	super(biome); 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
 
     @Override
     public Biome preferredBeach() {
@@ -50,6 +55,8 @@ public class RealisticBiomeBOPConiferousForest extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.treeGenerator = new DecoCollectionBOPConiferousForest(this.getConfig());
+    	
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.COBBLESTONE.getDefaultState());
         decoBoulder.setChance(16);

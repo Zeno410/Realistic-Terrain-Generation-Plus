@@ -32,6 +32,8 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
 abstract public class DecoVariableTree extends DecoTree {
 	
+	// TODO; figure out a way to generalize this to deal with variable numbers of trees, and not having a vanilla
+	
 	protected TreeRTG tallTree;
 	protected TreeRTG mediumTree;
 	protected TreeRTG smallTree;
@@ -56,6 +58,12 @@ abstract public class DecoVariableTree extends DecoTree {
 	
 	public DecoVariableTree() {
 		
+	}
+	
+	public TreeMaterials getMaterials() {return materials;}
+	
+	public void setMaterials(TreeMaterials newMaterials) {
+		materials = newMaterials;
 	}
 	
 	public void  changeAverageHeightSqrt(float change) {
@@ -83,9 +91,7 @@ abstract public class DecoVariableTree extends DecoTree {
         // TODO: [1.12] What is the point of deriving a noise value from static BlockPos within a chunk (population origin) and then applying
         //              it to a feature taking place at some other arbitrary place in the chunk. This seems nonsensical and makes needless
         //              calls to the noise generator. This should be replaced by a random amount.
-        // Zeno: Noise generation is essential to make different regions have different characteristics. Why are people trying to
-        // "simplify" out core aspects of RTG (here that unlike vanilla, every forest is NOT the same) without paying attention 
-        // to the code and design intent?
+        // Zeno: These are slowly changing values and essentially the same within a chunk, but must differ substantially between chunks for variability
         float noise = distribution.getValue(offsetPos, rtgWorld.treeDistributionNoise());
         int loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
         loopCount = (this.strengthNoiseFactorForLoops) ? (int) noise : loopCount;
@@ -151,7 +157,6 @@ abstract public class DecoVariableTree extends DecoTree {
 
 
 	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
-		// TODO Auto-generated method stub
 		
 		float averageHeightIndex = chunkInfo.treeHeightNoiseValue();
 		

@@ -38,8 +38,6 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     protected int crownSize;
     protected boolean noLeaves;
 
-    protected IBlockState saplingBlock;
-
     protected int generateFlag;
 
     protected int minTrunkSize;
@@ -72,8 +70,6 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         this.trunkSize = 2;
         this.crownSize = 4;
         this.setNoLeaves(false);
-
-        this.saplingBlock = Blocks.SAPLING.getDefaultState();
 
         this.generateFlag = 19;
 
@@ -115,8 +111,6 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         this.trunkSize = model.trunkSize;
         this.crownSize = model.crownSize;
         this.setNoLeaves(model.noLeaves);
-
-        this.saplingBlock = model.getSaplingBlock();
 
         this.generateFlag = model.generateFlag;
 
@@ -163,6 +157,15 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
 
     }
 
+    public void leafLine(World world, Random rand, RTGTreeBranch branch, int distanceFromLog, SkylightTracker lightTracker) {
+    	// places leaves in a line;
+    	// by convention the first block is assumed to be already placed.
+    	while(distanceFromLog<6&&branch.notDone()) {
+    		this.placeLeavesBlock(world, branch.movedOrthogonally(), lightTracker);
+    		distanceFromLog ++;
+    	}
+    }
+    
     public void buildLeaves(World world, Random rand, int x, int y, int z, int size, SkylightTracker lightTracker) {
 
     }
@@ -174,7 +177,10 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
 
     protected boolean isGroundValid(World world, BlockPos trunkPos, boolean sandAllowed) {
 
-        IBlockState g = world.getBlockState(new BlockPos(trunkPos.getX(), trunkPos.getY() - 1, trunkPos.getZ()));
+    	BlockPos plantPos = new BlockPos(trunkPos.getX(), trunkPos.getY() - 1, trunkPos.getZ());
+        IBlockState g = world.getBlockState(plantPos);
+        
+        if (g.getBlock().canSustainPlant(g, world, plantPos, net.minecraft.util.EnumFacing.UP, (net.minecraft.block.BlockSapling)Blocks.SAPLING)) return true;
 
         if (g.getBlock() == Blocks.SAND && !sandAllowed) {
             return false;
@@ -388,17 +394,6 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     public TreeRTG setNoLeaves(boolean noLeaves) {
 
         this.noLeaves = noLeaves;
-        return this;
-    }
-
-    public IBlockState getSaplingBlock() {
-
-        return saplingBlock;
-    }
-
-    public TreeRTG setSaplingBlock(IBlockState saplingBlock) {
-
-        this.saplingBlock = saplingBlock;
         return this;
     }
 

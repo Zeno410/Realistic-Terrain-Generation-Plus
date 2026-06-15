@@ -14,17 +14,20 @@ import rtg.api.util.noise.ISimplexData2D;
 import rtg.api.util.noise.SimplexData2D;
 import rtg.api.util.noise.VoronoiResult;
 import rtg.api.world.RTGWorld;
+import rtg.api.world.deco.AbstractDeco;
 import rtg.api.world.deco.DecoBase;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.surface.SurfaceRiverOasis;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.compat.ModCompat.Mods;
+import rtg.event.EventHandlerCommon;
 
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 
@@ -39,6 +42,8 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
     private final TerrainBase terrain;
     private final SurfaceBase surface;
     private final SurfaceBase surfaceRiver;
+    
+    protected AbstractDeco treeGenerator; // under development, will be the tree decos, separated so they can be imposed on other worldtypes
 
     private Collection<DecoBase> decos;
 
@@ -76,6 +81,8 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         this.surface = initSurface();
         this.surfaceRiver = new SurfaceRiverOasis(config);
         this.decos = new ArrayList<>();
+        
+        treeGenerator = new DecoCollectionBase(this.config);
 
         initDecos();
 
@@ -124,7 +131,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
     
     @Override
     public boolean allowVanillaTrees() {
-        return true;
+        return !(EventHandlerCommon.treeGenerationManager.managingBiome(baseBiome));
     }
     
     @Override
@@ -137,8 +144,10 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         return this.decos;
     }
 
+    public AbstractDeco getTreeDecos() {
+    	return this.treeGenerator;
     }
-
+    
     @Override
     public ResourceLocation baseBiomeResLoc() {
         return baseBiomeResLoc;

@@ -52,6 +52,7 @@ import rtg.world.biome.BiomeProviderRTG;
 public final class EventHandlerCommon
 {
     private EventHandlerCommon() {}
+    public static TreeGenerationManager treeGenerationManager = new TreeGenerationManager();
 
     public static void init() {
         MinecraftForge.TERRAIN_GEN_BUS.register(EventHandlerCommon.class);
@@ -83,7 +84,14 @@ public final class EventHandlerCommon
             }
         }
     }
-    
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void takeoverTreeGeneration(DecorateBiomeEvent.Decorate event)
+    {
+        if (event.getType() == Decorate.EventType.TREE){
+        	// we have work to do
+        	//event.setResult(Event.Result.DENY);
+        }
+    }
     private static ChunkTracker lightChecked = new ChunkTracker(1500);
     
     private static void fixLighting(World world, ChunkPos chunkPos) {

@@ -18,15 +18,20 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoBoulder;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.collection.trees.bop.DecoCollectionBOPSeasonalForest;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 import static rtg.api.world.deco.DecoFallenTree.LogCondition.RANDOM_CHANCE;
 
 
 public class RealisticBiomeBOPSeasonalForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPSeasonalForest(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPSeasonalForest(final Biome biome) { 
+    	super(biome); 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
 
     @Override
     public Biome preferredBeach() {
@@ -52,6 +57,8 @@ public class RealisticBiomeBOPSeasonalForest extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+
+    	this.treeGenerator = new DecoCollectionBOPSeasonalForest(getConfig());
 
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.COBBLESTONE.getDefaultState());

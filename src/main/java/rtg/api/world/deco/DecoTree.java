@@ -17,6 +17,7 @@ import rtg.api.util.Distribution;
 import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.IRealisticBiome;
+import rtg.api.world.gen.feature.tree.rtg.TreeDensityLimiter;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
 import java.util.Random;
@@ -165,9 +166,7 @@ public class DecoTree extends DecoBase {
         // TODO: [1.12] What is the point of deriving a noise value from static BlockPos within a chunk (population origin) and then applying
         //              it to a feature taking place at some other arbitrary place in the chunk. This seems nonsensical and makes needless
         //              calls to the noise generator. This should be replaced by a random amount.
-        // Zeno: Noise generation is essential to make different regions have different characteristics. Why are people trying to
-        // "simplify" out core aspects of RTG (here that unlike vanilla, every forest is NOT the same) without paying attention 
-        // to the code and design intent?
+        // Zeno: These are slowly changing values and are essentially the same everywhere in a given chunk.
         float noise = distribution.getValue(offsetPos, rtgWorld.treeDistributionNoise());
         int loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
         loopCount = (this.strengthNoiseFactorForLoops) ? (int) noise : loopCount;
@@ -229,6 +228,7 @@ public class DecoTree extends DecoBase {
     }
     
     public float doGenerate(Random rand, RTGWorld rtgWorld, ChunkInfo chunkInfo, BlockPos pos, int y) {  
+    	// this can probably be eliminated now for doVariableGenerate
     	// separated out for variable trees; but they later needed more changes so this may not be necessary.
     	switch (this.treeType) {
 		
@@ -582,4 +582,20 @@ public class DecoTree extends DecoBase {
     protected float applyConfigMultipliers(final float trees, final IRealisticBiome biome) {
         return (float)(trees * Math.min(RTGConfig.treeDensityMultiplier() * biome.getConfig().TREE_DENSITY_MULTIPLIER.get(), MAX_TREE_DENSITY));
     }
+    
+	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
+		// this is here to allow combining trees together for sharing a forest density
+		
+		float neededSpace = tree.estimatedSize();
+		if (treesRemaining.test(neededSpace, rand)) {
+			boolean success = tree.generate(chunkInfo.world(), rand, column.up(y));
+			if (!success) {
+				treesRemaining.occupy(0.1f);// a little bit to block infinite loops
+			} else {
+				treesRemaining.occupy(neededSpace);
+			}
+			return;
+		}
+		return;
+	}
 }

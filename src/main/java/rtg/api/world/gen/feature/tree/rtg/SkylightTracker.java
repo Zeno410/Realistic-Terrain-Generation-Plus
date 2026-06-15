@@ -5,7 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-class SkylightTracker {
+public class SkylightTracker {
 	
 	private final int distance;
 	private final int width;
@@ -26,7 +26,7 @@ class SkylightTracker {
 	private int lightingHeight = 50; // check this many blocks up for light obstructions
 	
 	
-	SkylightTracker( int distance, BlockPos base, World world) {
+	public SkylightTracker( int distance, BlockPos base, World world) {
 		
 		// add on some distance for tracking 
 		distance += 4;
@@ -51,7 +51,7 @@ class SkylightTracker {
 		setLighting(world);
 		initialSpread();
 	}
-	SkylightTracker( int distance, BlockPos base, World world, int tolerableObstruction) {
+	public SkylightTracker( int distance, BlockPos base, World world, int tolerableObstruction) {
 		
 		this(distance,base,world);
 		this.tolerableObstruction = tolerableObstruction;
