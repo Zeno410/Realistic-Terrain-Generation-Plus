@@ -53,7 +53,6 @@ import java.util.Random;
 public class DecoCollectionForest extends DecoCollectionBase {
 
     // Tends to return values between -3f to 5f, with some overflow.
-    private Distribution forestDistribution = new Distribution(100f, 6f, 0.8f);
     private Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 4.5f); 
     // effective range 2 to 6; 6.xx is truncated
 

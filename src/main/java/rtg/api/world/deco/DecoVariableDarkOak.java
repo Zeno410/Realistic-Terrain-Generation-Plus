@@ -2,7 +2,6 @@ package rtg.api.world.deco;
 
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenCanopyTree;
-import net.minecraft.world.gen.feature.WorldGenTrees;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGMediumDarkOak;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGMonstrous;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGSmallDarkOak;

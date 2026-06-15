@@ -11,6 +11,7 @@ class BranchVector {
     final double horizontalLength;
 	
 	
+    // note horizontal is in radians; vertical is in fractional motion
 	BranchVector (double horizontalDirection, float verticalShift) {
 		double trialDx = Math.cos(horizontalDirection);
 		double trialDz = Math.sin(horizontalDirection);

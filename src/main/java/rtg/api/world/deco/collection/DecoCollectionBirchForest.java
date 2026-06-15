@@ -39,29 +39,6 @@ public class DecoCollectionBirchForest extends DecoCollectionBase {
         ;
     }
 
-    private DecoHelperRandomSplit randomTrees() {
-        return new DecoHelperRandomSplit()
-            .setDecos(new DecoBase[]{tallBirchTrees(), vanillaTrees()})
-            .setChances(new int[]{10, 4});
-    }
-
-    private DecoTree tallBirchTrees() {
-
-        TreeRTG birchTree = new TreeRTGBetulaPapyrifera()
-            .setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH))
-            .setLeavesBlock(BlockUtil.getStateLeaf(EnumType.BIRCH))
-            .setMinTrunkSize(4)
-            .setMaxTrunkSize(10)
-            .setMinCrownSize(8)
-            .setMaxCrownSize(19);
-
-        return new DecoTree(birchTree)
-            .setStrengthFactorForLoops(3f)
-            .setTreeType(DecoTree.TreeType.RTG_TREE)
-            .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
-            .setMaxY(100);
-    }
-
     protected DecoTree tallVariableTrees(float noiseMin, float noiseMax) {
     	
         return new DecoVariableMaterialTree(TreeMaterials.inBirchForest)
@@ -73,14 +50,6 @@ public class DecoCollectionBirchForest extends DecoCollectionBase {
                 .setTreeConditionNoise2(noiseMax)
                 .setTreeConditionChance(1)
                 .setStrengthNoiseFactorForLoops(true);
-    }
-    
-    private DecoTree vanillaTrees() {
-        return new DecoTree(new WorldGenTrees(false))
-            .setTreeType(DecoTree.TreeType.WORLDGEN)
-            .setStrengthFactorForLoops(3f)
-            .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
-            .setMaxY(100);
     }
 
     private DecoFallenTree logs() {

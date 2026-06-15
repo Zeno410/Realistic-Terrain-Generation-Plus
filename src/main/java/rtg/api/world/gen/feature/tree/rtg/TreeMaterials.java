@@ -53,7 +53,7 @@ public class TreeMaterials {
 				Blocks.LOG2.getStateFromMeta(12));
 		
 		public static final TreeMaterials darkOak = new TreeMaterials(
-				"Acacia",
+				"Dark Oak",
 				BlockUtil.getStateLog(EnumType.DARK_OAK),
 				BlockUtil.getStateLeaf(EnumType.DARK_OAK),
 				Blocks.LOG2.getStateFromMeta(13));
