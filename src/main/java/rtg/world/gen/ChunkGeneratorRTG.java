@@ -268,7 +268,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         final BlockPos blockPos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
         final BlockPos offsetpos = blockPos.add(8, 0, 8);
 
-        IRealisticBiome biome = RTGAPI.getRTGBiome(biomeProvider.getBiome(blockPos.add(16, 0, 16)));
+        IRealisticBiome biome = RTGAPI.getRTGBiome(biomeProvider.getBiome(blockPos.add(8, 0, 8)));
 
         this.rand.setSeed(rtgWorld.getChunkSeed(chunkX, chunkZ));
 
