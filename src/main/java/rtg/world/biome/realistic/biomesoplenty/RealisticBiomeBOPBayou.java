@@ -18,6 +18,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.ISimplexData2D;
 import rtg.api.util.noise.SimplexData2D;
 import rtg.api.util.noise.SimplexNoise;
@@ -26,24 +27,37 @@ import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoMushrooms;
 import rtg.api.world.deco.DecoShrub;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoLeafVines;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGCeibaRosea;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusFalcata;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGSalixMyrtilloides;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 
     private static IBlockState mudBlock = BOPBlocks.mud.getDefaultState();
-    private static IBlockState logBlock = BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW)
+    private static IBlockState willowLogBlock = BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW)
         .withProperty(BlockLog.LOG_AXIS, EnumAxis.Y);
-    private static IBlockState leavesBlock = BlockBOPLeaves
+    private static IBlockState willowBranchBlock = BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW)
+            .withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE);
+    private static IBlockState willowLeavesBlock = BlockBOPLeaves
         .paging.getVariantState(BOPTrees.WILLOW)
         .withProperty(BlockLeaves.CHECK_DECAY, false)
-        .withProperty(BlockLeaves.DECAYABLE, false);
-    private double lakeWaterLevel = 0.04;// the lakeStrength below which things should be below water
-    private double lakeDepressionLevel = 0.3;// the lakeStrength below which land should start to be lowered
+        .withProperty(BlockLeaves.DECAYABLE, true);
+    //private double lakeWaterLevel = 0.2;// the lakeStrength below which things should be below water
+    //private double lakeDepressionLevel = 0.6;// the lakeStrength below which land should start to be lowered
+    private float defaultMixHeight = .25f;// higher numbers mean less mud
 
     public RealisticBiomeBOPBayou(final Biome biome) { 
     	super(biome);  
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
     }
 
     @Override
@@ -67,7 +81,7 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 
     @Override
     public SurfaceBase initSurface() {
-    	SurfaceBase result =  new SurfaceBOPBayou(getConfig(), baseBiome().topBlock, baseBiome().fillerBlock, 0f, 1.5f, 60f, 65f, 1.5f, baseBiome().topBlock, 0.10f);
+    	SurfaceBase result =  new SurfaceBOPBayou(getConfig(), baseBiome().topBlock, baseBiome().fillerBlock, 0f, 1.5f, 60f, 65f, 1.5f, baseBiome().topBlock, defaultMixHeight);
     	result.shadowStoneBlock = Blocks.DIRT.getDefaultState();
     	//BOPBlocks.mud.getStateFromMeta(0);
     	return result;
@@ -83,7 +97,9 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
         rtgWorld.simplexInstance(1).multiEval2D(x / 40.0d, y / 40.0d, jitterData);
         pX += jitterData.getDeltaX() * 35d;
         pY += jitterData.getDeltaY() * 35d;
-        return TerrainBase.bayesianAdjustment((float) rtgWorld.cellularInstance(0).eval2D(pX / 150.0, pY / 150.0).interiorValue(), 0.25f);
+        //return (float) rtgWorld.cellularInstance(0).eval2D(pX / 150.0, pY / 150.0).interiorValue();
+        
+        return TerrainBase.bayesianAdjustment((float) rtgWorld.cellularInstance(0).eval2D(pX / 75.0, pY / 75.0).interiorValue(), 0.12f);
     }
 
     @Override
@@ -132,59 +148,34 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-
-//        TreeRTG myrtilloidesTree = new TreeRTGSalixMyrtilloides();
-//        myrtilloidesTree.setLogBlock(logBlock);
-//        myrtilloidesTree.setLeavesBlock(leavesBlock);
-//        myrtilloidesTree.validGroundBlocks.add(mudBlock);
-//        this.addTree(myrtilloidesTree);
-//        DecoTree decoTrees = new DecoTree(myrtilloidesTree);
-//        decoTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
-//        decoTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
-//        decoTrees.setTreeConditionChance(4);
-//        decoTrees.setLogBlock(logBlock);
-//        decoTrees.setLeavesBlock(leavesBlock);
-//        decoTrees.setMaxY(90);
-//        this.addDeco(decoTrees);
-
-        /*
-         * STOP! Don't add anymore trees! BOP seems to generate a batch of its trees every time RTG generates a batch
-         * of its trees, even though we're not calling the BOP Bayou's decorate() method.
-         */
-
-//        TreeRTG roseaTree = new TreeRTGCeibaRosea(16f, 5, 0.32f, 0.1f);
-//        roseaTree.setLogBlock(logBlock);
-//        roseaTree.setLeavesBlock(leavesBlock);
-//        roseaTree.validGroundBlocks.add(mudBlock);
-//        roseaTree.setMinTrunkSize(2);
-//        roseaTree.setMaxTrunkSize(3);
-//        roseaTree.setMinCrownSize(10);
-//        roseaTree.setMaxCrownSize(18);
-//        roseaTree.setNoLeaves(false);
-//        this.addTree(roseaTree);
-//        DecoTree ceibaRoseaTree = new DecoTree(roseaTree);
-//        ceibaRoseaTree.setTreeType(DecoTree.TreeType.RTG_TREE);
-//        ceibaRoseaTree.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
-//        ceibaRoseaTree.setTreeConditionChance(4);
-//        ceibaRoseaTree.setMaxY(90);
-//        this.addDeco(ceibaRoseaTree);
-
-        //decoBaseBiomeDecorations.setNotEqualsZeroChance(4);
+    	
+    	treeGenerator  = new DecoCollectionBOPBayou(getConfig());
 
         // Shrubs to fill in the blanks.
         DecoShrub decoShrubOak = new DecoShrub();
         decoShrubOak.setMaxY(90);
         decoShrubOak.setLoopMultiplier(4f);
         decoShrubOak.setChance(3);
+        decoShrubOak.setLoops(decoShrubOak.getLoops()*3);
         this.addDeco(decoShrubOak);
+        
+
+        DecoShrub decoShrubWillow = new DecoShrub();
+        decoShrubWillow.setLeavesBlock(willowLeavesBlock);
+        decoShrubWillow.setLogBlock(willowLogBlock);
+        decoShrubWillow.setMaxY(90);
+        decoShrubWillow.setLoopMultiplier(4f);
+        decoShrubWillow.setChance(3);
+        decoShrubWillow.setLoops(decoShrubWillow.getLoops()*3);
+        this.addDeco(decoShrubWillow);
 
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(80f);
         decoFallenTree.getDistribution().setNoiseFactor(60f);
         decoFallenTree.getDistribution().setNoiseAddend(-15f);
         decoFallenTree.setLogConditionChance(4);
-        decoFallenTree.setLogBlock(logBlock);
-        decoFallenTree.setLeavesBlock(leavesBlock);
+        decoFallenTree.setLogBlock(willowLogBlock);
+        decoFallenTree.setLeavesBlock(willowLeavesBlock);
         decoFallenTree.setMinSize(3);
         decoFallenTree.setMaxSize(6);
         this.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
@@ -194,7 +185,81 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
         decoMushrooms.setRandomType(DecoMushrooms.RandomType.ALWAYS_GENERATE);
         this.addDeco(decoMushrooms);
     }
+    private static class DecoCollectionBOPBayou extends DecoCollectionBase {
+        
+        public DecoCollectionBOPBayou(BiomeConfig config) {
+			super(config); 
+			
+			// uses willow, mangrove, and spreading oak
+			// currently uses area density variability but not area height variability
+			
+			// Define trees
+			TreeRTG myrtilloidesTree = new TreeRTGSalixMyrtilloides();
+			myrtilloidesTree.setLogBlock(willowLogBlock);
+	        myrtilloidesTree.setLeavesBlock(willowLeavesBlock);
+	        myrtilloidesTree.setBranchBlock(willowBranchBlock);
+	        //myrtilloidesTree.validGroundBlocks.add(mudBlock);\        
+	        DecoTree decomyrtilloides = new DecoTree(myrtilloidesTree);
+	        decomyrtilloides.setTreeType(DecoTree.TreeType.RTG_TREE);
+	        decomyrtilloides.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
+	        decomyrtilloides.setTreeConditionChance(4);
+	        decomyrtilloides.setLogBlock(willowLogBlock);
+	        decomyrtilloides.setLeavesBlock(willowLeavesBlock);
+	        decomyrtilloides.setMaxY(90);
+	        //this.addDeco(decoTrees);
 
+
+	        TreeRTG roseaTree = new TreeRTGCeibaRosea(16f, 5, 0.32f, 0.1f);
+	        roseaTree.setLogBlock(willowLogBlock);
+	        roseaTree.setLeavesBlock(willowLeavesBlock);
+	        roseaTree.setBranchBlock(willowBranchBlock);
+	        //roseaTree.validGroundBlocks.add(mudBlock);
+	        roseaTree.setMinTrunkSize(2);
+	        roseaTree.setMaxTrunkSize(5);
+	        roseaTree.setMinCrownSize(5);
+	        roseaTree.setMaxCrownSize(8);
+	        roseaTree.setNoLeaves(false);
+	        DecoTree ceibaRoseaTree = new DecoTree(roseaTree);
+	        ceibaRoseaTree.setTreeType(DecoTree.TreeType.RTG_TREE);
+	        ceibaRoseaTree.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
+	        ceibaRoseaTree.setTreeConditionChance(4);
+	        ceibaRoseaTree.setMaxY(90);
+	        //this.addDeco(ceibaRoseaTree);
+	        
+	        //Quercus Falcata
+	        DecoTree oakTree = new DecoTree(new TreeRTGQuercusFalcata());
+	        oakTree.setTreeType(DecoTree.TreeType.RTG_TREE);
+	        oakTree.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
+	        oakTree.setMinSize(2);
+	        oakTree.setMaxSize(4);
+	        oakTree.setMinTrunkSize(3);
+	        oakTree.setMaxTrunkSize(6);
+	        oakTree.setMinCrownSize(4);
+	        oakTree.setMaxCrownSize(10);
+	        oakTree.setDistribution(new Distribution(100f, 6f, 0.8f));
+	        oakTree.setTreeConditionNoise(0f);
+	        oakTree.setTreeConditionChance(4);
+	        //this.addDeco(decoTree);
+    
+	        // combine into TreeSet, and add it as sole entry to the deco.
+			Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 5.5f); 
+			DecoTreeSet treeChooser = new DecoTreeSet();
+			treeChooser.setDistribution(treeFrequencyDistribution);
+			treeChooser.add(oakTree,2);
+			treeChooser.add(ceibaRoseaTree,4);
+			treeChooser.add(decomyrtilloides,2);
+
+			this.addDeco(treeChooser);
+			
+			// have to add our own vines to the trees
+			DecoLeafVines vines = new DecoLeafVines();
+			vines.setLoops(20);
+			
+			this.addDeco(vines);
+		}
+		
+    }
+    
     public static class TerrainBOPBayou extends TerrainBase {
 
         public TerrainBOPBayou() {
@@ -232,6 +297,7 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
             cCliff = clayCliff;
 
             mixBlock = this.getConfigBlock(config.SURFACE_MIX_BLOCK.get(), mix);
+            //mixBlock = mudBlock;
             mixHeight = mixSize;
         }
 
@@ -276,7 +342,7 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
                         else if (cliff == 2) {
                             primer.setBlockState(x, k, z, getShadowStoneBlock());
                         }
-                        else if (k < 63) {
+                        else if (k < 62) {
                             if (k < 62) {
                                 primer.setBlockState(x, k, z, fillerBlock);
                             }
@@ -284,7 +350,8 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
                                 primer.setBlockState(x, k, z, topBlock);
                             }
                         }
-                        else if (simplex.noise2f(i / 12f, j / 12f) > mixHeight) {
+                        else if ((simplex.noise2f(i / 12f, j / 12f) > mixHeight)&&k<66) {
+                        	// mud not on hills
                             primer.setBlockState(x, k, z, mixBlock);
                             m = true;
                         }

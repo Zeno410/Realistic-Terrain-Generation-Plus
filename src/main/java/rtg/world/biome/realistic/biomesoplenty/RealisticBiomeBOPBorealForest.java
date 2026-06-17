@@ -3,7 +3,8 @@ package rtg.world.biome.realistic.biomesoplenty;
 import java.util.Random;
 
 import biomesoplenty.api.biome.BOPBiomes;
-
+import biomesoplenty.api.enums.BOPWoods;
+import biomesoplenty.common.block.BlockBOPLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.state.IBlockState;
@@ -13,20 +14,37 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoVariableBirch;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.deco.DecoVariableSpruce;
+import rtg.api.world.deco.DecoVariableTree;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGPinusPonderosa;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.api.world.terrain.heighteffect.BumpyHillsEffect;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPBorealForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPBorealForest(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPBorealForest(final Biome biome) { 
+    	super(biome);
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
 
     @Override
-    public void initDecos() {}
+    public void initDecos() {
+    	treeGenerator = new DecoCollectionBOPBorealForest(getConfig());
+    }
 
     @Override
     public Biome preferredBeach() {
@@ -83,6 +101,45 @@ public class RealisticBiomeBOPBorealForest extends RealisticBiomeBase {
 
             return riverized(baseHeight, river) + (groundNoise + m) * river;
         }
+    }
+    
+    public static class DecoCollectionBOPBorealForest extends DecoCollectionBase {
+        
+        private Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 5.5f); 
+        // the BoP version is pretty crowded
+        // the trees are a bit stunted too
+
+    	public DecoCollectionBOPBorealForest(BiomeConfig config) {
+    		super(config);     
+    		DecoTreeSet treeChooser = new DecoTreeSet();
+    		treeChooser.setDistribution(treeFrequencyDistribution);
+    		treeChooser.add(evergreenTree(),9);
+    		treeChooser.add(yellowAutumnTree(), 9);
+    		treeChooser.add(stuntedOakTree(), 2);
+    		this.addDeco(treeChooser);
+    	}
+
+    	private DecoTree evergreenTree() {
+    		DecoVariableTree result = new DecoVariableSpruce();
+    		result.changeAverageHeightSqrt(-.5f);
+    		return result;
+    	}
+    	
+    	private DecoTree yellowAutumnTree() {
+    		DecoVariableTree result = new DecoVariableBirch();
+    		result.changeAverageHeightSqrt(-.5f);
+    		result.setMaterials(BOPTreeMaterials.Picker.yellowAutumn);
+    		return result;
+    	}
+  
+    	
+    	private DecoTree stuntedOakTree() {
+    		DecoVariableTree result = new DecoVariableOak();
+    		result.changeAverageHeightSqrt(-1.5f);
+    		result.changeHeightNoiseVariability(-.5f);
+    		return result;
+    	}	
+    	
     }
 
     public static class SurfaceBOPBorealForest extends SurfaceBase {

@@ -15,29 +15,6 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
 public class TreeBOPMediumFir extends TreeRTG {
 
-    /**
-     * <b>Picea Sitchensis (Sitka Spruce)</b><br><br>
-     * <u>Relevant variables:</u><br>
-     * logBlock, logMeta, leavesBlock, leavesMeta, trunkSize, crownSize, noLeaves<br><br>
-     * <u>DecoTree example:</u><br>
-     * DecoTree decoTree = new DecoTree(new TreeRTGPiceaSitchensis());<br>
-     * decoTree.setTreeType(DecoTree.TreeType.RTG_TREE);<br>
-     * decoTree.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);<br>
-     * decoTree.setDistribution(new DecoTree.Distribution(100f, 6f, 0.8f));<br>
-     * decoTree.setTreeConditionNoise(0f);<br>
-     * decoTree.setTreeConditionChance(4);<br>
-     * decoTree.setLogBlock(Blocks.LOG);<br>
-     * decoTree.logMeta = (byte)1;<br>
-     * decoTree.setLeavesBlock(Blocks.LEAVES);<br>
-     * decoTree.leavesMeta = (byte)1;<br>
-     * decoTree.setMinTrunkSize(4);<br>
-     * decoTree.setMaxTrunkSize(9);<br>
-     * decoTree.setMinCrownSize(5);<br>
-     * decoTree.setMaxCrownSize(14);<br>
-     * decoTree.setNoLeaves(false);<br>
-     * this.addDeco(decoTree);
-     */
-	
 	protected double fourBranchiness = 0.7;
     public TreeBOPMediumFir() {
 
@@ -48,7 +25,6 @@ public class TreeBOPMediumFir extends TreeRTG {
         this.setBranchBlock(BOPBlocks.log_0.getStateFromMeta(15));
         this.trunkSize = 8;
         this.crownSize = 10;
-        this.setNoLeaves(false);
     }
 	public float estimatedSize() {
 
@@ -119,7 +95,7 @@ public class TreeBOPMediumFir extends TreeRTG {
             	drop --;
             	y --;
             }
-            float branchLength = (float)(trunkTop + crownSize - y)*.25f -.5f;// the branch system tends to round up.
+            float branchLength = (float)(trunkTop + crownSize - y)*.25f;
             
             if (rand.nextDouble()> fourBranchiness) {
             	this.threeBranches(world, rand, x, y, z, branchLength, lightTracker);
@@ -155,7 +131,10 @@ public class TreeBOPMediumFir extends TreeRTG {
     private void branchOfSet(World world, Random rand, BlockPos start, double direction, float length, int setSize, SkylightTracker lightTracker) {
     	ArrayList<BlockPos> locations = new ArrayList<>();
     	ArrayList<Float> remainingLengths = new ArrayList<>();
-    	RTGTreeBranch branch = new RTGTreeBranch(direction,0f, length, 0,start); 
+    	// drop down sometimes
+    	if (rand.nextDouble()<.2) start = start.down();
+    	RTGTreeBranch branch = new RTGTreeBranch(direction,0.2f, length, 0,start); 
+    	
     	
     	double leftDirection = direction - Math.PI/(double)(setSize);
     	double rightDirection = direction + Math.PI/(double)(setSize);
@@ -171,14 +150,14 @@ public class TreeBOPMediumFir extends TreeRTG {
     		 if (!this.placeLogBlock(world, locations.get(i), lightTracker))  return; // abort branch if placement fails
     	    	RTGTreeBranch leftLeaves = new RTGTreeBranch(
     	    			leftDirection,
-    	    			0f, 
+    	    			(float)(.15+jigger(rand,.15)), 
     	    			leavesToPlace(remainingLengths.get(i),rand,1), 
     	    			0,
     	    			locations.get(i)); 
     	    	this.leafLine(world, rand, leftLeaves, leafDistanceUsed, lightTracker);
     	    	RTGTreeBranch rightLeaves = new RTGTreeBranch(
     	    			rightDirection,
-    	    			0f, 
+    	    			(float)(.15+jigger(rand,.15)), 
     	    			leavesToPlace(remainingLengths.get(i),rand,1), 
     	    			0,
     	    			locations.get(i)); 

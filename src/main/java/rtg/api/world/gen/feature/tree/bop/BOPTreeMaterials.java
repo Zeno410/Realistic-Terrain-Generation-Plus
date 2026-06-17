@@ -2,7 +2,11 @@ package rtg.api.world.gen.feature.tree.bop;
 
 import biomesoplenty.api.block.BOPBlocks;
 import biomesoplenty.api.enums.BOPTrees;
+import biomesoplenty.api.enums.BOPWoods;
 import biomesoplenty.common.block.BlockBOPLeaves;
+import biomesoplenty.common.block.BlockBOPLog;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -15,11 +19,23 @@ public class BOPTreeMaterials extends TreeMaterials {
 		super(name,log,leaves,branches);
 	}
 	
+	public static final TreeMaterials willow = new TreeMaterials(
+			"Willow",
+			BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.WILLOW),
+			BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
+		
+
+	public static final TreeMaterials snowyBirch = new TreeMaterials(
+			"Birch",
+			Blocks.LOG.getStateFromMeta(2),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN),
+			Blocks.LOG.getStateFromMeta(14));
 	
 	public static class Picker extends TreeMaterials.Picker {		
 		public static final TreeMaterials fir = new TreeMaterials(
 			"Fir",
-			BOPBlocks.log_0.getStateFromMeta(12),
+			BlockBOPLog.paging.getVariantState(BOPWoods.FIR),
 			BOPBlocks.leaves_1.getStateFromMeta(2),
 			BOPBlocks.log_0.getStateFromMeta(15));
 		
@@ -42,6 +58,21 @@ public class BOPTreeMaterials extends TreeMaterials {
 				BlockUtil.getStateLog(EnumType.DARK_OAK),
 				BlockBOPLeaves.paging.getVariantState(BOPTrees.ORANGE_AUTUMN),
 				Blocks.LOG2.getStateFromMeta(13)
+		);
+		
+
+		public static final TreeMaterials eucalyptus = new TreeMaterials(
+				"Eucalyptus",
+				BlockBOPLog.paging.getVariantState(BOPWoods.EUCALYPTUS),
+				BlockBOPLeaves.paging.getVariantState(BOPTrees.EUCALYPTUS),
+				BOPBlocks.log_3.getStateFromMeta(15)
+		);
+		
+		public static final TreeMaterials snowyForest = new TreeMaterials(
+				"Snowy Forest",
+				Blocks.LOG.getDefaultState(),
+				BlockBOPLeaves.paging.getVariantState(BOPTrees.DEAD),
+				Blocks.LOG.getStateFromMeta(13)
 		);
 		
 	}

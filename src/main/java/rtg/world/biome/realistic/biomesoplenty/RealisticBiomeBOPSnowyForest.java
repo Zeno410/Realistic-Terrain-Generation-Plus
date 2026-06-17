@@ -12,16 +12,29 @@ import rtg.api.config.BiomeConfig;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.deco.DecoVariableTree;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPSnowyForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPSnowyForest(final Biome biome) { super(biome, RiverType.FROZEN, BeachType.COLD); }
+    public RealisticBiomeBOPSnowyForest(final Biome biome) { 
+    	super(biome, RiverType.FROZEN, BeachType.COLD);
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
+    
 
     @Override
-    public void initDecos() {}
+    public void initDecos() {
+    	DecoVariableTree snowyOaks = new DecoVariableOak();
+    	snowyOaks.setMaterials(BOPTreeMaterials.Picker.snowyForest);
+    	
+    	treeGenerator = snowyOaks;
+    }
 
     @Override
     public void initConfig() {

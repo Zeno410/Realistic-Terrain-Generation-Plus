@@ -6,23 +6,36 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
+import rtg.api.util.noise.OpenSimplexNoise;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoBoulder;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.DecoShrub;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTree.TreeCondition;
+import rtg.api.world.deco.DecoTree.TreeType;
+import rtg.api.world.deco.bop.VariableBOPEucalyptusTree;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPEucalyptusForest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPEucalyptusForest(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPEucalyptusForest(final Biome biome) { 
+    	super(biome); 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
+    }
 
     @Override
     public void initConfig() {
@@ -40,10 +53,16 @@ public class RealisticBiomeBOPEucalyptusForest extends RealisticBiomeBase {
     public SurfaceBase initSurface() {
         return new SurfaceBOPEucalyptusForest(getConfig(), baseBiome().topBlock, baseBiome().fillerBlock, baseBiome().topBlock, baseBiome().fillerBlock, 80f, -0.15f, 10f, 0.5f);
     }
+    
 
+    
     @Override
     public void initDecos() {
 
+    	
+
+    	treeGenerator = new DecoCollectionBOPEucalyptusForest(getConfig());
+    	
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.COBBLESTONE.getDefaultState());
         decoBoulder.setMaxY(80);
@@ -86,6 +105,37 @@ public class RealisticBiomeBOPEucalyptusForest extends RealisticBiomeBase {
         }
     }
 
+    private class DecoCollectionBOPEucalyptusForest extends DecoCollectionBase {
+
+		public DecoCollectionBOPEucalyptusForest(BiomeConfig config) {
+			super(config);       
+			float tallMin = -1f;
+	        float tallMax = 3f;
+	        Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 1.0f, 2.0f); 
+	        
+	    	DecoTree trees = new VariableBOPEucalyptusTree();
+	    	trees.setStrengthFactorForLoops(6f)
+	        .setTreeType(TreeType.RTG_TREE)
+	        .setDistribution(treeFrequencyDistribution)
+	        .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
+	        .setTreeConditionNoise(tallMin)
+	        .setTreeConditionNoise2(tallMax)
+	        .setTreeConditionChance(1)
+	        .setMaxY(120)
+	        .setStrengthNoiseFactorForLoops(true)
+	        .setStrengthNoiseFactorXForLoops(false);// just in case
+	    	
+	        this.addDeco(trees);
+	    	
+	    	DecoShrub shrubs = new DecoShrub();
+	    	shrubs.setLoops(8);
+	    	
+	    	this.addDeco(shrubs);
+	        
+		}
+    	
+    }
+    
     public static class SurfaceBOPEucalyptusForest extends SurfaceBase {
 
 
