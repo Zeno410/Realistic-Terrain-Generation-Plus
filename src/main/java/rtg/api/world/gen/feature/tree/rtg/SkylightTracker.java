@@ -20,7 +20,7 @@ public class SkylightTracker {
 	private final boolean [] [] trunk;  // indicating where dark blocks go to the ground and light cannot pass underneath.
 	private final BlockPos base;
 
-	int tolerableObstruction = 4;
+	int tolerableObstruction = 5;
 	private int hopelesslyDark = 15;
 	
 	private int lightingHeight = 50; // check this many blocks up for light obstructions
@@ -452,7 +452,8 @@ public class SkylightTracker {
 		if (!inArray(baseX,baseZ)) return true;// if outside of examined area ignore.
 		// make the change temporarily to test. May need to be undone before exiting procedure;
 		int oldDirectOpacity = directOpacity [baseX][baseZ] ;
-		directOpacity [baseX][baseZ] += placed.getLightOpacity();
+		// for now treat everything as opaque because of lighting rules
+		directOpacity [baseX][baseZ] += 15;//placed.getLightOpacity();
 		// max 255
 		if (directOpacity [baseX][baseZ] >255)   directOpacity [baseX][baseZ] = 255;
 		if (this.lightDirection [baseX][baseZ] != OrthogonalDirection.CENTER&&!spotlight.trunk()) {

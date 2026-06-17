@@ -111,4 +111,8 @@ public abstract class DecoBase extends AbstractDeco {
     public static int getRangedRandom(Random rand, int min, int max) {
         return min + rand.nextInt(max - min + 1);
     }
+    
+    public static double jigger(Random rand, double range) {
+    	return range - rand.nextDouble()*2.0*range;
+    }
 }

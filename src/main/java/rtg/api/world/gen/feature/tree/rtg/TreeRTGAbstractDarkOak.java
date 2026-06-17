@@ -16,7 +16,7 @@ public abstract class TreeRTGAbstractDarkOak extends TreeRTG {
         this.setLogBlock(BlockUtil.getStateLog(EnumType.DARK_OAK));
         this.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
         this.setBranchBlock(Blocks.LOG2.getStateFromMeta(13));
-        this.maxAllowedObstruction = 4;
+        this.maxAllowedObstruction = 6;
 	}
 
 	@Override

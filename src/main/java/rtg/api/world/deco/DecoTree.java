@@ -587,6 +587,11 @@ public class DecoTree extends DecoBase {
 		// this is here to allow combining trees together for sharing a forest density
 		
 		float neededSpace = tree.estimatedSize();
+        this.tree.setLogBlock(this.logBlock);
+        this.tree.setLeavesBlock(this.leavesBlock);
+        this.tree.setTrunkSize(getRangedRandom(rand, this.minTrunkSize, this.maxTrunkSize));
+        this.tree.setCrownSize(getRangedRandom(rand, this.minCrownSize, this.maxCrownSize));
+        this.tree.setNoLeaves(this.noLeaves);
 		if (treesRemaining.test(neededSpace, rand)) {
 			boolean success = tree.generate(chunkInfo.world(), rand, column.up(y));
 			if (!success) {

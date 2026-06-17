@@ -144,7 +144,7 @@ public class TreeRTGCeibaRosea extends TreeRTG {
                 this.placeLogBlock(world, new BlockPos((int) x, (int) y, (int) z), this.trunkLog, this.generateFlag, lightTracker);
             }
             else {
-                this.placeLogBlock(world, new BlockPos((int) x, (int) y, (int) z), this.logBlock, this.generateFlag, lightTracker);
+                this.placeLogBlock(world, new BlockPos((int) x, (int) y, (int) z), this.branchBlock, this.generateFlag, lightTracker);
             }
 
             x += velX;

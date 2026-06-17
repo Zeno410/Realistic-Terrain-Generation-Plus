@@ -217,10 +217,12 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         }
     }*/
 
-    protected boolean placeLogBlock(World world, BlockPos pos, IBlockState logBlock, int generateFlag, SkylightTracker tracker) {
+    // TODO: placeLog has been used ambiguously for both trunk and branch blocks. Fix.
+    
+    protected boolean placeLogBlock(World world, BlockPos pos, IBlockState alternateLogBlock, int generateFlag, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testPlace(world, pos, logBlock, generateFlag);
+        	return tracker.testPlace(world, pos, alternateLogBlock, generateFlag);
         }
         return false;
     }
@@ -228,17 +230,25 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     protected boolean placeLogBlock(World world, BlockPos pos, int generateFlag, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testPlace(world, pos, logBlock, generateFlag);
+        	return tracker.testPlace(world, pos, branchBlock, generateFlag);
         }
-        return placeLogBlock(world,pos,this.branchBlock,generateFlag,tracker);
+        return false;
     }
     
     protected boolean placeLogBlock(World world, BlockPos pos, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testPlace(world, pos, logBlock, 3);
+        	return tracker.testPlace(world, pos, branchBlock, 3);
         }
-        return placeLogBlock(world,pos,this.branchBlock,generateFlag,tracker);
+        return false;
+    }
+    
+    protected boolean placeBranchBlock(World world, BlockPos pos, SkylightTracker tracker) {
+
+        if (this.isReplaceable(world, pos)) {
+        	return tracker.testPlace(world, pos, branchBlock, 3);
+        }
+        return false;
     }
     
     protected boolean debugPlaceLogBlock(World world, BlockPos pos, IBlockState logBlock, int generateFlag, SkylightTracker tracker) {
@@ -510,4 +520,6 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     	}
     	return result;
     }
+    
+    protected double jigger(Random random, double range) {return DecoBase.jigger(random, range);}
 }

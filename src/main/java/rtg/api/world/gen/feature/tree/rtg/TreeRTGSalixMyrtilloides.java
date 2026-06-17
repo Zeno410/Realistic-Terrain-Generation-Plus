@@ -62,7 +62,7 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         int height = 13;
         int leaveheight = 5;
         int branches = 6;
-        int branchLenght = 6;
+        int branchLength = 6;
 
         for (int i = 0; i < height; i++) {
             this.placeTrunkBlock(world, new BlockPos(x, y + i, z), this.generateFlag, lightTracker);
@@ -82,17 +82,17 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
             yd = (float) Math.sin(dir * Math.PI / 180f);
             m = false;
 
-            while (c < branchLenght) {
+            while (c < branchLength) {
                 c++;
                 hd += 0.5f;
 
                 this.placeLogBlock(world,
-                    new BlockPos(x + (int) (c * xd), y + (int) hd, z + (int) (c * yd)), this.trunkLog, this.generateFlag, lightTracker
+                    new BlockPos(x + (int) (c * xd), y + (int) hd, z + (int) (c * yd)), this.branchBlock, this.generateFlag, lightTracker
                 );
             }
 
-            while (c < branchLenght) {
-                if (c > branchLenght / 2 && !m) {
+            while (c < branchLength) {
+                if (c > branchLength / 2 && !m) {
                     m = true;
                     createLeavesAroundBranch(world, rand, x + (int) (c * xd), y + (int) hd, z + (int) (c * yd), 2, 1, lightTracker);
                 }

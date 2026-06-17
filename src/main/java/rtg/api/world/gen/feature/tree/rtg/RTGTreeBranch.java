@@ -7,11 +7,11 @@ import rtg.api.util.Logger;
 public class RTGTreeBranch {
 	static int reports = 0;
 	final BranchVector direction;
-	final float initialLength;
+	public final float initialLength;
 	private float remainingLength;
 	final double initialHorizontal;
-	final float initialVertical;
-	final int stage;
+	public final float initialVertical;
+	public final int stage;// under consideration for deprecation
 	final FractionalBlockPos branchLocation;
 	
 	public RTGTreeBranch (double horizontal, float vertical, float length, int stage, BlockPos branchStart) {
@@ -22,6 +22,10 @@ public class RTGTreeBranch {
 		this.stage = stage;
 		direction = new BranchVector(horizontal,vertical);
 		branchLocation = new FractionalBlockPos(branchStart);
+	}
+	
+	public RTGTreeBranch (double horizontal, float vertical, float length, BlockPos branchStart) {
+		this(horizontal,vertical,length,0,branchStart);
 	}
 	
 	public RTGTreeBranch(RTGTreeBranch copied) {
@@ -96,5 +100,7 @@ public class RTGTreeBranch {
 	public float remainingLength() { return remainingLength;}
 	
 	public boolean notDone() {return remainingLength > 0;}
+	
+	public double horizontalDirection() {return initialHorizontal;}
 
 }
