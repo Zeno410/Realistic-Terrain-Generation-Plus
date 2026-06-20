@@ -167,7 +167,7 @@ public class TreeRTGQuercusNigra extends TreeRTG {
 	
 	public float estimatedSize() {
 
-    	float branchLength= this.shortestBranch + this.branchLengthening*((float)crownSize)*1.3f; // came out a bit sparse
+    	float branchLength= this.shortestBranch + this.branchLengthening*((float)crownSize)*1.1f; // came out a bit sparse
     	branchLength *= 1.1;// leaf branches
     	return branchLength*branchLength/16f;
 	}

@@ -43,7 +43,6 @@ public class DecoVariableAcacia extends DecoVariableTree {
 	     mediumTree = new TreeRTGVachelliaTortilisMega();
 	     smallTree = new TreeRTGVachelliaTortilis();
 	     this.materials = this.materialsPicker.acacia;
-	     this.averageHeightSqrt += 0f;
 	 	 mediumTreeMinimumHeight = 11; // shortest allowed tall tree
 		 mediumTreeMinimumVariability = 3; // this less 1 (Random.nextInt()) added to minimum for largest allowed medium tree
 		 smallTreeMinimumHeight = 6; // etc.
@@ -118,7 +117,6 @@ public class DecoVariableAcacia extends DecoVariableTree {
                         //}
                     }
                     // get a suitable tree Type
-                    //treesRemaining -= doVariableGenerate(rand, rtgWorld, chunkInfo, pos,y,materialFor(pos,rtgWorld,rand), treesRemaining);
                     doVariableGenerate(rand, chunkInfo, pos,y, treesRemaining);
                 } else {
                 	treesRemaining.allowed(1f, rand);

@@ -1,7 +1,9 @@
 package rtg.api.world.deco;
 
 import java.util.Random;
+import java.util.function.Function;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -60,6 +62,24 @@ abstract public class DecoVariableTree extends DecoTree {
 		
 	}
 	
+	public void setLeafChoice(Function<Random,IBlockState> newChoice) {
+		tallTree.setLeafChoice(newChoice);
+		mediumTree.setLeafChoice(newChoice);
+		smallTree.setLeafChoice(newChoice);
+	}
+	
+	public void setTallTree(TreeRTG tree) {tallTree = tree;}
+
+	public void setMediumTree(TreeRTG tree) {mediumTree = tree;}
+	
+	public void setSmallTree(TreeRTG tree) {smallTree = tree;}
+	
+	public TreeRTG getTallTree() {return tallTree;}
+
+	public TreeRTG getMediumTree() {return mediumTree;}
+	
+	public TreeRTG getSmallTree() {return smallTree;}
+	
 	public TreeMaterials getMaterials() {return materials;}
 	
 	public void setMaterials(TreeMaterials newMaterials) {
@@ -73,6 +93,12 @@ abstract public class DecoVariableTree extends DecoTree {
 	public void  changeHeightNoiseVariability(float change) {
 		heightNoiseVariability += change;
 	}
+	
+	public void  changeLocalNoiseVariability(float change) {
+		localHeightSqrtVariability += change;
+	}
+	
+	public void setSaplingChance(float newChance) {saplingChance = newChance;}
 	
 	public int smallestSaplingHeight() {
 		return largestVanillaTree() + 1;

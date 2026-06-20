@@ -9,7 +9,6 @@ import biomesoplenty.api.generation.GeneratorStage;
 import biomesoplenty.api.generation.IGenerator;
 import net.minecraft.world.biome.Biome;
 import rtg.api.util.Logger;
-import rtg.api.world.biome.IRealisticBiome;
 
 public class TreeGenerationManager {
 	
@@ -62,6 +61,14 @@ public class TreeGenerationManager {
 			
 			
 			extendedBiome.getGenerationManager().removeGenerator(generator.getName());
+		}
+		generators = extendedBiome.getGenerationManager().getGeneratorsForStage(GeneratorStage.POST);
+		for (IGenerator generator: generators) {
+			Logger.info("[BOP Post Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
+			
+			if (generator.getName().equals("sacred_oak_trees")) {
+			    extendedBiome.getGenerationManager().removeGenerator(generator.getName());
+		    }
 		}
 	}
 	
