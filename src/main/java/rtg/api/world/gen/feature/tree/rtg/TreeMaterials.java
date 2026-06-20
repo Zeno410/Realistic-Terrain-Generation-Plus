@@ -2,6 +2,8 @@ package rtg.api.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -29,6 +31,11 @@ public class TreeMaterials {
 		if (!this.branches.equals(comparedMaterials.branches)) return false;
 		return true;
 	}
+	public static final TreeMaterials jungle = new TreeMaterials(
+			"Dark Oak",
+			BlockUtil.getStateLog(EnumType.JUNGLE),
+			BlockUtil.getStateLeaf(EnumType.JUNGLE),
+			BlockUtil.getStateLog(EnumType.JUNGLE).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
 	public static class Picker {
 		public static final TreeMaterials spruce = new TreeMaterials(

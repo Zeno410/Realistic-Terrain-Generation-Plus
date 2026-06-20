@@ -13,6 +13,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
@@ -20,7 +21,13 @@ import rtg.api.world.deco.DecoBoulder;
 import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.deco.DecoVariableSpruce;
+import rtg.api.world.deco.DecoVariableTree;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.helper.DecoHelper5050;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGBetulaPapyrifera;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
@@ -28,11 +35,14 @@ import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.api.world.terrain.heighteffect.HeightVariation;
 import rtg.api.world.terrain.heighteffect.JitterEffect;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPLandOfLakes extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPLandOfLakes(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPLandOfLakes(final Biome biome) { 
+    	super(biome); 
+    	}
 
     @Override
     public Biome preferredBeach() {
@@ -60,46 +70,9 @@ public class RealisticBiomeBOPLandOfLakes extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
-        TreeRTG birchTree = new TreeRTGBetulaPapyrifera();
-        birchTree.setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH));
-        birchTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.BIRCH));
-        birchTree.setMinTrunkSize(4);
-        birchTree.setMaxTrunkSize(10);
-        birchTree.setMinCrownSize(8);
-        birchTree.setMaxCrownSize(19);
-
-        DecoTree birchTrees = new DecoTree(birchTree);
-        birchTrees.setStrengthFactorForLoops(9f);
-        birchTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
-        birchTrees.getDistribution().setNoiseDivisor(100f);
-        birchTrees.getDistribution().setNoiseFactor(6f);
-        birchTrees.getDistribution().setNoiseAddend(0.8f);
-        birchTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
-        birchTrees.setTreeConditionChance(1);
-        birchTrees.setTreeConditionNoise(0f);
-        birchTrees.setMaxY(120);
-
-        TreeRTG sitchensisTree = new TreeRTGPiceaSitchensis();
-        sitchensisTree.setLogBlock(BlockUtil.getStateLog(EnumType.SPRUCE));
-        sitchensisTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.SPRUCE));
-        sitchensisTree.setMinTrunkSize(4);
-        sitchensisTree.setMaxTrunkSize(9);
-        sitchensisTree.setMinCrownSize(5);
-        sitchensisTree.setMaxCrownSize(14);
-
-        DecoTree smallPine = new DecoTree(sitchensisTree);
-        smallPine.setStrengthFactorForLoops(9f);
-        smallPine.setTreeType(DecoTree.TreeType.RTG_TREE);
-        smallPine.getDistribution().setNoiseDivisor(100f);
-        smallPine.getDistribution().setNoiseFactor(6f);
-        smallPine.getDistribution().setNoiseAddend(0.8f);
-        smallPine.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
-        smallPine.setTreeConditionChance(1);
-        smallPine.setTreeConditionNoise(0f);
-        smallPine.setMaxY(120);
-
-        DecoHelper5050 decoHelper5050 = new DecoHelper5050(birchTrees, smallPine);
-
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+    	treeGenerator = new DecoTreeCollectionBOPLandOfLakes(getConfig());
+    	
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(100f);
         decoFallenTree.getDistribution().setNoiseFactor(6f);
@@ -123,6 +96,46 @@ public class RealisticBiomeBOPLandOfLakes extends RealisticBiomeBase {
         this.addDeco(decoBoulder);
     }
 
+    
+    private static class DecoTreeCollectionBOPLandOfLakes extends DecoCollectionBase {
+
+		public DecoTreeCollectionBOPLandOfLakes(BiomeConfig config) {
+			super(config);
+			
+			DecoTreeSet trees = new DecoTreeSet();
+			
+			{DecoVariableTree spruceTree = new DecoVariableSpruce();
+			spruceTree.changeAverageHeightSqrt(-1);// short
+			trees.add(spruceTree,4);}
+			
+			
+			{DecoVariableTree oakSpruceTree = new DecoVariableSpruce();
+			oakSpruceTree.changeAverageHeightSqrt(-1);// short
+			TreeMaterials oakSpruceMaterials = new TreeMaterials("Oak Spruce",
+					Blocks.LOG.getStateFromMeta(0),
+					Blocks.LEAVES.getStateFromMeta(1),
+					Blocks.LOG.getStateFromMeta(12));
+			oakSpruceTree.setMaterials(oakSpruceMaterials);
+			trees.add(oakSpruceTree,4);}
+			
+			{DecoVariableTree oakTree = new DecoVariableOak();
+			oakTree.changeAverageHeightSqrt(-1.5f);// shorter
+			trees.add(oakTree,3);}
+			
+			{DecoVariableTree oakBirchTree = new DecoVariableOak();
+			oakBirchTree.changeAverageHeightSqrt(-1.5f);// shorter
+			oakBirchTree.setMaterials(TreeMaterials.Picker.birch);
+			trees.add(oakBirchTree,3);}
+
+			Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 5.5f); 
+			trees.setDistribution(treeFrequencyDistribution);
+			
+			this.addDeco(trees);
+			
+			
+		}
+    	
+    }
     public static class TerrainBOPLandOfLakes extends TerrainBase {
 
         private float minHeight;

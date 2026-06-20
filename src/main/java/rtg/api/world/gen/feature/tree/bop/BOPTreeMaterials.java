@@ -41,6 +41,13 @@ public class BOPTreeMaterials extends TreeMaterials {
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAHOGANY),
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
+	public static final TreeMaterials sacredOak = new TreeMaterials(
+			"Eucalyptus",
+			BlockBOPLog.paging.getVariantState(BOPWoods.SACRED_OAK),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.SACRED_OAK),
+			BlockBOPLog.paging.getVariantState(BOPWoods.SACRED_OAK).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
+	);
+	
 	public static class Picker extends TreeMaterials.Picker {		
 		public static final TreeMaterials fir = new TreeMaterials(
 			"Fir",

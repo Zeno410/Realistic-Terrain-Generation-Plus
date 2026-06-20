@@ -3,7 +3,8 @@ package rtg.world.biome.realistic.biomesoplenty;
 import java.util.Random;
 
 import biomesoplenty.api.biome.BOPBiomes;
-
+import biomesoplenty.api.enums.BOPTrees;
+import biomesoplenty.common.block.BlockBOPLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
@@ -20,13 +21,19 @@ import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoFlowersRTG;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoVariableBirch;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.deco.DecoVariableTree;
 import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.helper.DecoHelper5050;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPinusPonderosa;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 import static net.minecraft.block.BlockFlower.EnumFlowerType.ALLIUM;
 import static net.minecraft.block.BlockFlower.EnumFlowerType.BLUE_ORCHID;
@@ -42,7 +49,9 @@ import static net.minecraft.block.BlockFlower.EnumFlowerType.WHITE_TULIP;
 
 public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPWoodland(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPWoodland(final Biome biome) { 
+    	super(biome); 
+    }
 
     @Override
     public Biome preferredBeach() {
@@ -68,6 +77,39 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+    	DecoVariableTree oaks = new DecoVariableOak();
+    	// more variable
+    	oaks.changeLocalNoiseVariability(0.5f);
+    	// and more saplings
+    	oaks.setSaplingChance(.2f);
+    	
+
+    	DecoVariableTree spruceBirch = new DecoVariableBirch();
+    	// more variable
+    	spruceBirch.changeLocalNoiseVariability(0.5f);
+    	// and more saplings
+    	spruceBirch.setSaplingChance(.2f);
+    	
+    	
+        TreeMaterials spruceBirchMaterials = new TreeMaterials(
+    			"Birch",
+    			TreeMaterials.Picker.spruce.log,
+    			TreeMaterials.Picker.birch.leaves,
+    			TreeMaterials.Picker.spruce.branches);
+        
+        spruceBirch.setMaterials(spruceBirchMaterials);
+    	
+    	DecoTreeSet treeCombination = new DecoTreeSet();
+    	
+    	treeCombination.add(oaks,2);
+    	treeCombination.add(spruceBirch,1);
+		Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 5.5f); 
+		treeCombination.setDistribution(treeFrequencyDistribution);
+		
+    	treeGenerator = treeCombination;
+    	
         this.addDecoCollection(new DecoCollectionWoodland(this.getConfig()));
     }
 
@@ -157,9 +199,11 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
 
             super(config);
 
+            // trees are now in treeGenerator
+            // simplified from this; the original is just oaks somewhat taller than normal; so the same here.
             this
-                .addDeco(tallTrees(tallMin, tallMax)) // Tall trees first.
-                .addDeco(shortTrees(short1Min, short1Max)) // Short trees next.
+                //.addDeco(tallTrees(tallMin, tallMax)) // Tall trees first.
+                //.addDeco(shortTrees(short1Min, short1Max)) // Short trees next.
                 .addDeco(logs(), config.ALLOW_LOGS.get()) // Add some fallen trees of the oak and spruce variety (50/50 distribution).
                 .addDeco(shrubsOak()) // Shrubs to fill in the blanks.
                 .addDeco(shrubsSpruce()) // Fewer spruce shrubs than oak.
