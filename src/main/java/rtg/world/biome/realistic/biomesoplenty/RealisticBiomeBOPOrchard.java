@@ -9,11 +9,17 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.Distribution;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.deco.DecoVariableTree;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusFalcata;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 import static rtg.api.world.deco.DecoFallenTree.LogCondition.RANDOM_CHANCE;
 
@@ -43,6 +49,24 @@ RealisticBiomeBOPOrchard extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+    	
+    	DecoVariableTree orchardTree = new DecoVariableOak();
+    	// no Nigra
+    	orchardTree.setTallTree(new TreeRTGQuercusFalcata());
+    	// not so big
+    	orchardTree.changeAverageHeightSqrt(-.6f);
+    	// less variable
+    	orchardTree.changeHeightNoiseVariability(-1);
+    	// some Flowering leaves
+    	orchardTree.setLeafChoice(BOPTreeMaterials.floweringOak());
+
+		Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 1.5f, 5.5f); 
+		orchardTree.setDistribution(treeFrequencyDistribution);
+		
+		treeGenerator = orchardTree;
+		
+    	
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(80f);
         decoFallenTree.getDistribution().setNoiseFactor(60f);

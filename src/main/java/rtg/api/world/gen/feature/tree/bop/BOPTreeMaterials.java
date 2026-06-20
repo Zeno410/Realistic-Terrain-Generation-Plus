@@ -1,5 +1,8 @@
 package rtg.api.world.gen.feature.tree.bop;
 
+import java.util.Random;
+import java.util.function.Function;
+
 import biomesoplenty.api.block.BOPBlocks;
 import biomesoplenty.api.enums.BOPTrees;
 import biomesoplenty.api.enums.BOPWoods;
@@ -27,10 +30,16 @@ public class BOPTreeMaterials extends TreeMaterials {
 		
 
 	public static final TreeMaterials snowyBirch = new TreeMaterials(
-			"Birch",
+			"Snowy Birch",
 			Blocks.LOG.getStateFromMeta(2),
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN),
 			Blocks.LOG.getStateFromMeta(14));
+	
+	public static final TreeMaterials mahogany = new TreeMaterials(
+			"Mahogany",
+			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAHOGANY),
+			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
 	public static class Picker extends TreeMaterials.Picker {		
 		public static final TreeMaterials fir = new TreeMaterials(
@@ -75,6 +84,18 @@ public class BOPTreeMaterials extends TreeMaterials {
 				Blocks.LOG.getStateFromMeta(13)
 		);
 		
+	}
+	
+	public static Function<Random,IBlockState> floweringOak() {
+		return new Function<Random,IBlockState>() {
+
+			@Override
+			public IBlockState apply(Random t) {
+				if (t.nextInt(5) == 0) return BlockBOPLeaves.paging.getVariantState(BOPTrees.FLOWERING);
+				return BlockUtil.getStateLeaf(EnumType.OAK);
+			}
+			
+		};
 	}
 
 }

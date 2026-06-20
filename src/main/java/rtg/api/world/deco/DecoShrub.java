@@ -14,6 +14,7 @@ import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.gen.feature.WorldGenShrubRTG;
 
 import java.util.Random;
+import java.util.function.Function;
 
 
 /**
@@ -37,6 +38,10 @@ public class DecoShrub extends DecoBase {
     private int maxSize;
     private IBlockState logBlock;
     private IBlockState leavesBlock;
+    protected Function<Random,IBlockState> leafChoice = new Function<Random,IBlockState>() {
+    	@Override
+    	public IBlockState apply(Random applied) {return leavesBlock;}
+    };
 
     public DecoShrub() {
 
@@ -95,13 +100,13 @@ public class DecoShrub extends DecoBase {
 
                     if (this.notEqualsZeroChance > 1) {
                         if (rand.nextInt(this.notEqualsZeroChance) != 0) {
-                            new WorldGenShrubRTG(this.size, this.logBlock, this.leavesBlock, this.sand)
+                            new WorldGenShrubRTG(this.size, this.logBlock, this.leavesBlock, this.sand, this.leafChoice)
                                     .generate(rtgWorld.world(), rand, pos);
                         }
                     }
                     else {
                         if (rand.nextInt(this.chance) == 0) {
-                            new WorldGenShrubRTG(this.size, this.logBlock, this.leavesBlock, this.sand)
+                            new WorldGenShrubRTG(this.size, this.logBlock, this.leavesBlock, this.sand, this.leafChoice)
                                     .generate(rtgWorld.world(), rand, pos);
                         }
                     }
@@ -119,6 +124,12 @@ public class DecoShrub extends DecoBase {
 
         this.size = size;
         return this;
+    }
+    
+    public void setLeafChoice(Function<Random,IBlockState> newChoice) {leafChoice = newChoice;}
+    
+    protected IBlockState getLeaves(Random rand) {
+    	return this.leafChoice.apply(rand);
     }
 
     public boolean isUseDefaultRandom() {

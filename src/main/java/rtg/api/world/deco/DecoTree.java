@@ -585,7 +585,6 @@ public class DecoTree extends DecoBase {
     
 	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
 		// this is here to allow combining trees together for sharing a forest density
-		
 		float neededSpace = tree.estimatedSize();
         this.tree.setLogBlock(this.logBlock);
         this.tree.setLeavesBlock(this.leavesBlock);

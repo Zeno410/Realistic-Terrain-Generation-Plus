@@ -66,7 +66,7 @@ public class TreeRTGQuercusFalcata extends TreeRTG {
             this.placeLogBlock(world, pos.up(crownLocation+trunkSize-1), this.logBlock, this.generateFlag,lightTracker);
         }
         // leaves on top
-        this.placeLeavesBlob(world, pos.up(crownSize+trunkSize-1),leafList,lightTracker);
+        this.placeLeavesBlob(world, pos.up(crownSize+trunkSize-1),leafList,rand, lightTracker);
         
         float height = (float)crownSize;       
         double horizontalDirection = rand.nextFloat()*Math.PI*2.0; // horizontal direction of next branch in radians
@@ -136,22 +136,22 @@ public class TreeRTGQuercusFalcata extends TreeRTG {
             if (oldLocation.getY()!=location.getY()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 				// add in bridge block for Tinker's Lumber Axe
             	BlockPos bridgeLocation = new BlockPos(location.getX(),oldLocation.getY(),location.getZ());
-				this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);            
+				this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);            
 				if (oldLocation.getX()!=location.getX()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 					// add in bridge block for Tinker's Lumber Axe
 	            	bridgeLocation = new BlockPos(oldLocation.getX(),oldLocation.getY(),location.getZ());
-					this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);
+					this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);
 					
 				}
                 if (oldLocation.getZ()!=location.getZ()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 					// add in bridge block for Tinker's Lumber Axe
 	            	bridgeLocation = new BlockPos(location.getX(),oldLocation.getY(),oldLocation.getZ());
-					this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);
+					this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);
 					
                 }
 			}
 		}
-		placeLeavesBlob(world,branch.branchLocation.location(), leafList, lightTracker);
+		placeLeavesBlob(world,branch.branchLocation.location(), leafList, rand, lightTracker);
     }
 	
 	private void makeBifurcatingBranch (RTGTreeBranch branch, World world, Random rand,ArrayList<BlockPos> leafList,SkylightTracker lightTracker) {
@@ -164,17 +164,17 @@ public class TreeRTGQuercusFalcata extends TreeRTG {
             if (oldLocation.getY()!=location.getY()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 				// add in bridge block for Tinker's Lumber Axe
             	BlockPos bridgeLocation = new BlockPos(location.getX(),oldLocation.getY(),location.getZ());
-				this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);            
+				this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);            
 				if (oldLocation.getX()!=location.getX()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 					// add in bridge block for Tinker's Lumber Axe
 	            	bridgeLocation = new BlockPos(oldLocation.getX(),oldLocation.getY(),location.getZ());
-					this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);
+					this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);
 					
 				}
                 if (oldLocation.getZ()!=location.getZ()) {//((oldLocation.getX()!=location.getX())&&(oldLocation.getY()!=location.getY())&&(oldLocation.getZ()!=location.getZ())) {
 					// add in bridge block for Tinker's Lumber Axe
 	            	bridgeLocation = new BlockPos(location.getX(),oldLocation.getY(),oldLocation.getZ());
-					this.placeLeavesBlock(world, bridgeLocation, this.leavesBlock, this.generateFlag,lightTracker);
+					this.placeLeavesBlock(world, bridgeLocation, rand,lightTracker);
 					
                 }
 			}
@@ -195,7 +195,7 @@ public class TreeRTGQuercusFalcata extends TreeRTG {
 		}
     }
     
-    private void placeLeavesBlob(World world, BlockPos center, ArrayList<BlockPos> leafList, SkylightTracker lightTracker ) {
+    private void placeLeavesBlob(World world, BlockPos center, ArrayList<BlockPos> leafList, Random rand, SkylightTracker lightTracker ) {
     	for (int dy = 0; dy < 2; dy ++) {
 	    	for (int dz = -2; dz < 3; dz ++) {
 	    		for (int dx = -2; dx < 3; dx ++) {
@@ -211,16 +211,16 @@ public class TreeRTGQuercusFalcata extends TreeRTG {
     	recordLeaf(topCenter.north(),leafList);
     	recordLeaf(topCenter.south(),leafList);
     	
-    	placeLeaves(world, leafList,lightTracker);
+    	placeLeaves(world, leafList, rand, lightTracker);
     }
     
     private void recordLeaf(BlockPos recorded, ArrayList<BlockPos> leafList) {
     	leafList.add(recorded);
     }
     
-    private void placeLeaves(World world, ArrayList<BlockPos> leafList, SkylightTracker lightTracker ) {
+    private void placeLeaves(World world, ArrayList<BlockPos> leafList, Random rand, SkylightTracker lightTracker ) {
     	for (BlockPos pos: leafList) {
-    		this.placeLeavesBlock(world, pos, leavesBlock, generateFlag,lightTracker);
+    		this.placeLeavesBlock(world, pos, rand ,lightTracker);
     	}
     	leafList.clear();
     }

@@ -34,6 +34,10 @@ public class RTG3DBranch {
 			this(horizontal,vertical,length,0,branchStart);
 		}
 		
+		public RTG3DBranch(RTG3DBranch copied) {
+			this(copied.horizontalAngle,copied.verticalAngle,copied.remainingLength,copied.stage,copied.location());
+		}
+		
 		public BlockPos moved() {
 			direction.move(branchLocation);
 			remainingLength -= 1.0; // the d's reach the unit sphere

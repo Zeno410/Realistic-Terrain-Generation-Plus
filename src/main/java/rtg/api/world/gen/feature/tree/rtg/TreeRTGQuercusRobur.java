@@ -2,6 +2,7 @@ package rtg.api.world.gen.feature.tree.rtg;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.Lists;
@@ -19,14 +20,15 @@ import net.minecraft.world.World;
  */
 public class TreeRTGQuercusRobur extends TreeRTG {
 
-    int heightLimit;
-    int height;
+	//int heightLimit;
+    //int height;
+	int heightLimitLimit  = 12;
     double heightAttenuation = 0.618D;
     double branchSlope = 0.381D;
     double scaleWidth = 1.0D;
     double leafDensity = 1.0D;
-    int trunkSize = 1;
-    int heightLimitLimit = 12;
+    int trunkWidth = 1;
+    //int heightLimitLimit = 12;
     /**
      * Sets the distance limit for how far away the generator will populate leaves from the base leaf node.
      */
@@ -62,12 +64,15 @@ public class TreeRTGQuercusRobur extends TreeRTG {
         this.setLeavesBlock(Blocks.LEAVES.getDefaultState());
         this.trunkSize = 4;
         this.crownSize = 8;
+        this.minTrunkSize = 3;
+        this.maxTrunkSize = 6;
+        this.minCrownSize = 6;
+        this.maxCrownSize = 12;
     }
     
 	public float estimatedSize() {
 
-    	float branchLength= this.crownSize/4 + 2;
-    	//Logger.info("Robur Crown size {} branch length {}",crownSize,branchLength);
+    	float branchLength= this.crownSize/2 + 2;
     	return branchLength*branchLength/16f;
 	}
 	
@@ -83,29 +88,23 @@ public class TreeRTGQuercusRobur extends TreeRTG {
     /**
      * Generates a list of leaf nodes for the tree, to be populated by generateLeaves.
      */
-    void generateLeafNodeList() {
+    void generateLeafNodeList(int height, int heightLimit) {
+    	// testing; I think heightLimit should not be passed here
+    	//heightLimit = height;
 
-        this.heightLimit = this.trunkSize + this.crownSize;
-
-        this.height = (int) ((double) this.heightLimit * this.heightAttenuation);
-
-        if (this.height >= this.heightLimit) {
-            this.height = this.heightLimit - 1;
-        }
-
-        int i = (int) (1.382D + Math.pow(this.leafDensity * (double) this.heightLimit / 13.0D, 2.0D));
+        int i = (int) (1.382D + Math.pow(this.leafDensity * (double) heightLimit / 13.0D, 2.0D));
 
         if (i < 1) {
             i = 1;
         }
 
-        int j = this.basePos.getY() + this.height;
-        int k = this.heightLimit - this.leafDistanceLimit;
+        int j = this.basePos.getY() + height;
+        int k = heightLimit - this.leafDistanceLimit;
         this.foliageLocations = Lists.newArrayList();
         this.foliageLocations.add(new TreeRTGQuercusRobur.FoliageCoordinates(this.basePos.up(k), j));
 
         for (; k >= 0; --k) {
-            float f = this.layerSize(k);
+            float f = this.layerSize(k,heightLimit);
 
             if (f >= 0.0F) {
                 for (int l = 0; l < i; ++l) {
@@ -132,8 +131,9 @@ public class TreeRTGQuercusRobur extends TreeRTG {
         }
     }
 
+    public void setTrunkWidth(int newTrunkWidth) {this.trunkWidth = newTrunkWidth;}
+    
     private void func_181631_a(BlockPos p_181631_1_, float p_181631_2_, IBlockState p_181631_3_) {
-
         int i = (int) ((double) p_181631_2_ + 0.618D);
 
         if (this.world() == null) return;
@@ -150,9 +150,10 @@ public class TreeRTGQuercusRobur extends TreeRTG {
                 }
             }
         }
+    	throw new RuntimeException();
     }
     
-    void func_181631_a(BlockPos p_181631_1_, float p_181631_2_, IBlockState p_181631_3,SkylightTracker tracker) {
+    void func_181631_a(BlockPos p_181631_1_, float p_181631_2_, IBlockState p_181631_3, Random rand, SkylightTracker tracker) {
 
         int i = (int) ((double) p_181631_2_ + 0.618D);
 
@@ -165,7 +166,7 @@ public class TreeRTGQuercusRobur extends TreeRTG {
                     net.minecraft.block.state.IBlockState state = this.world().getBlockState(blockpos);
 
                     if (state.getBlock().isAir(state, this.world(), blockpos) || state.getBlock().isLeaves(state, this.world(), blockpos)) {
-                    	this.placeLeavesBlock(world(), blockpos, this.leavesBlock, this.generateFlag, tracker);
+                    	this.placeLeavesBlock(world(), blockpos, this.getLeaves(rand), this.generateFlag, tracker);
                         //this.setBlockAndNotifyAdequately(this.world(), blockpos, p_181631_3);
                     }
                 }
@@ -176,13 +177,13 @@ public class TreeRTGQuercusRobur extends TreeRTG {
     /**
      * Gets the rough size of a layer of the tree.
      */
-    float layerSize(int p_76490_1_) {
+    float layerSize(int p_76490_1_, int heightLimit) {
 
-        if ((float) p_76490_1_ < (float) this.heightLimit * 0.3F) {
+        if ((float) p_76490_1_ < (float) heightLimit * 0.3F) {
             return -1.0F;
         }
         else {
-            float f = (float) this.heightLimit / 2.0F;
+            float f = (float) heightLimit / 2.0F;
             float f1 = f - (float) p_76490_1_;
             float f2 = MathHelper.sqrt(f * f - f1 * f1);
 
@@ -205,10 +206,10 @@ public class TreeRTGQuercusRobur extends TreeRTG {
     /**
      * Generates the leaves surrounding an individual entry in the leafNodes list.
      */
-    void generateLeafNode(BlockPos pos, SkylightTracker lightTracker) {
+    void generateLeafNode(BlockPos pos, Random rand, SkylightTracker lightTracker) {
 
         for (int i = 0; i < this.leafDistanceLimit; ++i) {
-        	this.func_181631_a(pos.up(i), this.leafSize(i), this.leavesBlock.withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)),lightTracker);
+        	this.func_181631_a(pos.up(i), this.leafSize(i), this.getLeaves(rand).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)), rand, lightTracker);
         }
     }
 
@@ -227,6 +228,7 @@ public class TreeRTGQuercusRobur extends TreeRTG {
             BlockLog.EnumAxis blocklog$enumaxis = this.func_175938_b(p_175937_1_, blockpos1);
             this.setBlockAndNotifyAdequately(this.world(), blockpos1, p_175937_3_.withProperty(BlockLog.LOG_AXIS, blocklog$enumaxis));
         }
+    	throw new RuntimeException();
     }
     
     void func_175937_a(BlockPos p_175937_1_, BlockPos p_175937_2_, IBlockState p_175937_3, SkylightTracker lightTracker) {
@@ -282,33 +284,33 @@ public class TreeRTGQuercusRobur extends TreeRTG {
     /**
      * Generates the leaf portion of the tree as specified by the leafNodes list.
      */
-    void generateLeaves(SkylightTracker lightTracker) {
+    void generateLeaves(Random rand, SkylightTracker lightTracker) {
 
         for (TreeRTGQuercusRobur.FoliageCoordinates worldgenbigtree$foliagecoordinates : this.foliageLocations) {
-            this.generateLeafNode(worldgenbigtree$foliagecoordinates, lightTracker);
+            this.generateLeafNode(worldgenbigtree$foliagecoordinates, rand, lightTracker);
         }
     }
 
     /**
      * Indicates whether or not a leaf node requires additional wood to be added to preserve integrity.
      */
-    boolean leafNodeNeedsBase(int p_76493_1_) {
+    boolean leafNodeNeedsBase(int p_76493_1_, int heightLimit) {
 
-        return (double) p_76493_1_ >= (double) this.heightLimit * 0.2D;
+        return (double) p_76493_1_ >= (double) heightLimit * 0.2D;
     }
 
     /**
      * Places the trunk for the big tree that is being generated. Able to generate double-sized trunks by changing a
      * field that is always 1 to 2.
      */
-    void generateTrunk(SkylightTracker lightTracker) {
+    void generateTrunk(SkylightTracker lightTracker, int height) {
 
         BlockPos blockpos = this.basePos;
-        BlockPos blockpos1 = this.basePos.up(this.height);
+        BlockPos blockpos1 = this.basePos.up(height);
         IBlockState block = this.logBlock;
         this.func_175937_a(blockpos, blockpos1, block, lightTracker);
 
-        if (this.trunkSize == 2) {
+        if (this.trunkWidth == 2) {
             this.func_175937_a(blockpos.east(), blockpos1.east(), block, lightTracker);
             this.func_175937_a(blockpos.east().south(), blockpos1.east().south(), block, lightTracker);
             this.func_175937_a(blockpos.south(), blockpos1.south(), block, lightTracker);
@@ -318,13 +320,13 @@ public class TreeRTGQuercusRobur extends TreeRTG {
     /**
      * Generates additional wood blocks to fill out the bases of different leaf nodes that would otherwise degrade.
      */
-    void generateLeafNodeBases(SkylightTracker lightTracker) {
+    void generateLeafNodeBases(int heightLimit, SkylightTracker lightTracker) {
 
         for (TreeRTGQuercusRobur.FoliageCoordinates worldgenbigtree$foliagecoordinates : this.foliageLocations) {
             int i = worldgenbigtree$foliagecoordinates.func_177999_q();
             BlockPos blockpos = new BlockPos(this.basePos.getX(), i, this.basePos.getZ());
 
-            if (!blockpos.equals(worldgenbigtree$foliagecoordinates) && this.leafNodeNeedsBase(i - this.basePos.getY())) {
+            if (!blockpos.equals(worldgenbigtree$foliagecoordinates) && this.leafNodeNeedsBase(i - this.basePos.getY(), heightLimit)) {
                 this.func_175937_a(blockpos, worldgenbigtree$foliagecoordinates, this.logBlock, lightTracker);
             }
         }
@@ -351,7 +353,7 @@ public class TreeRTGQuercusRobur extends TreeRTG {
 
                 if (!this.isReplaceable(blockpos1)) {
 
-                    String replaceBlock = world().getBlockState(blockpos1).getBlock().getLocalizedName();
+                    //String replaceBlock = world().getBlockState(blockpos1).getBlock().getLocalizedName();
 
                     //Logger.debug("Block at %d %d %d (%s) is not replaceable.", blockpos1.getX(), blockpos1.getY(), blockpos1.getZ(), replaceBlock);
 
@@ -375,6 +377,14 @@ public class TreeRTGQuercusRobur extends TreeRTG {
         this.basePos = position;
         this.rand = new Random(rand.nextLong());
 
+        int heightLimit = this.trunkSize + this.crownSize;
+
+        int height = (int) ((double) heightLimit * this.heightAttenuation);
+
+        if (height >= heightLimit) {
+            height = heightLimit - 1;
+        }
+        
         int x = position.getX();
         int y = position.getY();
         int z = position.getZ();
@@ -383,21 +393,26 @@ public class TreeRTGQuercusRobur extends TreeRTG {
             return false;
         }
 
-        if (this.heightLimit == 0) {
-            this.heightLimit = 5 + this.rand.nextInt(this.heightLimitLimit);
+        if (heightLimit == 0) {
+            heightLimit = 5 + this.rand.nextInt(heightLimitLimit);
         }
 
-        if (!this.validTreeLocation()) {
+        Optional<Integer> correctedHeight = validTreeLocation(heightLimit);
+        // slightly awkward way of passing both a boolean and an Integer;
+        if (!correctedHeight.isPresent()) {
             return false;
         }
         else {
-        	
+        	heightLimit = correctedHeight.get();
+        	if (height >= heightLimit) {
+                height = heightLimit - 1;
+            }
             SkylightTracker lightTracker = new SkylightTracker(this.furthestLikelyExtension(),position,worldIn);
             
-            this.generateLeafNodeList();
-            this.generateTrunk(lightTracker);
-            this.generateLeaves(lightTracker);
-            this.generateLeafNodeBases(lightTracker);
+            this.generateLeafNodeList(height, heightLimit);
+            this.generateTrunk(lightTracker, height);
+            this.generateLeaves(rand, lightTracker);
+            this.generateLeafNodeBases(heightLimit,lightTracker);
             return true;
         }
     }
@@ -406,7 +421,7 @@ public class TreeRTGQuercusRobur extends TreeRTG {
      * Returns a boolean indicating whether or not the current location for the tree, spanning basePos to to the height
      * limit, is valid.
      */
-    private boolean validTreeLocation() {
+    private Optional<Integer> validTreeLocation(int heightLimit) {
 
         BlockPos down = this.basePos.down();
         net.minecraft.block.state.IBlockState state = this.world().getBlockState(down);
@@ -414,21 +429,21 @@ public class TreeRTGQuercusRobur extends TreeRTG {
 
         if (!isSoil) {
             //Logger.debug("Invalid tree location! Ground block is not soil.");
-            return false;
+            return Optional.empty();
         }
         else {
-            int i = this.checkBlockLine(this.basePos, this.basePos.up(this.heightLimit - 1));
+            int i = this.checkBlockLine(this.basePos, this.basePos.up(heightLimit - 1));
 
             if (i == -1) {
-                return true;
+                return Optional.of(heightLimit);
             }
             else if (i < 6) {
                 //Logger.debug("Invalid tree location! checkBlockLine() == false");
-                return false;
+                return Optional.empty();
             }
             else {
-                this.heightLimit = i;
-                return true;
+                heightLimit = i;
+                return Optional.of(i);
             }
         }
     }

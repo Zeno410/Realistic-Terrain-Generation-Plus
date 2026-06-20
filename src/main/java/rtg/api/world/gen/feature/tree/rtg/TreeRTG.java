@@ -20,6 +20,7 @@ import rtg.api.world.deco.DecoBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * The base class for all RTG trees.
@@ -54,6 +55,11 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
 
     private boolean allowBarkCoveredLogs;
     protected int maxAllowedObstruction = 4;
+    
+    protected Function<Random,IBlockState> leafChoice = new Function<Random,IBlockState>() {
+    	@Override
+    	public IBlockState apply(Random applied) {return leavesBlock;}
+    };
 
     public TreeRTG(boolean notify) {
 
@@ -100,6 +106,7 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         ));
 
         this.allowBarkCoveredLogs = RTGConfig.barkCoveredLogs();
+        
     }
     
     public TreeRTG(TreeRTG model) {
@@ -292,6 +299,14 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
         return placeLeavesBlock(world,pos,this.leavesBlock,3,tracker);
     }
     
+    protected boolean placeLeavesBlock(World world, BlockPos pos, Random rand, SkylightTracker tracker) {
+        return placeLeavesBlock(world,pos,leafChoice.apply(rand),3,tracker);
+    }
+    
+    protected IBlockState getLeaves(Random rand) {
+    	return this.leafChoice.apply(rand);
+    }
+    
     @Override
     public boolean isReplaceable(World world, BlockPos pos) {
 
@@ -372,6 +387,13 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
 
         this.leavesBlock = leavesBlock;
         return this;
+    }
+    
+    public TreeRTG setMaterials(TreeMaterials materials) {
+    	this.branchBlock = materials.branches;
+    	this.leavesBlock = materials.leaves;
+    	this.logBlock = materials.log;
+    	return this;
     }
 
     public int getTrunkSize() {
@@ -521,5 +543,7 @@ public abstract class TreeRTG extends WorldGenAbstractTree {
     	return result;
     }
     
-    protected double jigger(Random random, double range) {return DecoBase.jigger(random, range);}
+    public final double jigger(Random random, double range) {return DecoBase.jigger(random, range);}
+
+    public void setLeafChoice(Function<Random,IBlockState> newChoice) {leafChoice = newChoice;}
 }

@@ -1,6 +1,7 @@
 package rtg.api.world.gen.feature;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,8 +17,12 @@ public class WorldGenShrubRTG extends WorldGenerator {
 
     private int varSize;
     private IBlockState logBlock;
-    private IBlockState leaveBlock;
+    private IBlockState leavesBlock;
     private boolean varSand;
+    protected Function<Random,IBlockState> leafChoice = new Function<Random,IBlockState>() {
+    	@Override
+    	public IBlockState apply(Random applied) {return leavesBlock;}
+    };
 
     public WorldGenShrubRTG(int size, IBlockState log, IBlockState leav, boolean sand) {
 
@@ -25,7 +30,17 @@ public class WorldGenShrubRTG extends WorldGenerator {
         varSand = sand;
 
         logBlock = log;
-        leaveBlock = leav;
+        leavesBlock = leav;
+    }
+    
+    public WorldGenShrubRTG(int size, IBlockState log, IBlockState leav, boolean sand, Function<Random,IBlockState> _leafChoice) {
+
+        varSize = size;
+        varSand = sand;
+
+        logBlock = log;
+        leavesBlock = leav;
+        leafChoice = _leafChoice;
     }
 
     @Override
@@ -44,19 +59,19 @@ public class WorldGenShrubRTG extends WorldGenerator {
             int rZ = rand.nextInt(width * 2) - width;
 
             if (i == 0 && varSize > 4) {
-                buildLeaves(world, x + rX, y, z + rZ, 3);
+                buildLeaves(world, x + rX, y, z + rZ, 3, rand);
             }
             else if (i == 1 && varSize > 2) {
-                buildLeaves(world, x + rX, y, z + rZ, 2);
+                buildLeaves(world, x + rX, y, z + rZ, 2, rand);
             }
             else {
-                buildLeaves(world, x + rX, y + rY, z + rZ, 1);
+                buildLeaves(world, x + rX, y + rY, z + rZ, 1, rand);
             }
         }
         return true;
     }
 
-    public void buildLeaves(World world, int x, int y, int z, int size) {
+    public void buildLeaves(World world, int x, int y, int z, int size, Random rand) {
 
         IBlockState b = world.getBlockState(new BlockPos(x, y - 2, z));
         IBlockState b1 = world.getBlockState(new BlockPos(x, y - 1, z));
@@ -81,7 +96,7 @@ public class WorldGenShrubRTG extends WorldGenerator {
                     for (int j = -1; j <= 1; j++) {
                         for (int k = -size; k <= size; k++) {
                             if (Math.abs(i) + Math.abs(j) + Math.abs(k) <= size) {
-                                buildBlock(world, x + i, y + j, z + k, leaveBlock);
+                                buildBlock(world, x + i, y + j, z + k, leafChoice.apply(rand));
                             }
                         }
                     }

@@ -37,7 +37,9 @@ public class TreeDensityLimiter {
 			return true;
 		}
 		// conditional, chance equal to the ratio remaining/needed
-		boolean allowed = rand.nextFloat()*needed < treesRemaining;
+		boolean allowed = rand.nextFloat()*(float)needed < treesRemaining;
+		treesRemaining = 0;
+		
 		return allowed;
 	}
 	
