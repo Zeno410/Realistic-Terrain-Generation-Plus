@@ -36,6 +36,7 @@ public final class BiomeAnalyzer {
     private SmoothingSearchStatus beachSearch;
     private SmoothingSearchStatus landSearch;
     private SmoothingSearchStatus oceanSearch;
+    private boolean beachesSetUp = false;
 
     public BiomeAnalyzer() {
         initBiomes();
@@ -114,9 +115,12 @@ public final class BiomeAnalyzer {
         for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
             if (biome != null) {
                 final int id = Biome.getIdForBiome(biome);
-                final Map.Entry<Biome, IRealisticBiome> realisticBiome = RTGAPI.RTG_BIOMES.get(id);
+                final IRealisticBiome realisticBiome = RTGAPI.RTG_BIOMES.get(biome);
                 if (realisticBiome != null) {
-                    preferredBeach.set(id, realisticBiome.getValue().getBeachBiome().baseBiomeId());
+                	IRealisticBiome beachBiome = realisticBiome.getBeachBiome();
+                	int refID = RTGAPI.getBiomeID(beachBiome.baseBiome());
+                	//Logger.error(biome.biomeName + " "  + id + " " + beachBiome.baseBiome().biomeName + " " + beachBiome.baseBiomeId() + " " + refID);
+                    preferredBeach.set(id, beachBiome.baseBiomeId());
                 }
             }
         }
@@ -201,6 +205,10 @@ public final class BiomeAnalyzer {
         }
         
         // put beaches on shores
+        if (!this.beachesSetUp) {
+        	this.setupBeachesForBiomes();
+        	beachesSetUp = true;
+        }
         for (int i = 0; i < genLayerBiomes.length; i++) {
             if (beachSearch.isAbsent()) {
                 break; //no point
