@@ -9,6 +9,7 @@ class BranchVector {
 	final double dy;
 	final double dz;
     final double horizontalLength;
+    final double length;
 	
 	
     // note horizontal is in radians; vertical is in fractional motion
@@ -22,7 +23,8 @@ class BranchVector {
 		dx = trialDx/longestDirection;
 		dy = trialDy/longestDirection;
 		dz = trialDz/longestDirection;
-		horizontalLength = Math.sqrt(dx*dx+dy*dy+dz*dz);
+		horizontalLength = Math.sqrt(dx * dx + dz * dz);
+		length = horizontalLength;
 	}
 
 	public BranchVector(Vec3d vector) {
@@ -35,7 +37,8 @@ class BranchVector {
 		dx = trialDx/longestDirection;
 		dy = trialDy/longestDirection;
 		dz = trialDz/longestDirection;
-		horizontalLength = Math.sqrt(dx*dx+dz*dz);
+		horizontalLength = Math.sqrt(dx * dx + dz * dz);
+		length = Math.sqrt(dx * dx + dy * dy + dz * dz);
 		
 	}
 	

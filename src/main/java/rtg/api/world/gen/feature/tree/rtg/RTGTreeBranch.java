@@ -4,7 +4,7 @@ import net.minecraft.util.math.BlockPos;
 import rtg.api.util.FractionalBlockPos;
 import rtg.api.util.Logger;
 
-public class RTGTreeBranch {
+public class RTGTreeBranch implements RTGBranch {
 	static int reports = 0;
 	final BranchVector direction;
 	public final float initialLength;
@@ -51,7 +51,7 @@ public class RTGTreeBranch {
 		double oldZ = branchLocation.z;
 		double multiplier = multiplierToNextBlock() + .0001; // fudge factor for rounding errors
 		direction.moveFractionally(branchLocation,multiplierToNextBlock());
-		remainingLength -= Math.abs(multiplier)/direction.horizontalLength;
+		remainingLength -= Math.abs(multiplier)*direction.horizontalLength;
 		BlockPos newPos = branchLocation.location();
 		int differences = 0;
 		if (oldPos.getX() != newPos.getX()) differences ++;

@@ -1,11 +1,14 @@
 package rtg.api.world.gen.feature.tree.rtg;
 
+import java.util.ArrayList;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import rtg.api.util.FractionalBlockPos;
 import rtg.api.util.Logger;
+import rtg.api.util.Valued;
 
-public class RTG3DBranch {
+public class RTG3DBranch implements RTGBranch {
 		static int reports = 0;
 		final BranchVector direction;
 		public final float initialLength;
@@ -14,6 +17,8 @@ public class RTG3DBranch {
 		public final double verticalAngle;
 		public final int stage;// under consideration for deprecation
 		final FractionalBlockPos branchLocation;
+		private final Vec3d originalLocation;
+		//private ArrayList<Valued<Vec3d>> stageLocations = new ArrayList<>();
 		
 		public RTG3DBranch (double horizontal, double vertical, float length, int stage, BlockPos branchStart) {
 			initialLength = length;
@@ -28,6 +33,7 @@ public class RTG3DBranch {
 			double dz = horizontalMove*Math.sin(horizontalAngle);
 			direction = new BranchVector(new Vec3d(dx,dy,dz));
 			branchLocation = new FractionalBlockPos(branchStart);
+			originalLocation = branchLocation.vector();
 		}
 
 		public RTG3DBranch (double horizontal, double vertical, float length, BlockPos branchStart) {
@@ -35,7 +41,37 @@ public class RTG3DBranch {
 		}
 		
 		public RTG3DBranch(RTG3DBranch copied) {
-			this(copied.horizontalAngle,copied.verticalAngle,copied.remainingLength,copied.stage,copied.location());
+			this.direction = new BranchVector(new Vec3d(copied.direction.dx,copied.direction.dy,copied.direction.dz));
+			initialLength = copied.initialLength;
+			remainingLength = copied.remainingLength;
+			horizontalAngle = copied.horizontalAngle;
+			verticalAngle = copied.verticalAngle;
+			stage = copied.stage;
+			branchLocation = new FractionalBlockPos(copied.branchLocation);
+			//this(copied.horizontalAngle,copied.verticalAngle,copied.remainingLength,copied.stage,copied.location());
+			originalLocation = copied.originalLocation;
+		}
+		
+		public RTG3DBranch (Vec3d vector, float length, BlockPos branchStart) {
+			vector = vector.normalize();
+			initialLength = length;
+			remainingLength = length;
+			if (vector.x <.001) {
+				  if (vector.z> 0) {horizontalAngle = Math.PI/2.0;} else {horizontalAngle = -Math.PI/2.0;}
+				}
+			
+			else {horizontalAngle = Math.atan(vector.z/vector.x);}
+			double dHorizontal = Math.sqrt(vector.x*vector.x + vector.z*vector.z);
+			
+			if (dHorizontal <.001) {
+				if (vector.y> 0) {verticalAngle = Math.PI/2.0;} else {verticalAngle = -Math.PI/2.0;}
+				}
+			else {verticalAngle = Math.atan(vector.y/dHorizontal);}
+			
+			this.stage = 0;
+			direction = new BranchVector(vector);
+			branchLocation = new FractionalBlockPos(branchStart);
+			originalLocation = branchLocation.vector();
 		}
 		
 		public BlockPos moved() {
@@ -46,18 +82,18 @@ public class RTG3DBranch {
 		
 		public BlockPos movedOrthogonally() {
 			BlockPos oldPos = branchLocation.location();
-			double oldX = branchLocation.x;
-			double oldY = branchLocation.y;
-			double oldZ = branchLocation.z;
+			//double oldX = branchLocation.x;
+			//double oldY = branchLocation.y;
+			//double oldZ = branchLocation.z;
 			double multiplier = multiplierToNextBlock() + .0001; // fudge factor for rounding errors
 			direction.moveFractionally(branchLocation,multiplierToNextBlock());
-			remainingLength -= multiplier;
+			remainingLength -= direction.length* multiplier;
 			BlockPos newPos = branchLocation.location();
 			int differences = 0;
 			if (oldPos.getX() != newPos.getX()) differences ++;
 			if (oldPos.getY() != newPos.getY()) differences ++;
 			if (oldPos.getZ() != newPos.getZ()) differences ++;
-			if (differences != 1&&differences == 1) {// debugging code, currently off but not dead issues
+			/*if (differences != 1) {// debugging code, currently off
 
 				Logger.info("old {},{},{}",oldX, oldY,oldZ);
 				Logger.info("pos {},{},{}",oldPos.getX(), oldPos.getY(),oldPos.getZ());
@@ -68,6 +104,16 @@ public class RTG3DBranch {
 				Logger.info("multiplier: {}", multiplier);
 				
 			}
+			*/
+			/*this.stageLocations.add(new Valued<>(branchLocation.vector(),this.remainingLength));
+			if (!notDone()&&branchLocation.vector().distanceTo(originalLocation)>(this.initialLength+0.5)) {
+				Logger.info("");
+				Logger.info("initial "+ this.originalLocation.toString() + " " + initialLength);
+				for (Valued<Vec3d> stageInfo: stageLocations) {
+					double distance = stageInfo.item.distanceTo(originalLocation);
+					Logger.info(" {} effectiveLength {}",stageInfo.item.toString(),(distance + stageInfo.value));
+				}
+			}*/
 			return branchLocation.location();
 		}
 		
@@ -77,7 +123,6 @@ public class RTG3DBranch {
 			double zMult = multiplierToNextInteger(branchLocation.z, direction.dz);
 		   
 			double result = Math.min(Math.min(yMult, zMult),xMult);
-			if (result <0) throw new RuntimeException();
 			return result;
 		}
 		
@@ -102,5 +147,9 @@ public class RTG3DBranch {
 		public boolean notDone() {return remainingLength > 0;}
 		
 		public double horizontalDirection() {return horizontalAngle;}
+		
+		public Vec3d direction() {
+			return new Vec3d(direction.dx,direction.dy,direction.dz);
+		}
 
 	}
