@@ -95,6 +95,11 @@ public final class RTG {
     public void serverStarting(final FMLServerStartingEvent event) {
         event.registerServerCommand(new RTGCommandTree());
     }
+    
+    @Mod.EventHandler
+    public void serverStopping(final FMLServerStoppingEvent event) {
+        RTGAPI.clearBiomeIDs();
+    }
 
     public interface RTGProxy {
         void displayCustomizeWorldScreen(net.minecraft.client.gui.GuiCreateWorld guiCreateWorld);

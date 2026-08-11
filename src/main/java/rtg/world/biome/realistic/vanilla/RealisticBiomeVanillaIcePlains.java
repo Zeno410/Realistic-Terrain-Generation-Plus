@@ -3,17 +3,23 @@ package rtg.world.biome.realistic.vanilla;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.DecoShrub;
+import rtg.api.world.deco.DecoVariableSpruce;
 
 
 public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
@@ -64,6 +70,23 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+    	
+    	DecoVariableSpruce scatteredSpruce = new DecoVariableSpruce();
+    	scatteredSpruce.changeAverageHeightSqrt(-1.5f);
+    	scatteredSpruce.changeHeightNoiseVariability(-.75f);
+    	scatteredSpruce.changeLocalNoiseVariability(+0.5f);
+    	scatteredSpruce.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 
+    			0.1f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
+    			0.15f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
+    	scatteredSpruce.setStrengthNoiseFactorForLoops(true);
+    	scatteredSpruce.setStrengthNoiseFactorXForLoops(false);
+    	this.addDeco(scatteredSpruce);
+    	
+    }    
+    
+    @Override
+    public boolean allowVanillaTrees() {
+        return false;
     }
 
     public static class TerrainVanillaIcePlains extends TerrainBase {

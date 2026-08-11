@@ -58,9 +58,6 @@ public class RealisticBiomeBOPEucalyptusForest extends RealisticBiomeBase {
     
     @Override
     public void initDecos() {
-
-    	
-
     	treeGenerator = new DecoCollectionBOPEucalyptusForest(getConfig());
     	
         DecoBoulder decoBoulder = new DecoBoulder();

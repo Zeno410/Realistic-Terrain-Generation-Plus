@@ -7,6 +7,7 @@ import biomesoplenty.api.block.BOPBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -27,12 +28,11 @@ public class RealisticBiomeBOPConiferousForest extends RealisticBiomeBase {
 
     public RealisticBiomeBOPConiferousForest(final Biome biome) { 
     	super(biome); 
-    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(biome);
     }
 
     @Override
     public Biome preferredBeach() {
-        return BOPBiomes.gravel_beach.orNull();
+        return Biomes.STONE_BEACH;
     }
 
     @Override
@@ -55,6 +55,8 @@ public class RealisticBiomeBOPConiferousForest extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(this.baseBiome());
+    	
     	this.treeGenerator = new DecoCollectionBOPConiferousForest(this.getConfig());
     	
         DecoBoulder decoBoulder = new DecoBoulder();

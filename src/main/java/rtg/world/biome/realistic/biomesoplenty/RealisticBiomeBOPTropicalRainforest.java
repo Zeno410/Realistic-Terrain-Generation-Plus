@@ -2,6 +2,7 @@ package rtg.world.biome.realistic.biomesoplenty;
 
 import java.util.Random;
 
+import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.enums.BOPTrees;
 import biomesoplenty.common.block.BlockBOPLeaves;
 import net.minecraft.block.Block;
@@ -31,7 +32,9 @@ import rtg.event.EventHandlerCommon;
 
 public class RealisticBiomeBOPTropicalRainforest extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPTropicalRainforest(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPTropicalRainforest(final Biome biome) { 
+    	super(biome); 
+    }
 
     @Override
     public void initDecos() {

@@ -8,6 +8,7 @@ import biomesoplenty.common.block.BlockBOPLog;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -48,7 +49,7 @@ public class RealisticBiomeBOPBorealForest extends RealisticBiomeBase {
 
     @Override
     public Biome preferredBeach() {
-        return BOPBiomes.gravel_beach.orNull();
+        return Biomes.STONE_BEACH;
     }
 
     @Override
@@ -128,7 +129,7 @@ public class RealisticBiomeBOPBorealForest extends RealisticBiomeBase {
     	private DecoTree yellowAutumnTree() {
     		DecoVariableTree result = new DecoVariableBirch();
     		result.changeAverageHeightSqrt(-.5f);
-    		result.setMaterials(BOPTreeMaterials.Picker.yellowAutumn);
+    		result.setMaterials(BOPTreeMaterials.yellowAutumn);
     		return result;
     	}
   

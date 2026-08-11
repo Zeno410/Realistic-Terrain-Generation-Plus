@@ -11,11 +11,22 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.Distribution;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoVariableBirch;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.bop.TreeBOPJacaranda;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusRobur;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGResizable;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 import static rtg.api.world.deco.DecoFallenTree.LogCondition.RANDOM_CHANCE;
 
@@ -49,6 +60,46 @@ public class RealisticBiomeBOPMysticGrove extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+    	
+    	TreeRTG oakTree = new TreeRTGQuercusRobur();
+    	oakTree.setMinCrownSize(6);
+    	oakTree.setMaxCrownSize(10);
+    	oakTree.setMinTrunkSize(6);
+    	oakTree.setMaxTrunkSize(8);
+    	oakTree.setLeafChoice(BOPTreeMaterials.floweringOak());
+    	TreeRTGResizable variableOak = new TreeRTGResizable(oakTree);
+    	variableOak.changeAverageHeightSqrt(-0.5f);// apparently the sizes aren't consistent
+    	variableOak.changeHeightNoiseVariability(-1);
+    	
+    	DecoTree oakDeco = new DecoTree(variableOak);
+    	
+    	DecoVariableBirch mysticDeco = new DecoVariableBirch();
+    	mysticDeco.changeAverageHeightSqrt(-1);
+    	mysticDeco.changeHeightNoiseVariability(-1);
+    	mysticDeco.setMaterials(BOPTreeMaterials.mystic);
+    	
+    	TreeRTG jacarandaTree = new TreeBOPJacaranda();
+    	TreeRTGResizable variableJacaranda = new TreeRTGResizable(jacarandaTree);
+    	variableJacaranda.changeAverageHeightSqrt(-0.5f);
+    	variableJacaranda.changeHeightNoiseVariability(-1);
+    	
+    	DecoTree jacarandaDeco = new DecoTree(variableJacaranda);
+    	
+    	DecoTreeSet treeCombination = new DecoTreeSet();
+    	treeCombination.add(oakDeco, 2);
+    	treeCombination.add(mysticDeco, 1);
+    	treeCombination.add(jacarandaDeco, 1);
+    	
+
+		Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 3f, 6.0f); 
+		treeCombination.setDistribution(treeFrequencyDistribution);
+		
+    	DecoCollectionBase rtgTrees = new DecoCollectionBase(getConfig());
+    	rtgTrees.addDeco(treeCombination);
+
+    	treeGenerator = rtgTrees;
+    	
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(80f);
         decoFallenTree.getDistribution().setNoiseFactor(60f);

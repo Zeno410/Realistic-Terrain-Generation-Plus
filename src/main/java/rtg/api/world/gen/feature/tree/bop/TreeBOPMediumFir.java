@@ -16,11 +16,12 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 public class TreeBOPMediumFir extends TreeRTG {
 
 	protected double fourBranchiness = 0.7;
+	protected float wideningRate = 0.25f;
     public TreeBOPMediumFir() {
 
         super();
 
-        this.setLogBlock(BOPBlocks.log_0.getStateFromMeta(12));
+        this.setLogBlock(BOPTreeMaterials.fir.log);
         this.setLeavesBlock(BOPBlocks.leaves_1.getStateFromMeta(2));
         this.setBranchBlock(BOPBlocks.log_0.getStateFromMeta(15));
         this.trunkSize = 8;
@@ -39,6 +40,9 @@ public class TreeBOPMediumFir extends TreeRTG {
     	return (int)(extension + branchLength);
 	}
 	
+	public float wideningRate() {return wideningRate;}
+	
+	public void setWideningRate(float newRate) {wideningRate = newRate;}
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
     	fourBranchiness = 0.5 + 0.4*rand.nextDouble();
@@ -58,7 +62,7 @@ public class TreeBOPMediumFir extends TreeRTG {
         
         int i;
         for (i = 0; i < this.trunkSize; i++) {
-            this.placeTrunkBlock(world, new BlockPos(x, y, z), this.generateFlag, lightTracker);
+            if(!this.placeTrunkBlock(world, new BlockPos(x, y, z), this.generateFlag, lightTracker)) return false;
             y++;
         }
 
@@ -95,7 +99,7 @@ public class TreeBOPMediumFir extends TreeRTG {
             	drop --;
             	y --;
             }
-            float branchLength = (float)(trunkTop + crownSize - y)*.25f;
+            float branchLength = (float)(trunkTop + crownSize - y)*wideningRate;
             
             if (rand.nextDouble()> fourBranchiness) {
             	this.threeBranches(world, rand, x, y, z, branchLength, lightTracker);

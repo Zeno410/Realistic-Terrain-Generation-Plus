@@ -7,14 +7,12 @@ import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 
 public class VariableBOPFirTree extends DecoVariableTree {
 		
-		
-	private TreeMaterials.Picker materialsPicker = new BOPTreeMaterials.Picker();
 	
 	public VariableBOPFirTree() {
 		 tallTree = new TreeBOPMediumFir();
 	     mediumTree = new TreeBOPMediumFir();
 	     smallTree = new TreeBOPMediumFir();
-	     this.materials = new BOPTreeMaterials.Picker().fir;
+	     this.materials = BOPTreeMaterials.fir;
 	     this.averageHeightSqrt += 1f;
 	     this.heightNoiseVariability += 0.2f;
 	     // we don't have a vanilla tree, so edit the min heights to prevent

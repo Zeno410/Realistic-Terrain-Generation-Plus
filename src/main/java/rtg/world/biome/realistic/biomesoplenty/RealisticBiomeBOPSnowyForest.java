@@ -31,7 +31,7 @@ public class RealisticBiomeBOPSnowyForest extends RealisticBiomeBase {
     @Override
     public void initDecos() {
     	DecoVariableTree snowyOaks = new DecoVariableOak();
-    	snowyOaks.setMaterials(BOPTreeMaterials.Picker.snowyForest);
+    	snowyOaks.setMaterials(BOPTreeMaterials.snowyForest);
     	
     	treeGenerator = snowyOaks;
     }

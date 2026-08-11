@@ -39,19 +39,19 @@ public class DecoCollectionBOPSeasonalForest extends DecoCollectionBase {
 	
 	private DecoTree yellowAutumnTree() {
 		DecoVariableTree result = new DecoVariableBirch();
-		result.setMaterials(BOPTreeMaterials.Picker.yellowAutumn);
+		result.setMaterials(BOPTreeMaterials.yellowAutumn);
 		return result;
 	}
 	
 	private DecoTree mapleAutumnTree() {
 		DecoVariableTree result = new DecoVariableOak();
-		result.setMaterials(BOPTreeMaterials.Picker.maple);
+		result.setMaterials(BOPTreeMaterials.maple);
 		return result;
 	}
 	
 	private DecoTree orangeAutumnTree() {
 		DecoVariableTree result = new DecoVariableOak();
-		result.setMaterials(BOPTreeMaterials.Picker.orangeAutumn);
+		result.setMaterials(BOPTreeMaterials.orangeAutumn);
 		return result;
 	}	
 	

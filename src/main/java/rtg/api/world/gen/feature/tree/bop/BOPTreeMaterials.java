@@ -8,8 +8,10 @@ import biomesoplenty.api.enums.BOPTrees;
 import biomesoplenty.api.enums.BOPWoods;
 import biomesoplenty.common.block.BlockBOPLeaves;
 import biomesoplenty.common.block.BlockBOPLog;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockLog.EnumAxis;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -29,7 +31,7 @@ public class BOPTreeMaterials extends TreeMaterials {
 			BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 		
 
-	public static final TreeMaterials snowyBirch = new TreeMaterials(
+	public static final TreeMaterials yellowAutumn = new TreeMaterials(
 			"Snowy Birch",
 			Blocks.LOG.getStateFromMeta(2),
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN),
@@ -41,41 +43,86 @@ public class BOPTreeMaterials extends TreeMaterials {
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAHOGANY),
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
+	public static final TreeMaterials mystic = new TreeMaterials(
+			"Mahogany",
+			BlockBOPLog.paging.getVariantState(BOPWoods.MAGIC),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAGIC),
+			BlockBOPLog.paging.getVariantState(BOPWoods.MAGIC).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
+	
 	public static final TreeMaterials sacredOak = new TreeMaterials(
-			"Eucalyptus",
+			"Sacred Oak",
 			BlockBOPLog.paging.getVariantState(BOPWoods.SACRED_OAK),
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.SACRED_OAK),
 			BlockBOPLog.paging.getVariantState(BOPWoods.SACRED_OAK).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
 	);
 	
+	public static final TreeMaterials palm = new TreeMaterials(
+			"Sacred Oak",
+			BlockBOPLog.paging.getVariantState(BOPWoods.PALM),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.PALM).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			BlockBOPLog.paging.getVariantState(BOPWoods.PALM).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
+			//.withProperty(BlockLeaves.DECAYABLE, false)
+	);
+	
+	public static final TreeMaterials jacaranda = new TreeMaterials(
+			"Jacaranda",
+			BlockBOPLog.paging.getVariantState(BOPWoods.JACARANDA),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.JACARANDA).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			BlockBOPLog.paging.getVariantState(BOPWoods.JACARANDA).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
+	);
+	
+	public static final TreeMaterials redwood = new TreeMaterials(
+			"Redwood",
+			BlockBOPLog.paging.getVariantState(BOPWoods.REDWOOD),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.REDWOOD).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			BlockBOPLog.paging.getVariantState(BOPWoods.REDWOOD).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
+	);
+	
+	public static final TreeMaterials fir = new TreeMaterials(
+		"Fir",
+		BlockBOPLog.paging.getVariantState(BOPWoods.FIR),
+		BOPBlocks.leaves_1.getStateFromMeta(2),
+		BOPBlocks.log_0.getStateFromMeta(15));
+	
+	
+	public static final TreeMaterials maple = new TreeMaterials(
+			"Maple",
+			Blocks.LOG.getStateFromMeta(0),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAPLE).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			Blocks.LOG.getStateFromMeta(12)
+	);
+	
+	public static final TreeMaterials mangrove = new TreeMaterials(
+			"Mangrove",
+			BlockBOPLog.paging.getVariantState(BOPWoods.MANGROVE),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MANGROVE).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			BlockBOPLog.paging.getVariantState(BOPWoods.MANGROVE).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
+	);
+	
+	public static final TreeMaterials orangeAutumn = new TreeMaterials(
+			"Orange Autumn",
+			BlockUtil.getStateLog(EnumType.DARK_OAK),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.ORANGE_AUTUMN).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			Blocks.LOG2.getStateFromMeta(13)
+	);
+	
+
+	
+	public static final TreeMaterials snowyForest = new TreeMaterials(
+			"Snowy Forest",
+			Blocks.LOG.getDefaultState(),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.DEAD),
+			Blocks.LOG.getStateFromMeta(12)
+	);
+	
+	public static final TreeMaterials eucalyptus = new TreeMaterials(
+			"Eucalyptus",
+			BlockBOPLog.paging.getVariantState(BOPWoods.EUCALYPTUS),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.EUCALYPTUS).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
+			BOPBlocks.log_3.getStateFromMeta(15)
+	);
+	
 	public static class Picker extends TreeMaterials.Picker {		
-		public static final TreeMaterials fir = new TreeMaterials(
-			"Fir",
-			BlockBOPLog.paging.getVariantState(BOPWoods.FIR),
-			BOPBlocks.leaves_1.getStateFromMeta(2),
-			BOPBlocks.log_0.getStateFromMeta(15));
-		
-		public static final TreeMaterials yellowAutumn = new TreeMaterials(
-				"Yellow Autumn",
-				Blocks.LOG.getStateFromMeta(2),
-				BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN),
-				Blocks.LOG.getStateFromMeta(14)
-		);
-		
-		public static final TreeMaterials maple = new TreeMaterials(
-				"Maple",
-				Blocks.LOG.getStateFromMeta(0),
-				BlockBOPLeaves.paging.getVariantState(BOPTrees.MAPLE),
-				Blocks.LOG.getStateFromMeta(12)
-		);
-		
-		public static final TreeMaterials orangeAutumn = new TreeMaterials(
-				"Orange Autumn",
-				BlockUtil.getStateLog(EnumType.DARK_OAK),
-				BlockBOPLeaves.paging.getVariantState(BOPTrees.ORANGE_AUTUMN),
-				Blocks.LOG2.getStateFromMeta(13)
-		);
-		
 
 		public static final TreeMaterials eucalyptus = new TreeMaterials(
 				"Eucalyptus",
@@ -84,12 +131,8 @@ public class BOPTreeMaterials extends TreeMaterials {
 				BOPBlocks.log_3.getStateFromMeta(15)
 		);
 		
-		public static final TreeMaterials snowyForest = new TreeMaterials(
-				"Snowy Forest",
-				Blocks.LOG.getDefaultState(),
-				BlockBOPLeaves.paging.getVariantState(BOPTrees.DEAD),
-				Blocks.LOG.getStateFromMeta(13)
-		);
+
+		
 		
 	}
 	

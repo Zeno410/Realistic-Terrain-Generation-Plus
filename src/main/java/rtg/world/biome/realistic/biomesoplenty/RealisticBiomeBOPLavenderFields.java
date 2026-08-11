@@ -9,12 +9,22 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoShrub;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoVariableBirch;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.bop.TreeBOPJacaranda;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusRobur;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGResizable;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPLavenderFields extends RealisticBiomeBase {
@@ -37,7 +47,24 @@ public class RealisticBiomeBOPLavenderFields extends RealisticBiomeBase {
     }
 
     @Override
-    public void initDecos() {
+    public void initDecos() {    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+	
+	TreeRTG jacarandaTree = new TreeBOPJacaranda();
+	TreeRTGResizable variableJacaranda = new TreeRTGResizable(jacarandaTree);
+	variableJacaranda.changeAverageHeightSqrt(-0.5f);
+	variableJacaranda.changeHeightNoiseVariability(-1);
+	
+	DecoTree jacarandaDeco = new DecoTree(variableJacaranda);
+	
+	DecoTreeSet treeCombination = new DecoTreeSet();
+	treeCombination.add(jacarandaDeco, 1);
+	
+
+	Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 1.5f, 1f); 
+	treeCombination.setDistribution(treeFrequencyDistribution);
+	
+	this.treeGenerator = treeCombination;
+	
 
         DecoShrub decoShrub = new DecoShrub();
         decoShrub.setMaxY(110);

@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
@@ -33,7 +34,9 @@ public final class RTGAPI {
     public static final String   VERSION          = "@API_VERSION@";
     public static final String   RTG_MOD_ID       = "rtg";
     public static final String   RTG_WORLDTYPE_ID = "RTG";
-    public static final SparseList<Map.Entry<Biome, IRealisticBiome>> RTG_BIOMES = new SparseList<>();
+    public static final Map<Biome, IRealisticBiome> RTG_BIOMES = new HashMap<>();
+    private static IRealisticBiome[] BIOME_IDS;
+    private static Map<Biome,Integer> BIOME_ID_MAPPING;
     private static final Set<DimensionType> ALLOWED_DIMENSION_TYPES = new ObjectArraySet<>();
     private static boolean rtgBiomesLocked = false;
     private static Path configPath;
@@ -88,17 +91,58 @@ public final class RTGAPI {
     }
 
     public static IRealisticBiome getRTGBiome(@Nonnull Biome biome) {
-        final Map.Entry<Biome, IRealisticBiome> entry = RTG_BIOMES.get(Biome.getIdForBiome(biome));
+        final IRealisticBiome entry = RTG_BIOMES.get(biome);
         if (entry != null) {
-            return entry.getValue();
+            return entry;
         }
         return patchBiome;
     }
+    
+    public static void clearBiomeIDs() {
+    	BIOME_IDS = null;
+    }
+    
+    public static int highestBiomeID() {
+        Iterator<ResourceLocation> registries = Biome.REGISTRY.getKeys().iterator();
+        int result = 256;
+        while (registries.hasNext()) {
+        	ResourceLocation location = registries.next();
+        	Biome biome = Biome.REGISTRY.getObject(location);
+        	int ID  = Biome.REGISTRY.getIDForObject(biome);
+        	result = Math.max(result, ID);
+        }
+        return result;
+    }
+    
+    
+    private static void setupBiomeIDS() {
+    	BIOME_IDS = new IRealisticBiome[highestBiomeID()];
+    	RTGAPI.BIOME_ID_MAPPING = new HashMap<>();
+    	for (int i = 0; i < BIOME_IDS.length; i ++) {
+    		BIOME_IDS[i] = null;
+    	}
+        Iterator<ResourceLocation> registries = Biome.REGISTRY.getKeys().iterator();
+        while (registries.hasNext()) {
+        	ResourceLocation location = registries.next();
+        	Biome biome = Biome.REGISTRY.getObject(location);
+        	int ID  = Biome.REGISTRY.getIDForObject(biome);
+        	//Logger.error(biome.biomeName + " "+ ID);
+        	BIOME_IDS[ID] = getRTGBiome(biome);
+        	BIOME_ID_MAPPING.put(biome, ID);
+        }
+    	
+    }
 
+    public static Integer getBiomeID(Biome toCount) {
+    	if (BIOME_ID_MAPPING == null) setupBiomeIDS();
+    	return BIOME_ID_MAPPING.get(toCount);
+    }
+    
     public static IRealisticBiome getRTGBiome(int biomeId) {
-        final Map.Entry<Biome, IRealisticBiome> entry = RTG_BIOMES.get(biomeId);
+    	if (BIOME_IDS== null) setupBiomeIDS();
+        final IRealisticBiome entry = BIOME_IDS[biomeId];
         if (entry != null) {
-            return entry.getValue();
+            return entry;
         }
         return patchBiome;
     }
@@ -107,7 +151,7 @@ public final class RTGAPI {
         if (!rtgBiomesLocked) {
             for (final IRealisticBiome biome : biomes) {
                 final Biome baseBiome = biome.baseBiome();
-                RTG_BIOMES.set(Biome.getIdForBiome(baseBiome), new AbstractMap.SimpleEntry<>(baseBiome, biome));
+                RTG_BIOMES.put(baseBiome, biome);
             }
         }
     }   

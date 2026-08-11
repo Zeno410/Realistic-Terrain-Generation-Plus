@@ -6,28 +6,90 @@ import biomesoplenty.api.biome.BOPBiomes;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.Distribution;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.DecoLeafVines;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.DecoTree.TreeCondition;
+import rtg.api.world.deco.DecoTree.TreeType;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.bop.TreeBOPMediumFir;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGBetulaPopulifolia;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGResizable;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 
 public class RealisticBiomeBOPTemperateRainforest extends RealisticBiomeBase {
 
     public RealisticBiomeBOPTemperateRainforest(final Biome biome) { super(biome); }
 
+
     @Override
-    public void initDecos() {}
+    public void initDecos() {
+
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(this.baseBiome());
+    	
+    	TreeBOPMediumFir redwoodTree = new  TreeBOPMediumFir();
+    	redwoodTree.setMaterials(BOPTreeMaterials.redwood);
+    	redwoodTree.setWideningRate(.2f);
+    	redwoodTree.setLowestVariableTrunkProportion(.4f);
+    	redwoodTree.setTrunkProportionVariability(.15f);
+    	TreeRTGResizable variableRedwoodTree = new TreeRTGResizable(redwoodTree);
+    	variableRedwoodTree.changeAverageHeightSqrt(1.5f);
+    	variableRedwoodTree.changeHeightNoiseVariability(.2f);
+    	
+        DecoTree redwoodPopulation = new DecoTree(variableRedwoodTree);
+        
+        TreeRTG substoryTree = new TreeRTGBetulaPopulifolia();
+        substoryTree.setMaxCrownSize(7);
+        substoryTree.setTrunkProportionVariability(.5f);
+        substoryTree.setMaterials(TreeMaterials.Picker.oak);
+        substoryTree.setAbsoluteMinimumTrunk(0);
+        TreeRTGResizable variableSubstoryTree = new TreeRTGResizable(substoryTree);
+        variableSubstoryTree.changeLocalNoiseVariability(1f);
+        
+        DecoTree substoryPopulation = new DecoTree(variableSubstoryTree);
+        
+        DecoTreeSet forest = new DecoTreeSet();
+        forest.setTreeType(TreeType.RTG_TREE)
+        .setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 3.5f, 12.0f) ) //denser than usual
+        .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
+        .setMaxY(120)
+        .setStrengthNoiseFactorForLoops(true)
+        .setStrengthNoiseFactorXForLoops(false);
+        
+        forest.add(redwoodPopulation, 8);
+        forest.add(substoryPopulation, 3);
+        
+		// have to add our own vines to the trees
+		DecoLeafVines vines = new DecoLeafVines();
+		vines.setLoops(10);
+		
+		DecoCollectionBase vinedForest = new DecoCollectionBase(this.getConfig());
+		vinedForest.addDeco(forest);
+		vinedForest.addDeco(vines);
+		
+		treeGenerator = vinedForest;
+    	
+    }
 
     @Override
     public Biome preferredBeach() {
-        return BOPBiomes.gravel_beach.orNull();
+    	return Biomes.STONE_BEACH;
     }
 
     @Override

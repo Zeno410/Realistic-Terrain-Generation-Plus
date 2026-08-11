@@ -13,6 +13,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.biome.RealisticBiomeBase.BeachType;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.api.world.terrain.heighteffect.HeightVariation;
@@ -21,14 +22,16 @@ import rtg.api.world.terrain.heighteffect.HillockEffect;
 
 public class RealisticBiomeBOPBog extends RealisticBiomeBase {
 
-    public RealisticBiomeBOPBog(final Biome biome) { super(biome); }
+    public RealisticBiomeBOPBog(final Biome biome) {
+
+        super(biome); }
 
     @Override
     public void initDecos() {}
 
     @Override
     public Biome preferredBeach() {
-        return BOPBiomes.gravel_beach.orNull();
+        return this.baseBiome();
     }
 
     @Override

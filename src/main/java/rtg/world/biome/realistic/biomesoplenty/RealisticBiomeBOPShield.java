@@ -8,6 +8,7 @@ import biomesoplenty.api.block.BOPBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -37,7 +38,7 @@ public class RealisticBiomeBOPShield extends RealisticBiomeBase {
 
     @Override
     public Biome preferredBeach() {
-        return BOPBiomes.gravel_beach.orNull();
+    	return Biomes.STONE_BEACH;
     }
 
     @Override

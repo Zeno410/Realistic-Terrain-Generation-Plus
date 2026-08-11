@@ -8,13 +8,12 @@ import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 
 public class VariableBOPEucalyptusTree  extends DecoVariableTree {
 
-	private TreeMaterials.Picker materialsPicker = new BOPTreeMaterials.Picker();
 	
 	public VariableBOPEucalyptusTree() {
 		 tallTree = new TreeBOPLargeEucalyptus();
 	     mediumTree = new TreeBOPMediumEucalyptus();
 	     smallTree = new TreeBOPMediumEucalyptus();
-	     this.materials = BOPTreeMaterials.Picker.eucalyptus;
+	     this.materials = BOPTreeMaterials.eucalyptus;
 	     //this.averageHeightSqrt += 1f;
 	     this.heightNoiseVariability += 0.2f;
 	     // we don't have a vanilla tree, so edit the min heights to prevent

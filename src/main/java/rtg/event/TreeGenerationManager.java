@@ -8,7 +8,7 @@ import biomesoplenty.api.biome.IExtendedBiome;
 import biomesoplenty.api.generation.GeneratorStage;
 import biomesoplenty.api.generation.IGenerator;
 import net.minecraft.world.biome.Biome;
-import rtg.api.util.Logger;
+//import rtg.api.util.Logger;
 
 public class TreeGenerationManager {
 	
@@ -39,32 +39,31 @@ public class TreeGenerationManager {
 		if (!(suppressedBOPBiomes.contains(toSuppress))) throw new RuntimeException(toSuppress.getBiomeName());
 		IExtendedBiome extendedBiome = BOPBiomes.REG_INSTANCE.getExtendedBiome(toSuppress);
 		Collection<IGenerator> generators = extendedBiome.getGenerationManager().getGeneratorsForStage(GeneratorStage.TREE);
-		Logger.info("[BOP Tree Generation]");
+		//Logger.info("[BOP Tree Generation]");
 		for (IGenerator generator: generators) {
-			Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
-			
+			//Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
 			
 			extendedBiome.getGenerationManager().removeGenerator(generator.getIdentifier());
 		}
-		Logger.info("after removal");
+		//Logger.info("after removal");
 		generators = extendedBiome.getGenerationManager().getGeneratorsForStage(GeneratorStage.TREE);
 		for (IGenerator generator: generators) {
-			Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
+			//Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
 			
 			
 			extendedBiome.getGenerationManager().removeGenerator(generator.getName());
 		}
-		Logger.info("after reremoval");
+		//Logger.info("after reremoval");
 		generators = extendedBiome.getGenerationManager().getGeneratorsForStage(GeneratorStage.TREE);
 		for (IGenerator generator: generators) {
-			Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
+			//Logger.info("[BOP Tree Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
 			
 			
 			extendedBiome.getGenerationManager().removeGenerator(generator.getName());
 		}
 		generators = extendedBiome.getGenerationManager().getGeneratorsForStage(GeneratorStage.POST);
 		for (IGenerator generator: generators) {
-			Logger.info("[BOP Post Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
+			//Logger.info("[BOP Post Generation] ID: "+ generator.getIdentifier() + " name: " + generator.getName() + " text: " + generator.toString());
 			
 			if (generator.getName().equals("sacred_oak_trees")) {
 			    extendedBiome.getGenerationManager().removeGenerator(generator.getName());

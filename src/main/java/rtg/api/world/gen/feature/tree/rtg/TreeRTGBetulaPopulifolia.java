@@ -22,14 +22,14 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
     
 	public float estimatedSize() {
 
-    	float branchLength= 3;
+    	float branchLength= (float)crownSize/3f;
     	return branchLength*branchLength/16f;
 	}
 	
 	@Override
     public int furthestLikelyExtension() {
 
-    	int branchLength= 3;
+    	int branchLength= (crownSize+2)/3;
     	return branchLength;
 	}
 	
@@ -109,12 +109,12 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
             	if (biasLeft) {
 	            	Direction.cardinalList().forEach(direction -> {
 	            		BlockPos leafPos = direction.moved(direction.rightAngleLeft().moved(trunkBlock));
-	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos);
+	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos,rand);
 	            	});
             	} else {
 	            	Direction.cardinalList().forEach(direction -> {
 	            		BlockPos leafPos = direction.moved(direction.rightAngleRight().moved(trunkBlock));
-	            		tryBuildLeaves(direction,direction.rightAngleRight(),leafPos);
+	            		tryBuildLeaves(direction,direction.rightAngleRight(),leafPos,rand);
 	            	});
             	}
             	// build side branches
@@ -135,12 +135,12 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
     	            		BlockPos leafPos;
     	            		if (rightStopSquared >ring*ring + branchRing*branchRing) {// not too far from trunk
     	            		    leafPos = direction.moved(direction.rightAngleRight().moved(trunkBlock,branchRing),ring);
-    	            		    tryBuildLeaves(direction,direction.rightAngleRight(),leafPos);
+    	            		    tryBuildLeaves(direction,direction.rightAngleRight(),leafPos,rand);
     	            		}
 
     	            		if (leftStopSquared >ring*ring + branchRing*branchRing) {// not too far from trunk
 	    	            		leafPos = direction.moved(direction.rightAngleLeft().moved(trunkBlock,branchRing),ring);
-	    	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos);
+	    	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos,rand);
     	            		}
     	            	});
             		}
@@ -151,7 +151,7 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
 	            		if (rightStopSquared >2*ring*ring ) {// not too far from trunk
     	            	Direction.cardinalList().forEach(direction -> {
     	            		BlockPos leafPos = direction.moved(direction.rightAngleLeft().moved(trunkBlock,ring),ring);
-    	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos);
+    	            		tryBuildLeaves(direction,direction.rightAngleLeft(),leafPos,rand);
     	            	});
 	            		}
     	            	
@@ -159,7 +159,7 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
 	            		if (leftStopSquared >2*ring*ring ) {// not too far from trunk
 	    	            	Direction.cardinalList().forEach(direction -> {
 	    	            		BlockPos leafPos = direction.moved(direction.rightAngleRight().moved(trunkBlock,ring),ring);
-	    	            		tryBuildLeaves(direction,direction.rightAngleRight(),leafPos);
+	    	            		tryBuildLeaves(direction,direction.rightAngleRight(),leafPos,rand);
 	    	            	});
 	            		}
             			
@@ -210,7 +210,7 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
         	}
         }
         
-        private void tryBuildLeaves(Direction branch, Direction sideBranch, BlockPos position) {
+        private void tryBuildLeaves(Direction branch, Direction sideBranch, BlockPos position, Random rand) {
         	float success = 0f;
     		if (below.present(position)) success += growth;
     		if (current.present(position,branch.reversed())) success += growth;
@@ -218,7 +218,7 @@ public class TreeRTGBetulaPopulifolia extends TreeRTG {
     		if (success > 1f) success = 1f;
     		success *= leafSuccess;
     		if (success>0f &&rand.nextFloat()<success) {
-    			current.set(position, placeLeavesBlock(world, position,  leavesBlock, generateFlag,lightTracker));
+    			current.set(position, placeLeavesBlock(world, position,  getLeaves(rand), generateFlag,lightTracker));
     		}
         }
     	

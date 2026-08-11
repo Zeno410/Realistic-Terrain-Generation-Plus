@@ -19,9 +19,9 @@ public abstract class TreeBOPBaseEucalyptus extends TreeRTG {
 
 	        super();
 
-	        this.setLogBlock(BOPTreeMaterials.Picker.eucalyptus.log);
-	        this.setLeavesBlock(BOPTreeMaterials.Picker.eucalyptus.leaves);
-	        this.setBranchBlock(BOPTreeMaterials.Picker.eucalyptus.branches);
+	        this.setLogBlock(BOPTreeMaterials.eucalyptus.log);
+	        this.setLeavesBlock(BOPTreeMaterials.eucalyptus.leaves);
+	        this.setBranchBlock(BOPTreeMaterials.eucalyptus.branches);
 	    }
 		public float estimatedSize() {
 
@@ -80,11 +80,15 @@ public abstract class TreeBOPBaseEucalyptus extends TreeRTG {
 	    	if (3.0 + rand.nextDouble()*2.0< branch.remainingLength())  {
 	    		// split
 	    		double targetLength = branch.remainingLength() - (Math.min(6.0,branch.remainingLength()/(2.0)) + jigger(rand,.5));
+	    		RTG3DBranch leafcover = new RTG3DBranch(branch);
 	    		while (branch.remainingLength() > targetLength) {
 	    			if (beefy) {
 		    			if (!this.placeBranchBlock(world, branch.movedOrthogonally(), lightTracker)) return;// abort if blocked
 	    			} else {
 		    			if (!this.placeBranchBlock(world, branch.moved(), lightTracker)) return;// abort if blocked
+		    			while(leafcover.notDone()&& leafcover.remainingLength()< branch.remainingLength()) {
+		    				this.placeLeavesBlock(world, leafcover.movedOrthogonally(), lightTracker);
+		    			}
 	    			}
 	    		}
 	    		double leftDirection = branch.horizontalDirection()-1.4+jigger(rand,.2);
