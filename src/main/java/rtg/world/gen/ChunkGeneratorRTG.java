@@ -175,7 +175,8 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
 
 
         // store in the in process pile
-        Chunk chunk = new Chunk(this.world, primer, cx, cz);
+        Chunk chunk = new LatePopulatingChunk(this.world, primer, cx, cz);
+        //Chunk chunk = new Chunk(this.world, primer, cx, cz);
 
         int[] intBiomeArray = new int[256];
         Arrays.fill(intBiomeArray, -1);
@@ -261,6 +262,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     @Override
     public void populate(int chunkX, int chunkZ) {
 
+    	
         BlockFalling.fallInstantly = true;
 
         final BiomeProvider biomeProvider = this.world.getBiomeProvider();
@@ -268,7 +270,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         final BlockPos blockPos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
         final BlockPos offsetpos = blockPos.add(8, 0, 8);
 
-        IRealisticBiome biome = RTGAPI.getRTGBiome(biomeProvider.getBiome(blockPos.add(8, 0, 8)));
+        IRealisticBiome biome = RTGAPI.getRTGBiome(biomeProvider.getBiome(blockPos.add(16, 0, 16)));
 
         this.rand.setSeed(rtgWorld.getChunkSeed(chunkX, chunkZ));
 
@@ -294,6 +296,9 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
             }
             if (settings.useMansions) {
                 woodlandMansionGenerator.generateStructure(world, rand, chunkPos);
+            }
+            if (settings.useMonuments && this.mapFeaturesEnabled) {
+                oceanMonumentGenerator.generateStructure(this.world, this.rand, new ChunkPos(chunkX, chunkZ));
             }
         }
 
@@ -359,10 +364,10 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
         }
         else {
             if (river > 0.9f) {
-                biome.getRiverBiome().rDecorate(this.rtgWorld, this.rand, chunkPos, river, hasVillage);
+                biome.getRiverBiome().rDecorate(this.rtgWorld, this.rand, chunkPos, river, hasVillage, biome);
             }
             else {
-                biome.rDecorate(this.rtgWorld, this.rand, chunkPos, river, hasVillage);
+                biome.rDecorate(this.rtgWorld, this.rand, chunkPos, river, hasVillage, biome);
             }
         }
 
@@ -414,7 +419,7 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
     public boolean generateStructures(Chunk chunkIn, int x, int z) {
         boolean flag = false;
         if (settings.useMonuments && this.mapFeaturesEnabled && chunkIn.getInhabitedTime() < 3600L) {
-            flag = this.oceanMonumentGenerator.generateStructure(this.world, this.rand, new ChunkPos(x, z));
+            //flag = this.oceanMonumentGenerator.generateStructure(this.world, this.rand, new ChunkPos(x, z));
         }
         return flag;
     }

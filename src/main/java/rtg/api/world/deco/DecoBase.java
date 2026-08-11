@@ -107,6 +107,10 @@ public abstract class DecoBase extends AbstractDeco {
     public static BlockPos getOffsetPos(final ChunkPos pos) {
         return new BlockPos(pos.x * 16 + 8, 0, pos.z * 16 + 8);
     }
+    
+    public static BlockPos getTreePos(final ChunkPos pos) {
+        return new BlockPos(pos.x * 16 + 8, 0, pos.z * 16 + 8);
+    }
 
     public static int getRangedRandom(Random rand, int min, int max) {
         return min + rand.nextInt(max - min + 1);

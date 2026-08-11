@@ -108,7 +108,7 @@ abstract public class DecoVariableTree extends DecoTree {
     public void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInfo) {
     	// duped from DecoTree to add debuggers
 
-        final BlockPos offsetPos = getOffsetPos(chunkPos);
+        final BlockPos offsetPos = getTreePos(chunkPos);
         /*
          * Determine how many trees we're going to try to generate (loopCount).
          * The actual number of trees that end up being generated could be *less* than this value,
@@ -119,18 +119,18 @@ abstract public class DecoVariableTree extends DecoTree {
         //              calls to the noise generator. This should be replaced by a random amount.
         // Zeno: These are slowly changing values and essentially the same within a chunk, but must differ substantially between chunks for variability
         float noise = distribution.getValue(offsetPos, rtgWorld.treeDistributionNoise());
-        int loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
-        loopCount = (this.strengthNoiseFactorForLoops) ? (int) noise : loopCount;
-        loopCount = (this.strengthNoiseFactorXForLoops) ? (int) (noise * this.strengthFactorForLoops) : loopCount;
+        float loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
+        loopCount = (this.strengthNoiseFactorForLoops) ? noise : loopCount;
+        loopCount = (this.strengthNoiseFactorXForLoops) ? (noise * this.strengthFactorForLoops) : loopCount;
 
-        if (loopCount < 1) {
+        if (loopCount <= 0 ) {
             return;
         }
 
         // Now let's check the configs to see if we should increase/decrease this value.
         loopCount = this.applyConfigMultipliers(loopCount, biome);
 
-        if (loopCount < 1) {
+        if (loopCount <= 0 ) {
             return;
         }
 
@@ -145,13 +145,16 @@ abstract public class DecoVariableTree extends DecoTree {
          * the additional context.
          */
         //TODO [1.12] Trees should just generate how they do in the vanilla BiomeDecorator::genDecorations and use the Forge event.
-        DecorateBiomeEventRTG.DecorateRTG event = new DecorateBiomeEventRTG.DecorateRTG(rtgWorld.world(), rand, offsetPos, Decorate.EventType.TREE, loopCount);
+        DecorateBiomeEventRTG.DecorateRTG event = new DecorateBiomeEventRTG.DecorateRTG(rtgWorld.world(), rand, offsetPos, Decorate.EventType.TREE, (int)loopCount);
         MinecraftForge.TERRAIN_GEN_BUS.post(event);
 
         if (event.getResult() != Event.Result.DENY) {
 
-            loopCount = event.getModifiedAmount();
-            if (loopCount < 1) { return; }
+        	if ((int)loopCount != event.getModifiedAmount()) {
+                loopCount = event.getModifiedAmount();
+                throw new RuntimeException();
+        	}
+            if (loopCount <=0 ) { return; }
 
             // TODO: [1.12] This should be done in #setLeavesBlock.
             DecoBase.tweakTreeLeaves(this, false, true);
@@ -239,15 +242,11 @@ abstract public class DecoVariableTree extends DecoTree {
     }
     
 	private void generateTallTree(World world, Random random, BlockPos pos,int actualHeight, TreeMaterials materials, TreeDensityLimiter treesRemaining) {
-		float proportionTrunk  = tallTree.getLowestVariableTrunkProportion() + random.nextFloat()*tallTree.getTrunkProportionVariability();
-		int trunkHeight = (int)(proportionTrunk*(actualHeight-tallTree.getTrunkReserve()))+tallTree.getTrunkReserve();
-		if (trunkHeight < 4) trunkHeight = 4;
 		
 		tallTree.setLogBlock(materials.log);
         tallTree.setLeavesBlock(materials.leaves);
         tallTree.setBranchBlock(materials.branches);
-        tallTree.setTrunkSize(trunkHeight);
-        tallTree.setCrownSize(actualHeight-trunkHeight);
+        tallTree.setTreeSize(actualHeight, random);
         tallTree.setNoLeaves(false);
         if (treesRemaining.allowed(tallTree.estimatedSize(), random)) {
 		    tallTree.generate(world, random, pos);
@@ -255,16 +254,11 @@ abstract public class DecoVariableTree extends DecoTree {
 	}
 	
 	private void generateMediumTree(World world, Random random, BlockPos pos,int actualHeight, TreeMaterials materials, TreeDensityLimiter treesRemaining) {
-		float proportionTrunk  = mediumTree.getLowestVariableTrunkProportion() + random.nextFloat()*mediumTree.getTrunkProportionVariability();
-		int trunkHeight = (int)(proportionTrunk*(actualHeight-mediumTree.getTrunkReserve()))+mediumTree.getTrunkReserve();
-		if (trunkHeight < 4) trunkHeight = 4;
 		
 		mediumTree.setLogBlock(materials.log);
 		mediumTree.setLeavesBlock(materials.leaves);
 		mediumTree.setBranchBlock(materials.branches);
-        mediumTree.setTrunkSize(trunkHeight);
-        mediumTree.setCrownSize(actualHeight-trunkHeight);
-        //mediumTree.setCrownSize(2);
+        mediumTree.setTreeSize(actualHeight, random);
         mediumTree.setNoLeaves(false);
         if (treesRemaining.allowed(mediumTree.estimatedSize(), random)) {
              mediumTree.generate(world, random, pos);
@@ -272,15 +266,13 @@ abstract public class DecoVariableTree extends DecoTree {
 	}
 	
 	private void generateSmallTree(World world, Random random, BlockPos pos,int actualHeight, TreeMaterials materials, TreeDensityLimiter treesRemaining) {		
-		float proportionTrunk  = smallTree.getLowestVariableTrunkProportion() + random.nextFloat()*smallTree.getTrunkProportionVariability();
-		int trunkHeight = (int)(proportionTrunk*(actualHeight-smallTree.getTrunkReserve()))+smallTree.getTrunkReserve();
-		if (trunkHeight < 4) trunkHeight = 4;
+
+		smallTree.setTreeSize(actualHeight, random);
 	
 	    smallTree.setLogBlock(materials.log);
 		smallTree.setLeavesBlock(materials.leaves);
 		smallTree.setBranchBlock(materials.branches);
-		smallTree.setTrunkSize(trunkHeight);
-	    smallTree.setCrownSize(actualHeight-trunkHeight+2);// need a bit more crown for this algo
+	    smallTree.setCrownSize(smallTree.getCrownSize()+2);// need a bit more crown for this algo
 	    //smallTree.setCrownSize(2);
 	    smallTree.setNoLeaves(false);
 	    if (treesRemaining.allowed(smallTree.estimatedSize(), random)){

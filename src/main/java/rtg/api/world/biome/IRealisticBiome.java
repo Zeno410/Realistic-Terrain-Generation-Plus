@@ -127,7 +127,8 @@ public interface IRealisticBiome {
 
     }
 
-    default void rDecorate(final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage) {
+    default void rDecorate(final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage,
+    		IRealisticBiome treeBiome) {
     	ChunkInfo info = new ChunkInfo(chunkPos,rtgWorld);
         this.getDecos().stream()
                 .filter(deco -> deco.preGenerate(river))
@@ -151,7 +152,7 @@ public interface IRealisticBiome {
         		//decorator.decorate(rtgWorld.world(), rand, this.baseBiome(), basePos);
         		// insert RTG Trees if appropriate
         		if (EventHandlerCommon.treeGenerationManager.managingBiome(this.baseBiome())) {
-        			this.getTreeDecos().generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
+        			treeBiome.getTreeDecos().generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
         		}
         	}
         }

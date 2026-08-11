@@ -50,7 +50,7 @@ public class DecoTreeSet extends DecoTree {
     public void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInfo) {
     	// duped from DecoVariableTree. Should probably be moved to DecoTree but I don't have the nerve
 
-        final BlockPos offsetPos = getOffsetPos(chunkPos);
+        final BlockPos offsetPos = getTreePos(chunkPos);
         /*
          * Determine how many trees we're going to try to generate (loopCount).
          * The actual number of trees that end up being generated could be *less* than this value,

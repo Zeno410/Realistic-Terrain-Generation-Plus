@@ -43,7 +43,14 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
     private final SurfaceBase surface;
     private final SurfaceBase surfaceRiver;
     
-    protected AbstractDeco treeGenerator; // under development, will be the tree decos, separated so they can be imposed on other worldtypes
+    protected AbstractDeco treeGenerator; 
+    /* This may become a key part of the system for averting runaway generation. Trees are often too large for vanilla's
+     * limited system for preventing runaway, which is to make sure a group of 4 chunks are all generated
+     * and then offset the generation. RTG plus makes sure all 8 adjacent chunks are generated and placed the trees
+     * in the chunk (That part is in LatePopulatingChunk)
+     * 
+     * But right now not implemented because of issues with placement of non-RTG trees.
+     */
 
     private Collection<DecoBase> decos;
 
@@ -121,7 +128,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
 
     @Override
     public IRealisticBiome getBeachBiome() {
-        IRealisticBiome rbb = RTGAPI.getRTGBiome(Biome.getIdForBiome(this.preferredBeach()));
+        IRealisticBiome rbb = RTGAPI.getRTGBiome(this.preferredBeach());
         int configBiomeId = this.getConfig().BEACH_BIOME.get();
         if (configBiomeId > -1) {
             rbb = RTGAPI.getRTGBiome(configBiomeId);
