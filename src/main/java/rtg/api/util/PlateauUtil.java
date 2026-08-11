@@ -129,10 +129,10 @@ public final class PlateauUtil {
 
     public static void init() {
         PLATEAU_BIOMES.stream()
-        .map(b -> RTGAPI.RTG_BIOMES.get(Biome.getIdForBiome(b)))
+        .map(b -> RTGAPI.RTG_BIOMES.get(b))
             .filter(Objects::nonNull)
             .forEach(rtgBiome -> {
-                final IRealisticBiome realisticBiome = rtgBiome.getValue();
+                final IRealisticBiome realisticBiome = rtgBiome;
                 Collection<String> blocks = getConfigBlocks(realisticBiome);
                 List<IBlockState> bands = blocks.stream()
                         .map(BlockUtil::getBlockStateFromCfgString)
