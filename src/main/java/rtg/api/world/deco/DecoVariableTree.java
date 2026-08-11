@@ -285,4 +285,8 @@ abstract public class DecoVariableTree extends DecoTree {
 	protected WorldGenAbstractTree vanillaTree() {
 		return new WorldGenTrees(false,4,materials.log,materials.leaves,false);
 	}
+	
+	public void setSmallTreeMinimumHeight(int newHeight) {
+		this.smallTreeMinimumHeight = newHeight;
+	}
 }

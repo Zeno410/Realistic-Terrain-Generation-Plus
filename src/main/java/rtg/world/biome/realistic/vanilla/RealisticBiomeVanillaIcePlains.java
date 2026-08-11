@@ -20,6 +20,8 @@ import rtg.event.EventHandlerCommon;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoVariableSpruce;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
 
 
 public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
@@ -72,12 +74,16 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
     public void initDecos() {
     	
     	DecoVariableSpruce scatteredSpruce = new DecoVariableSpruce();
-    	scatteredSpruce.changeAverageHeightSqrt(-1.5f);
+    	scatteredSpruce.changeAverageHeightSqrt(-2.0f);
     	scatteredSpruce.changeHeightNoiseVariability(-.75f);
     	scatteredSpruce.changeLocalNoiseVariability(+0.5f);
+    	scatteredSpruce.setSmallTreeMinimumHeight(0);
+    	TreeRTG icePlainsTree = new TreeRTGPiceaSitchensis();
+    	icePlainsTree.setAbsoluteMinimumTrunk(0);
+    	scatteredSpruce.setSmallTree(icePlainsTree);
     	scatteredSpruce.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 
-    			0.1f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
-    			0.15f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
+    			0.03f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
+    			0.05f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
     	scatteredSpruce.setStrengthNoiseFactorForLoops(true);
     	scatteredSpruce.setStrengthNoiseFactorXForLoops(false);
     	this.addDeco(scatteredSpruce);

@@ -48,8 +48,8 @@ public class TreeRTGPiceaSitchensis extends TreeRTG {
     }
 	public float estimatedSize() {
 
-    	float branchLength= (crownSize/4) + 1;
-    	return branchLength*branchLength/40f;
+    	float branchLength= (crownSize/3) + 1;
+    	return branchLength*branchLength/20f;
 	}
 	
 	@Override
