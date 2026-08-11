@@ -168,9 +168,9 @@ public class DecoTree extends DecoBase {
         //              calls to the noise generator. This should be replaced by a random amount.
         // Zeno: These are slowly changing values and are essentially the same everywhere in a given chunk.
         float noise = distribution.getValue(offsetPos, rtgWorld.treeDistributionNoise());
-        int loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
-        loopCount = (this.strengthNoiseFactorForLoops) ? (int) noise : loopCount;
-        loopCount = (this.strengthNoiseFactorXForLoops) ? (int) (noise * this.strengthFactorForLoops) : loopCount;
+        float loopCount = (this.strengthFactorForLoops > 0f) ? (int) this.strengthFactorForLoops : this.loops;
+        loopCount = (this.strengthNoiseFactorForLoops) ? noise : loopCount;
+        loopCount = (this.strengthNoiseFactorXForLoops) ? (noise * this.strengthFactorForLoops) : loopCount;
 
         if (loopCount < 1) {
             return;
@@ -194,32 +194,39 @@ public class DecoTree extends DecoBase {
          * the additional context.
          */
         //TODO [1.12] Trees should just generate how they do in the vanilla BiomeDecorator::genDecorations and use the Forge event.
-        DecorateBiomeEventRTG.DecorateRTG event = new DecorateBiomeEventRTG.DecorateRTG(rtgWorld.world(), rand, offsetPos, Decorate.EventType.TREE, loopCount);
+        DecorateBiomeEventRTG.DecorateRTG event = new DecorateBiomeEventRTG.DecorateRTG(rtgWorld.world(), rand, offsetPos, Decorate.EventType.TREE, (int)loopCount);
         MinecraftForge.TERRAIN_GEN_BUS.post(event);
 
         if (event.getResult() != Event.Result.DENY) {
 
-            loopCount = event.getModifiedAmount();
-            if (loopCount < 1) { return; }
+        	if ((int)loopCount != event.getModifiedAmount()) {
+                loopCount = event.getModifiedAmount();
+        	}
+        	
+            if (loopCount <=0 ) { return; }
 
             // TODO: [1.12] This should be done in #setLeavesBlock.
             DecoBase.tweakTreeLeaves(this, false, true);
 
-            for (int i = 0; i < loopCount; i++) {
-
+            TreeDensityLimiter treesRemaining = new TreeDensityLimiter(loopCount);
+            while (treesRemaining.notDone()) {
                 final BlockPos pos = offsetPos.add(rand.nextInt(16), 0, rand.nextInt(16));
                 int y = rtgWorld.world().getHeight(pos).getY();
                 if (y <= this.maxY && y >= this.minY && isValidTreeCondition(noise, rand)) {
 
                     // If we're in a village, check to make sure the tree has extra room to grow to avoid corrupting the village.
                     if (hasVillage) {
-                        //if (BlockUtil.checkVerticalBlocks(MatchType.ALL, rtgWorld.world(), pos, -1, Blocks.FARMLAND)) {//||
-                            //!BlockUtil.checkAreaBlocks(MatchType.ALL_IGNORE_REPLACEABLE, rtgWorld.world(), pos, 2)) {
+                        if (BlockUtil.checkVerticalBlocks(MatchType.ALL, rtgWorld.world(), pos, -1, Blocks.FARMLAND) ||
+                            !BlockUtil.checkAreaBlocks(MatchType.ALL_IGNORE_REPLACEABLE, rtgWorld.world(), pos, 2)) {
                             return;
-                        //}
+                        }
                     }
-                    doGenerate(rand, rtgWorld, chunkInfo, pos,y);
+                    // get a suitable tree Type
+                    doVariableGenerate(rand,  chunkInfo, pos,y, treesRemaining);
+                } else {
+                	treesRemaining.allowed(1f, rand);
                 }
+
             }
         }
         else if (RTGConfig.enableDebugging()) {
@@ -584,22 +591,12 @@ public class DecoTree extends DecoBase {
     }
     
 	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
-		// this is here to allow combining trees together for sharing a forest density
-		float neededSpace = tree.estimatedSize();
+		// this is here to allow combining trees together for sharing a forest density and allowing variable tree sizes
         this.tree.setLogBlock(this.logBlock);
         this.tree.setLeavesBlock(this.leavesBlock);
         this.tree.setTrunkSize(getRangedRandom(rand, this.minTrunkSize, this.maxTrunkSize));
         this.tree.setCrownSize(getRangedRandom(rand, this.minCrownSize, this.maxCrownSize));
         this.tree.setNoLeaves(this.noLeaves);
-		if (treesRemaining.test(neededSpace, rand)) {
-			boolean success = tree.generate(chunkInfo.world(), rand, column.up(y));
-			if (!success) {
-				treesRemaining.occupy(0.1f);// a little bit to block infinite loops
-			} else {
-				treesRemaining.occupy(neededSpace);
-			}
-			return;
-		}
-		return;
+        tree.doVariableGenerate(rand, chunkInfo, column, y, treesRemaining);
 	}
 }
