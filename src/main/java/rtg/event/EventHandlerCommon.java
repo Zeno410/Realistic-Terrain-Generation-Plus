@@ -1,10 +1,7 @@
 package rtg.event;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.Block;
@@ -21,23 +18,18 @@ import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
-import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Post;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkEvent.Load;
 
 import rtg.RTGConfig;
-import rtg.api.RTGAPI;
 import rtg.api.util.BlockUtil;
 import rtg.api.util.ChunkTracker;
 import rtg.api.util.Direction;
 import rtg.api.util.Logger;
 import rtg.api.util.UtilityClass;
-import rtg.api.world.biome.IRealisticBiome;
-import rtg.api.world.deco.DecoBase;
 import rtg.api.world.deco.DecoVariableTree;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGCeibaPentandra;
@@ -64,7 +56,7 @@ public final class EventHandlerCommon
     	if (loadEvent.getWorld().isRemote) return;
     	for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16 ; z++) {
-				//fixLighting(loadEvent.getChunk(),x,z);
+				fixLighting(loadEvent.getChunk(),x,z);
 			}
 		}
 	}
