@@ -50,6 +50,7 @@ public class TreeRTGCeibaRosea extends TreeRTG {
         branch = 5;
         verStart = 0.32f;
         verRand = 0.1f;
+        canGrowInWater = true;
     }
 
     public TreeRTGCeibaRosea(float length, int branch, float verStart, float verRand) {
@@ -64,6 +65,8 @@ public class TreeRTGCeibaRosea extends TreeRTG {
 
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
+    	
+    	pos = this.dropToGround(world, pos);
 
         if (!this.isGroundValid(world, pos)) {
             return false;

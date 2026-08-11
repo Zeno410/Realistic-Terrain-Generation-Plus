@@ -99,7 +99,7 @@ public class TreeRTGQuercusNigra extends TreeRTG {
         for (int crownLocation = 0 ; crownLocation < crownSize;crownLocation++) {
         	// we've already done lighting with the lower trunk, so no tracking.
         	if (!this.placeLogBlock(world, pos.up(crownLocation+trunkSize), this.logBlock, this.generateFlag, lightTracker)) {
-        		Logger.info("aborting Q. nigra Tree at {}" , pos);
+        		//Logger.info("aborting Q. nigra Tree at {}" , pos);
         		return false;
         	};
         }

@@ -3,6 +3,7 @@ package rtg.api.world.gen.feature.tree.rtg;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import rtg.api.util.Logger;
 import rtg.api.util.RTGTreeData;
 
 import java.util.Random;
@@ -50,6 +51,7 @@ public class TreeRTGCeibaPentandra extends TreeRTG {
         this.branch = 3;
         this.verStart = 0.32f;
         this.verRand = 0.1f;
+        canGrowInWater = true;
     }
 
     public TreeRTGCeibaPentandra(float length, int branch, float verStart, float verRand) {
@@ -64,6 +66,8 @@ public class TreeRTGCeibaPentandra extends TreeRTG {
 
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
+    	
+    	pos = this.dropToGround(world, pos);
 
         if (!this.isGroundValid(world, pos)) {
             return false;
@@ -82,7 +86,9 @@ public class TreeRTGCeibaPentandra extends TreeRTG {
         
         for (int i = y + this.trunkSize; i < y + this.crownSize; i++) {
         	// place trunk blocks. Abandon if trunk is blocked.
-            if (!this.placeTrunkBlock(world, new BlockPos(x, i, z), this.generateFlag, lightTracker)) return false; 
+            if (!this.placeTrunkBlock(world, new BlockPos(x, i, z), this.generateFlag, lightTracker)) {
+            	return false;
+            }
         }
 
         // place "roots"
