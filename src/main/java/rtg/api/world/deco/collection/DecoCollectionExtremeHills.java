@@ -39,7 +39,6 @@ public class DecoCollectionExtremeHills extends DecoCollectionBase {
         nigraDeco.getDistribution().setNoiseDivisor(100f);
         nigraDeco.getDistribution().setNoiseFactor(6f);
         nigraDeco.getDistribution().setNoiseAddend(0.8f);
-        nigraDeco.setTreeType(DecoTree.TreeType.RTG_TREE);
         nigraDeco.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         nigraDeco.setTreeConditionChance(20);
         nigraDeco.setMaxY(maxY);

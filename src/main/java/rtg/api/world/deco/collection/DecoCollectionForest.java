@@ -20,7 +20,6 @@ import rtg.api.world.deco.DecoVariableSpruce;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.DecoVariableBirch;
 import rtg.api.world.deco.DecoVariableFallenTree;
 import rtg.api.world.deco.DecoVariableMaterialTree;
@@ -84,42 +83,41 @@ public class DecoCollectionForest extends DecoCollectionBase {
     	
     	DecoTree result = new DecoVariableMaterialTree(TreeMaterials.inOakForest);
 
-        return result
+         result
             .setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
             .setTreeConditionChance(1)
             .setMaxY(120)
             .setStrengthNoiseFactorForLoops(true)
-            .setStrengthNoiseFactorXForLoops(false)// just in case
+            .setStrengthNoiseFactorXForLoops(false)
+            .setDistribution(treeFrequencyDistribution)
             ;
+         
+         return result;
     }
     
     private DecoTree oakTrees(float noiseMin, float noiseMax) {
 
-        return new DecoVariableOak()
+        DecoTree result =  new DecoVariableOak()
             .setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
             .setTreeConditionChance(1)
             .setMaxY(120)
             .setStrengthNoiseFactorForLoops(true)
-            .setStrengthNoiseFactorXForLoops(false)// just in case
+            .setStrengthNoiseFactorXForLoops(false)
             ;
+        result.setDistribution(treeFrequencyDistribution);
+        return result;
     }
     
     private DecoTree birchTrees(float noiseMin, float noiseMax) {
 
-        return new DecoVariableBirch()
+        DecoTree result =  new DecoVariableBirch()
             .setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
@@ -128,6 +126,8 @@ public class DecoCollectionForest extends DecoCollectionBase {
             .setStrengthNoiseFactorForLoops(true)
             .setStrengthNoiseFactorXForLoops(false)// just in case
             ;
+        result.setDistribution(treeFrequencyDistribution);
+        return result;
     }
 
     private DecoTree randomPungensTrees() {
@@ -142,7 +142,6 @@ public class DecoCollectionForest extends DecoCollectionBase {
 
         return new DecoTree(piceaPungens)
             .setStrengthFactorForLoops(3f)
-            .setTreeType(TreeType.RTG_TREE)
             .setTreeCondition(TreeCondition.RANDOM_CHANCE)
             .setTreeConditionChance(5)
             .setMaxY(100);

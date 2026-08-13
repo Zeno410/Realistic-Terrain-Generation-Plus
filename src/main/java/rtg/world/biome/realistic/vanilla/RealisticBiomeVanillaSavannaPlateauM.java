@@ -94,7 +94,6 @@ public class RealisticBiomeVanillaSavannaPlateauM extends RealisticBiomeBase {
 
         DecoTree acaciaTrees = new DecoTree(acaciaTree);
         acaciaTrees.setStrengthFactorForLoops(2f);
-        acaciaTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         acaciaTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         acaciaTrees.setTreeConditionChance(12);
         acaciaTrees.setMaxY(90);

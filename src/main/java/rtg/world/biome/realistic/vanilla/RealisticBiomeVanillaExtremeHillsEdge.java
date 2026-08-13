@@ -70,7 +70,6 @@ public class RealisticBiomeVanillaExtremeHillsEdge extends RealisticBiomeBase {
         decoTrees.getDistribution().setNoiseDivisor(100f);
         decoTrees.getDistribution().setNoiseFactor(6f);
         decoTrees.getDistribution().setNoiseAddend(0.8f);
-        decoTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         decoTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         decoTrees.setTreeConditionChance(24);
         decoTrees.setMaxY(100);

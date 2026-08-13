@@ -6,10 +6,10 @@ import rtg.api.config.BiomeConfig;
 import rtg.api.world.deco.DecoBase;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.helper.DecoHelperRandomSplit;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGUmbrella;
 
 
 /**
@@ -31,14 +31,12 @@ public class DecoCollectionSmallPineTreesForest extends DecoCollectionBase {
 
         DecoTree oakPine = new DecoTree(sitchensisTree);
         oakPine.setStrengthFactorForLoops(3f);
-        oakPine.setTreeType(TreeType.RTG_TREE);
         oakPine.setTreeCondition(TreeCondition.RANDOM_CHANCE);
         oakPine.setTreeConditionChance(4);
         oakPine.setMaxY(110);
 
-        DecoTree vanillaTrees = new DecoTree(new WorldGenTrees(false));
+        DecoTree vanillaTrees = new DecoTree(new TreeRTGUmbrella());
         vanillaTrees.setStrengthFactorForLoops(3f);
-        vanillaTrees.setTreeType(TreeType.WORLDGEN);
         vanillaTrees.setTreeCondition(TreeCondition.RANDOM_CHANCE);
         vanillaTrees.setTreeConditionChance(4);
         vanillaTrees.setMaxY(110);

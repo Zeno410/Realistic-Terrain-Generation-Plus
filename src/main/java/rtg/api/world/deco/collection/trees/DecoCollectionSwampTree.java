@@ -26,7 +26,6 @@ public class DecoCollectionSwampTree extends DecoCollectionBase {
         decoTrees.getDistribution().setNoiseDivisor(80f);
         decoTrees.getDistribution().setNoiseFactor(60f);
         decoTrees.getDistribution().setNoiseAddend(-15f);
-        decoTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         decoTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         decoTrees.setTreeConditionChance(12);
         decoTrees.setMaxY(70);
@@ -42,7 +41,6 @@ public class DecoCollectionSwampTree extends DecoCollectionBase {
         ponderosaTree.setNoLeaves(true);
 
         DecoTree deadPineTree = new DecoTree(ponderosaTree);
-        deadPineTree.setTreeType(DecoTree.TreeType.RTG_TREE);
         deadPineTree.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         deadPineTree.setTreeConditionChance(18);
         deadPineTree.setMaxY(90);

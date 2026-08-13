@@ -3,10 +3,6 @@ package rtg.api.world.deco.collection;
 import net.minecraft.init.Blocks;
 import rtg.api.config.BiomeConfig;
 import rtg.api.world.deco.*;
-import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTGAcaciaBucheri;
 
 
 /**

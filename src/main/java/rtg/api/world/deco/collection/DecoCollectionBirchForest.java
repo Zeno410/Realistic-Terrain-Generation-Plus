@@ -41,15 +41,17 @@ public class DecoCollectionBirchForest extends DecoCollectionBase {
 
     protected DecoTree tallVariableTrees(float noiseMin, float noiseMax) {
     	
-        return new DecoVariableMaterialTree(TreeMaterials.inBirchForest)
+        DecoTree result =  new DecoVariableMaterialTree(TreeMaterials.inBirchForest)
                 .setStrengthFactorForLoops(6f)
-                .setTreeType(DecoTree.TreeType.RTG_TREE)
-                .setDistribution(treeFrequencyDistribution)
                 .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
                 .setTreeConditionNoise(noiseMin)
                 .setTreeConditionNoise2(noiseMax)
                 .setTreeConditionChance(1)
                 .setStrengthNoiseFactorForLoops(true);
+        
+        result.setDistribution(treeFrequencyDistribution);
+        
+        return result;
     }
 
     private DecoFallenTree logs() {

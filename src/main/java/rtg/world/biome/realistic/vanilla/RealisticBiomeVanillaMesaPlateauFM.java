@@ -18,6 +18,7 @@ import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
 import rtg.api.world.deco.collection.DecoCollectionMesa;
+import rtg.api.world.gen.feature.tree.rtg.TreeWorldGen;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -74,10 +75,11 @@ public class RealisticBiomeVanillaMesaPlateauFM extends RealisticBiomeBase {
 
         this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
         this.addDecoCollection(new DecoCollectionMesa(this.getConfig()));
+        
+        TreeWorldGen mesaTree =new TreeWorldGen(new WorldGenTrees(false));
 
-        DecoTree decoTree = new DecoTree(new WorldGenTrees(false));
+        DecoTree decoTree = new DecoTree(mesaTree);
         decoTree.setLoops(16);
-        decoTree.setTreeType(DecoTree.TreeType.WORLDGEN);
         decoTree.setDistribution(new Distribution(24f, 1f, 0f));
         decoTree.setTreeConditionChance(1);
         decoTree.setTreeConditionFloat(4f);

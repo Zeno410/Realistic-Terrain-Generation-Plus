@@ -58,7 +58,6 @@ public class RealisticBiomeNTPoppyMeadow extends RealisticBiomeNTBasePlains {
         roburTree1.setMaxCrownSize(9);
 
         DecoTree oakTrees = new DecoTree(roburTree1);
-        oakTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         oakTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         oakTrees.setDistribution(new Distribution(100f, 6f, 0.8f));
         oakTrees.setTreeConditionNoise(0.4f);

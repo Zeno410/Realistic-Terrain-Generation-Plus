@@ -67,7 +67,6 @@ public class DecoCollectionBOPSeasonalForest extends DecoCollectionBase {
 
         DecoTree deadPineTree = new DecoTree(ponderosaTree);
         deadPineTree.setLogBlock(BlockBOPLog.paging.getVariantState(BOPWoods.DEAD));
-        deadPineTree.setTreeType(DecoTree.TreeType.RTG_TREE);
         deadPineTree.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         deadPineTree.setTreeConditionChance(18);
         deadPineTree.setMaxY(90);

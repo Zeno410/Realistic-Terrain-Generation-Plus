@@ -17,7 +17,6 @@ import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoWorldGen;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.DecoVariableDarkOak;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 
@@ -35,10 +34,8 @@ public class DecoCollectionRoofedForest extends DecoCollectionBase {
 	
     private DecoTree darkOakTrees(float noiseMin, float noiseMax) {
 
-        return new DecoVariableDarkOak()
+        DecoTree result =  new DecoVariableDarkOak()
             .setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
@@ -47,6 +44,10 @@ public class DecoCollectionRoofedForest extends DecoCollectionBase {
             .setStrengthNoiseFactorForLoops(true)
             .setStrengthNoiseFactorXForLoops(false)// just in case
             ;
+        
+        result.setDistribution(treeFrequencyDistribution);
+        
+        return result;
     }
     
 	public void initDecos() {

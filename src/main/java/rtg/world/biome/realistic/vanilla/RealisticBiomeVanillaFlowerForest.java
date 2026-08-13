@@ -15,16 +15,12 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoFlowersRTG;
-import rtg.api.world.deco.DecoVariableSpruce;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoVariableMaterialTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
-import rtg.api.world.deco.collection.DecoCollectionSmallPineTreesForest;
 import rtg.api.world.deco.helper.DecoHelper5050;
 import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTGPinusPonderosa;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -141,10 +137,8 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
 
     	DecoTree result = new DecoVariableMaterialTree(TreeMaterials.inOakForest);
 
-        return result
+         result
             .setStrengthFactorForLoops(.5f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
@@ -153,6 +147,9 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
             .setStrengthNoiseFactorForLoops(false)
             .setStrengthNoiseFactorXForLoops(true)// just in case
             ;
+         
+         result.setDistribution(treeFrequencyDistribution);
+         return result;
     }
     public static class TerrainVanillaFlowerForest extends TerrainBase {
 

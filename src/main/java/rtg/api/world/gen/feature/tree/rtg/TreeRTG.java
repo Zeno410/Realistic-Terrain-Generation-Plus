@@ -29,7 +29,7 @@ import java.util.function.Function;
  * @author WhichOnesPink
  * @see <a href="http://imgur.com/a/uoJsU">RTG Tree Gallery</a>
  */
-public abstract class TreeRTG extends WorldGenAbstractTree {
+public abstract class TreeRTG extends AbstractTreeRTG {
 	
 	public static final int ROOFED_FOREST_LIGHT_OBSTRUCTION_LIMIT = 6;
 

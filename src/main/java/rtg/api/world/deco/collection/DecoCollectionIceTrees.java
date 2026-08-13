@@ -9,7 +9,6 @@ import rtg.api.util.Distribution;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.helper.DecoHelper5050;
 import rtg.api.world.gen.feature.tree.rtg.IceSpikeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -64,15 +63,15 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
         validBlocks.add(Blocks.SNOW.getDefaultState());
         iceSpike.setValidGroundBlocks(validBlocks);
 
-        return new DecoTree(iceSpike)
+        DecoTree result =  new DecoTree(iceSpike)
             .setStrengthFactorForLoops(1f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(forestDistribution)
             .setTreeCondition(TreeCondition.NOISE_BETWEEN_AND_RANDOM_CHANCE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
             .setTreeConditionChance(2)
             .setMaxY(85);
+        result.setDistribution(forestDistribution);
+        return result;
     }
 
     private DecoHelper5050 shortTrees(float noiseMin, float noiseMax) {
@@ -96,15 +95,15 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
         validBlocks.add(Blocks.SNOW.getDefaultState());
         shortIceSpike.setValidGroundBlocks(validBlocks);
 
-        return new DecoTree(shortIceSpike)
+        DecoTree result =  new DecoTree(shortIceSpike)
             .setStrengthFactorForLoops(2f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(forestDistribution)
             .setTreeCondition(TreeCondition.NOISE_BETWEEN_AND_RANDOM_CHANCE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
             .setTreeConditionChance(2)
             .setMaxY(85);
+        result.setDistribution(forestDistribution);
+        return result;
     }
 
     private DecoTree randomPungensTrees() {
@@ -123,7 +122,6 @@ public class DecoCollectionIceTrees extends DecoCollectionBase {
 
         return new DecoTree(iceBush)
             .setStrengthFactorForLoops(1f)
-            .setTreeType(TreeType.RTG_TREE)
             .setTreeCondition(TreeCondition.RANDOM_CHANCE)
             .setTreeConditionChance(8)
             .setMaxY(100);

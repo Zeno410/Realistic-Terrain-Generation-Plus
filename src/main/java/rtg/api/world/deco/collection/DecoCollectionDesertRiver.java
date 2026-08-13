@@ -7,7 +7,6 @@ import rtg.api.world.deco.DecoReed;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat.ChanceType;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -35,7 +34,6 @@ public class DecoCollectionDesertRiver extends DecoCollectionBase {
         acaciaTrees.setCheckRiver(true);
         acaciaTrees.setMinRiver(0.86f);
         acaciaTrees.setLoops(1);
-        acaciaTrees.setTreeType(TreeType.RTG_TREE);
         acaciaTrees.setTreeCondition(TreeCondition.ALWAYS_GENERATE);
         acaciaTrees.setMaxY(65);
         this.addDeco(acaciaTrees);

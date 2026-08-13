@@ -74,7 +74,6 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
         decoTrees.getDistribution().setNoiseDivisor(80f);
         decoTrees.getDistribution().setNoiseFactor(60f);
         decoTrees.getDistribution().setNoiseAddend(-15f);
-        decoTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         decoTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         decoTrees.setTreeConditionNoise(0f);
         decoTrees.setTreeConditionChance(1);

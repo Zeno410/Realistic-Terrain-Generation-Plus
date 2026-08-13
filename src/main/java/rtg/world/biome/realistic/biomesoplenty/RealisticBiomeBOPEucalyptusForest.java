@@ -22,7 +22,6 @@ import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.bop.VariableBOPEucalyptusTree;
 import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.surface.SurfaceBase;
@@ -112,15 +111,15 @@ public class RealisticBiomeBOPEucalyptusForest extends RealisticBiomeBase {
 	        
 	    	DecoTree trees = new VariableBOPEucalyptusTree();
 	    	trees.setStrengthFactorForLoops(6f)
-	        .setTreeType(TreeType.RTG_TREE)
-	        .setDistribution(treeFrequencyDistribution)
 	        .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
 	        .setTreeConditionNoise(tallMin)
 	        .setTreeConditionNoise2(tallMax)
 	        .setTreeConditionChance(1)
 	        .setMaxY(120)
 	        .setStrengthNoiseFactorForLoops(true)
-	        .setStrengthNoiseFactorXForLoops(false);// just in case
+	        .setStrengthNoiseFactorXForLoops(false);
+	    	
+	    	trees.setDistribution(treeFrequencyDistribution);
 	    	
 	        this.addDeco(trees);
 	    	

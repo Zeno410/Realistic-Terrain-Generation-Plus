@@ -7,7 +7,6 @@ import rtg.api.util.BlockUtil;
 import rtg.api.world.deco.DecoBase;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.helper.DecoHelperRandomSplit;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaPungens;
@@ -35,7 +34,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         DecoTree smallPines = new DecoTree(sitchensisTree);
         smallPines.setStrengthNoiseFactorXForLoops(true);
         smallPines.setStrengthFactorForLoops(4f);
-        smallPines.setTreeType(TreeType.RTG_TREE);
         smallPines.setTreeCondition(TreeCondition.ALWAYS_GENERATE);
         smallPines.setTreeConditionChance(3);
         smallPines.setMaxY(100);
@@ -51,7 +49,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         DecoTree spruceTrees = new DecoTree(pungensTree);
         spruceTrees.setStrengthNoiseFactorXForLoops(true);
         spruceTrees.setStrengthFactorForLoops(3f);
-        spruceTrees.setTreeType(TreeType.RTG_TREE);
         spruceTrees.setTreeCondition(TreeCondition.ALWAYS_GENERATE);
         spruceTrees.setTreeConditionChance(1);
         spruceTrees.setMaxY(100);
@@ -67,7 +64,6 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase {
         DecoTree oakPines = new DecoTree(ponderosaTree);
         oakPines.setStrengthNoiseFactorXForLoops(true);
         oakPines.setStrengthFactorForLoops(3f);
-        oakPines.setTreeType(TreeType.RTG_TREE);
         oakPines.setTreeCondition(TreeCondition.ALWAYS_GENERATE);
         oakPines.setTreeConditionChance(1);
         oakPines.setMaxY(100);

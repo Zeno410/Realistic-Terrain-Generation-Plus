@@ -62,7 +62,6 @@ public class RealisticBiomeVanillaBeach extends RealisticBiomeBase {
         nuciferaTree.getValidGroundBlocks().add(Blocks.SAND.getDefaultState());
 
         DecoTree palmTrees = new DecoTree(nuciferaTree);
-        palmTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         palmTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         palmTrees.setTreeConditionNoise(-0.2f);
         palmTrees.setTreeConditionChance(12);

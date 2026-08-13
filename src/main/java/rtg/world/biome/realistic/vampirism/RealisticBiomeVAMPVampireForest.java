@@ -52,7 +52,6 @@ public class RealisticBiomeVAMPVampireForest extends RealisticBiomeVAMPBase {
         
         return new DecoTree(oakTree)
             .setStrengthFactorForLoops(7f)
-            .setTreeType(DecoTree.TreeType.RTG_TREE)
             .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
             .setMaxY(100);
     }

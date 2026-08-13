@@ -154,7 +154,12 @@ public class DecoVariableMaterialTree extends DecoTree {
 
         // override DecoTree because we don't have just one tree.
         return true;
-    }
+    }	
+    
+    public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
+		// pick one of the trees and have it do the generate
+		throw new RuntimeException();
+	}
     
     private TreeMaterials materialFor(BlockPos pos, RTGWorld world, Random rand) {
     	float divisor = RTGWorld.getTreeMaterialsNoiseDivisor();

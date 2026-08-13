@@ -14,6 +14,7 @@ import rtg.RTGConfig;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
 import rtg.api.util.ChunkInfo;
+import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase.BeachType;
 import rtg.api.world.biome.RealisticBiomeBase.RiverType;
@@ -130,10 +131,15 @@ public interface IRealisticBiome {
     default void rDecorate(final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage,
     		IRealisticBiome treeBiome) {
     	ChunkInfo info = new ChunkInfo(chunkPos,rtgWorld);
-        this.getDecos().stream()
-                .filter(deco -> deco.preGenerate(river))
-                .forEach(deco -> deco.generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info));
-
+    	for (DecoBase deco: this.getDecos() ) {
+    		if (deco.preGenerate(river)) {
+    			try {
+					deco.generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
+				} catch (Exception e) {
+					throw new RuntimeException(" crash generated in "+treeBiome.baseBiome().biomeName);
+				}
+    		}
+    	}
         if (overridesHardcoded()) {
             this.baseBiome().decorator.decorate(rtgWorld.world(), rand, baseBiome(), new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
         } else {

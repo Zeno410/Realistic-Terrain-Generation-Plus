@@ -200,7 +200,6 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 	        myrtilloidesTree.setBranchBlock(willowBranchBlock);
 	        //myrtilloidesTree.validGroundBlocks.add(mudBlock);\        
 	        DecoTree decomyrtilloides = new DecoTree(myrtilloidesTree);
-	        decomyrtilloides.setTreeType(DecoTree.TreeType.RTG_TREE);
 	        decomyrtilloides.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
 	        decomyrtilloides.setTreeConditionChance(4);
 	        decomyrtilloides.setLogBlock(willowLogBlock);
@@ -220,7 +219,6 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 	        roseaTree.setMaxCrownSize(8);
 	        roseaTree.setNoLeaves(false);
 	        DecoTree ceibaRoseaTree = new DecoTree(roseaTree);
-	        ceibaRoseaTree.setTreeType(DecoTree.TreeType.RTG_TREE);
 	        ceibaRoseaTree.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
 	        ceibaRoseaTree.setTreeConditionChance(4);
 	        ceibaRoseaTree.setMaxY(90);
@@ -228,7 +226,6 @@ public class RealisticBiomeBOPBayou extends RealisticBiomeBase {
 	        
 	        //Quercus Falcata
 	        DecoTree oakTree = new DecoTree(new TreeRTGQuercusFalcata());
-	        oakTree.setTreeType(DecoTree.TreeType.RTG_TREE);
 	        oakTree.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
 	        oakTree.setMinSize(2);
 	        oakTree.setMaxSize(4);

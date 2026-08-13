@@ -8,7 +8,6 @@ import rtg.api.util.Distribution;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.deco.*;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat.ChanceType;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -84,8 +83,6 @@ public class DecoCollectionTaiga extends DecoCollectionBase {
     	DecoVariableTaigaTree result = new DecoVariableTaigaTree();
         
             result.setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
@@ -94,6 +91,7 @@ public class DecoCollectionTaiga extends DecoCollectionBase {
             .setStrengthNoiseFactorForLoops(true)
             .setStrengthNoiseFactorXForLoops(false)// just in case
             ;
+            result.setDistribution(treeFrequencyDistribution);
             return result;
     }
 }

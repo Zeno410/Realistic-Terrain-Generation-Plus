@@ -96,7 +96,6 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         roburTree1.setMaxCrownSize(9);
 
         DecoTree oakTrees = new DecoTree(roburTree1);
-        oakTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         oakTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         oakTrees.setDistribution(new Distribution(100f, 6f, 0.8f));
         oakTrees.setTreeConditionNoise(0.4f);
@@ -111,7 +110,6 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         roburTree2.setMaxCrownSize(9);
 
         DecoTree birchTrees = new DecoTree(roburTree2);
-        birchTrees.setTreeType(DecoTree.TreeType.RTG_TREE);
         birchTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         birchTrees.setDistribution(new Distribution(100f, 6f, 0.8f));
         birchTrees.setTreeConditionNoise(0.4f);

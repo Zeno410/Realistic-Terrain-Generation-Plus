@@ -26,7 +26,9 @@ public class WeightedChooser<T> {
 		double target = totalWeights * rand.nextDouble();
 		for (Valued<T> valued: weighted) {
 			target -= valued.value;
-			if (target <=0 ) return valued.item;
+			if (target <=0 ) {
+				return valued.item;
+			}
 		}
 		throw new RuntimeException("Unexplained WeightedChooser error");
 		// really should not happen; would be something like simultaneous access

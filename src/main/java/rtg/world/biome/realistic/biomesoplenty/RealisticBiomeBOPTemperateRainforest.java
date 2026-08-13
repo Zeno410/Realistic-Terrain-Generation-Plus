@@ -19,8 +19,6 @@ import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoLeafVines;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoTreeSet;
-import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
 import rtg.api.world.gen.feature.tree.bop.TreeBOPMediumFir;
@@ -65,12 +63,7 @@ public class RealisticBiomeBOPTemperateRainforest extends RealisticBiomeBase {
         DecoTree substoryPopulation = new DecoTree(variableSubstoryTree);
         
         DecoTreeSet forest = new DecoTreeSet();
-        forest.setTreeType(TreeType.RTG_TREE)
-        .setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 3.5f, 12.0f) ) //denser than usual
-        .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
-        .setMaxY(120)
-        .setStrengthNoiseFactorForLoops(true)
-        .setStrengthNoiseFactorXForLoops(false);
+        forest.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 3.5f, 12.0f) ); //denser than usual
         
         forest.add(redwoodPopulation, 8);
         forest.add(substoryPopulation, 3);

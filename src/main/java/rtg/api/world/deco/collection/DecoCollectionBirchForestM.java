@@ -17,8 +17,6 @@ public class DecoCollectionBirchForestM extends DecoCollectionBirchForest {
     	
     	DecoVariableMaterialTree result =  new DecoVariableMaterialTree(TreeMaterials.inBirchForest);
                 result.setStrengthFactorForLoops(6f)
-                .setTreeType(DecoTree.TreeType.RTG_TREE)
-                .setDistribution(treeFrequencyDistribution)
                 .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
                 .setTreeConditionNoise(noiseMin)
                 .setTreeConditionNoise2(noiseMax)
@@ -27,6 +25,8 @@ public class DecoCollectionBirchForestM extends DecoCollectionBirchForest {
                 
                 result.changeAverageHeightSqrt(2f);
                 result.changeHeightNoiseVariability(-1f);
+                
+                result.setDistribution(treeFrequencyDistribution);
         
         return result;
     }

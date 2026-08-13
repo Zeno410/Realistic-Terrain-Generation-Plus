@@ -6,7 +6,6 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.bop.VariableBOPFirTree;
 import rtg.api.world.deco.DecoTree.TreeCondition;
-import rtg.api.world.deco.DecoTree.TreeType;
 import rtg.api.world.deco.collection.DecoCollectionBase;
 
 public class DecoCollectionBOPConiferousForest extends DecoCollectionBase {
@@ -24,10 +23,8 @@ public class DecoCollectionBOPConiferousForest extends DecoCollectionBase {
 
     private DecoTree firTrees(float noiseMin, float noiseMax) {
 
-        return new VariableBOPFirTree()
+        DecoTree result =  new VariableBOPFirTree()
             .setStrengthFactorForLoops(6f)
-            .setTreeType(TreeType.RTG_TREE)
-            .setDistribution(treeFrequencyDistribution)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)
@@ -36,5 +33,8 @@ public class DecoCollectionBOPConiferousForest extends DecoCollectionBase {
             .setStrengthNoiseFactorForLoops(true)
             .setStrengthNoiseFactorXForLoops(false)// just in case
             ;
+
+        result.setDistribution(treeFrequencyDistribution);
+        return result;
     }
 }

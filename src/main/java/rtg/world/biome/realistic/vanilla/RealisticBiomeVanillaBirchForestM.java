@@ -79,7 +79,6 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeBase {
         DecoTree superTallBirch = new DecoTree(tallBirch);
         superTallBirch.setStrengthFactorForLoops(16f);
         superTallBirch.setStrengthNoiseFactorForLoops(true);
-        superTallBirch.setTreeType(DecoTree.TreeType.RTG_TREE);
         superTallBirch.getDistribution().setNoiseDivisor(80f);
         superTallBirch.getDistribution().setNoiseFactor(60f);
         superTallBirch.getDistribution().setNoiseAddend(-15f);

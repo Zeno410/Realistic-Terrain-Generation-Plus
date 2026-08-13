@@ -26,7 +26,7 @@ import java.util.Random;
 /**
  * @author WhichOnesPink
  */
-public class DecoTree extends DecoBase {
+public class DecoTree extends AbstractDecoTree {
 
     public static final double MAX_TREE_DENSITY = 5.0D;
 
@@ -34,10 +34,8 @@ public class DecoTree extends DecoBase {
     protected float strengthFactorForLoops; // If set, this overrides and dynamically calculates 'loops' based on the strength parameter.
     protected boolean strengthNoiseFactorForLoops; // If true, this overrides and dynamically calculates 'loops' based on (noise * strength)
     protected boolean strengthNoiseFactorXForLoops; // If true, this overrides and dynamically calculates 'loops' based on (noise * X * strength)
-    protected TreeType treeType; // Enum for the various tree presets.
     protected TreeRTG tree;
     protected WorldGenerator worldGen;
-    protected Distribution distribution; // Parameter object for noise calculations.
     protected TreeCondition treeCondition; // Enum for the various conditions/chances for tree gen.
     protected float treeConditionNoise; // Only applies to a noise-related TreeCondition.
     protected float treeConditionNoise2; // Only applies to a noise-related TreeCondition.
@@ -55,7 +53,7 @@ public class DecoTree extends DecoBase {
     protected int maxCrownSize; // Max tree height (only used with certain tree presets)
     protected boolean noLeaves;
 
-    public DecoTree() {
+    protected DecoTree() {
 
         super();
 
@@ -67,9 +65,7 @@ public class DecoTree extends DecoBase {
         this.setStrengthFactorForLoops(0f);
         this.setStrengthNoiseFactorForLoops(false);
         this.setStrengthNoiseFactorXForLoops(false);
-        this.setTreeType(TreeType.RTG_TREE);
         this.tree = null;
-        this.worldGen = null;
         this.setDistribution(new Distribution(100f, 5f, 0.8f));
         this.setTreeCondition(TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         this.setTreeConditionNoise(0f);
@@ -96,9 +92,8 @@ public class DecoTree extends DecoBase {
         this.setStrengthFactorForLoops(source.strengthFactorForLoops);
         this.setStrengthNoiseFactorForLoops(source.strengthNoiseFactorForLoops);
         this.setStrengthNoiseFactorXForLoops(source.strengthNoiseFactorXForLoops);
-        this.setTreeType(source.treeType);
         this.tree = source.tree;
-        this.worldGen = source.worldGen;
+        if (source.tree == null) throw new RuntimeException();
         this.setDistribution(source.distribution);
         this.setTreeCondition(source.treeCondition);
         this.setTreeConditionNoise(source.treeConditionNoise);
@@ -131,12 +126,6 @@ public class DecoTree extends DecoBase {
         this.setNoLeaves(tree.getNoLeaves());
     }
 
-    public DecoTree(WorldGenerator worldGen) {
-
-        this();
-        this.worldGen = worldGen;
-    }
-
     // TODO: [1.12] Both `tree` and `worldGen` are WorldGenerators so there is no reason to treat them differently.
     //              All RTG-specific aspects of the TreeRTG WorldGenerator should be passed at the time of object
     //              creation and those objects should *only* be created at the time of generation instead of this
@@ -146,15 +135,10 @@ public class DecoTree extends DecoBase {
     @Deprecated
     public boolean properlyDefined() {
 
-        if (this.treeType == TreeType.RTG_TREE) {
-            if (this.tree == null) {
-                return false;
-            }
-        }
         return super.properlyDefined();
     }
 
-    @Override
+    //@Override
     public void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInfo) {
 
         final BlockPos offsetPos = getTreePos(chunkPos);
@@ -237,11 +221,6 @@ public class DecoTree extends DecoBase {
     public float doGenerate(Random rand, RTGWorld rtgWorld, ChunkInfo chunkInfo, BlockPos pos, int y) {  
     	// this can probably be eliminated now for doVariableGenerate
     	// separated out for variable trees; but they later needed more changes so this may not be necessary.
-    	switch (this.treeType) {
-		
-		    case RTG_TREE:
-		
-		        //this.setLogBlock(strength < 0.2f ? BlockUtil.getStateLog(2) : this.logBlock);
 		
 		        this.tree.setLogBlock(this.logBlock);
 		        this.tree.setLeavesBlock(this.leavesBlock);
@@ -249,20 +228,7 @@ public class DecoTree extends DecoBase {
 		        this.tree.setCrownSize(getRangedRandom(rand, this.minCrownSize, this.maxCrownSize));
 		        this.tree.setNoLeaves(this.noLeaves);
 		        this.tree.generate(rtgWorld.world(), rand, pos.up(y));
-		
-		        break;
-		
-		    case WORLDGEN:
-		
-		        WorldGenerator worldgenerator = this.worldGen;
-		        worldgenerator.generate(rtgWorld.world(), rand, pos.up(y));
-		
-		        break;
-		
-		    default:
-		        break;
-		}
-        return 1f;
+        return tree.estimatedSize();
     }
 
     public boolean isValidTreeCondition(float noise, Random rand) {
@@ -347,17 +313,6 @@ public class DecoTree extends DecoBase {
         return this;
     }
 
-    public TreeType getTreeType() {
-
-        return treeType;
-    }
-
-    public DecoTree setTreeType(TreeType treeType) {
-
-        this.treeType = treeType;
-        return this;
-    }
-
     public TreeRTG getTree() {
 
         return tree;
@@ -366,28 +321,6 @@ public class DecoTree extends DecoBase {
     public DecoTree setTree(TreeRTG tree) {
 
         this.tree = tree;
-        return this;
-    }
-
-    public WorldGenerator getWorldGen() {
-
-        return worldGen;
-    }
-
-    public DecoTree setWorldGen(WorldGenerator worldGen) {
-
-        this.worldGen = worldGen;
-        return this;
-    }
-
-    public Distribution getDistribution() {
-
-        return distribution;
-    }
-
-    public DecoTree setDistribution(Distribution distribution) {
-
-        this.distribution = distribution;
         return this;
     }
 
@@ -567,11 +500,6 @@ public class DecoTree extends DecoBase {
         return this;
     }
 
-    public enum TreeType {
-        RTG_TREE,
-        WORLDGEN
-    }
-
     public enum TreeCondition {
         ALWAYS_GENERATE,
         NOISE_GREATER_AND_RANDOM_CHANCE,
@@ -580,10 +508,6 @@ public class DecoTree extends DecoBase {
         RANDOM_CHANCE,
         RANDOM_NOT_EQUALS_CHANCE,
         DISTRIBUTION_GIVES_CHANCE
-    }
-
-    protected int applyConfigMultipliers(final int loopCount, final IRealisticBiome biome) {
-        return (int)(loopCount * Math.min(RTGConfig.treeDensityMultiplier() * biome.getConfig().TREE_DENSITY_MULTIPLIER.get(), MAX_TREE_DENSITY));
     }
     
     protected float applyConfigMultipliers(final float trees, final IRealisticBiome biome) {

@@ -11,6 +11,7 @@ import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGCocosNucifera;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGRhizophoraMucronata;
+import rtg.api.world.gen.feature.tree.rtg.TreeWorldGen;
 
 
 /**
@@ -34,12 +35,12 @@ public class DecoCollectionJungle extends DecoCollectionBase {
 
         DecoTree mangroves = new DecoTree(new TreeRTGRhizophoraMucronata(4, 5, 13f, 0.32f, 0.2f));
         mangroves.setLoops(3);
-        mangroves.setTreeType(DecoTree.TreeType.RTG_TREE);
         mangroves.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         mangroves.setTreeConditionChance(3);
         mangroves.setMaxY(160);
 
-        DecoTree megaJungle = new DecoTree(new WorldGenMegaJungle(false, 10, 27, BlockUtil.getStateLog(EnumType.JUNGLE), BlockUtil.getStateLeaf(EnumType.JUNGLE)));
+        TreeWorldGen vanillaJungle = new TreeWorldGen(new WorldGenMegaJungle(false, 10, 27, BlockUtil.getStateLog(EnumType.JUNGLE), BlockUtil.getStateLeaf(EnumType.JUNGLE)));
+        DecoTree megaJungle = new DecoTree(vanillaJungle);
         megaJungle.setLogBlock(BlockUtil.getStateLog(EnumType.JUNGLE));
         megaJungle.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.JUNGLE));
         megaJungle.setMinTrunkSize(3);
@@ -47,7 +48,6 @@ public class DecoCollectionJungle extends DecoCollectionBase {
         megaJungle.setMinCrownSize(10);
         megaJungle.setMaxCrownSize(27);
         megaJungle.setLoops(3);
-        megaJungle.setTreeType(DecoTree.TreeType.WORLDGEN);
         megaJungle.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         megaJungle.setTreeConditionChance(3);
         megaJungle.setMaxY(160);
@@ -65,7 +65,6 @@ public class DecoCollectionJungle extends DecoCollectionBase {
 
         DecoTree palmCustom = new DecoTree(nuciferaTree);
         palmCustom.setLoops(1);
-        palmCustom.setTreeType(DecoTree.TreeType.RTG_TREE);
         palmCustom.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
         palmCustom.setTreeConditionChance(4);
         palmCustom.setMaxY(160);

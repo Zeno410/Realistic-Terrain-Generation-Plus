@@ -229,15 +229,15 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
             pinusPonderosa.setMinCrownSize(8);
             pinusPonderosa.setMaxCrownSize(20);
 
-            return new DecoTree(pinusPonderosa)
+            DecoTree result =  new DecoTree(pinusPonderosa)
                 .setStrengthFactorForLoops(6f)
-                .setTreeType(DecoTree.TreeType.RTG_TREE)
-                .setDistribution(forestDistribution)
                 .setTreeCondition(DecoTree.TreeCondition.NOISE_BETWEEN_AND_RANDOM_CHANCE)
                 .setTreeConditionNoise(noiseMin)
                 .setTreeConditionNoise2(noiseMax)
                 .setTreeConditionChance(1)
                 .setMaxY(85);
+            result.setDistribution(forestDistribution);
+            return result;
         }
 
         private DecoHelper5050 shortTrees(float noiseMin, float noiseMax) {
@@ -257,15 +257,16 @@ public class RealisticBiomeBOPWoodland extends RealisticBiomeBase {
                 .setMinCrownSize(6)
                 .setMaxCrownSize(13);
 
-            return new DecoTree(piceaSitchensis)
+            DecoTree result =  new DecoTree(piceaSitchensis)
                 .setStrengthFactorForLoops(6f)
-                .setTreeType(DecoTree.TreeType.RTG_TREE)
-                .setDistribution(forestDistribution)
                 .setTreeCondition(DecoTree.TreeCondition.NOISE_BETWEEN_AND_RANDOM_CHANCE)
                 .setTreeConditionNoise(noiseMin)
                 .setTreeConditionNoise2(noiseMax)
                 .setTreeConditionChance(1)
                 .setMaxY(85);
+            
+            result.setDistribution(forestDistribution);
+            return result;
         }
 
         private DecoHelper5050 logs() {
