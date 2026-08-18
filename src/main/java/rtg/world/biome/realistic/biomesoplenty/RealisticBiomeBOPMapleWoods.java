@@ -14,11 +14,22 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTreeSet;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.gen.feature.tree.bop.BOPTreeMaterials;
+import rtg.api.world.gen.feature.tree.bop.TreeBOPMediumFir;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusNigra;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGResizable;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.event.EventHandlerCommon;
 
 public class RealisticBiomeBOPMapleWoods extends RealisticBiomeBase {
 
@@ -48,6 +59,35 @@ public class RealisticBiomeBOPMapleWoods extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+
+    	EventHandlerCommon.treeGenerationManager.suppressBOPBiome(baseBiome());
+    	
+    	TreeRTGQuercusNigra fancyMaple = new TreeRTGQuercusNigra();
+    	fancyMaple.setMaterials(BOPTreeMaterials.maple);
+    	fancyMaple.setTrunkProportionVariability(.15f);
+    	fancyMaple.setLowestVariableTrunkProportion(.3f);
+    	TreeRTGResizable variableMaple = new TreeRTGResizable(fancyMaple);
+    	variableMaple.changeAverageHeightSqrt(-.5f);
+    	variableMaple.changeHeightNoiseVariability(-.75f);
+    	DecoTree mapleDeco = new DecoTree(variableMaple);
+    	
+    	 
+    	TreeBOPMediumFir scatteredPines = new TreeBOPMediumFir();
+    	scatteredPines.setTrunkProportionVariability(.15f);
+    	scatteredPines.setMaterials(TreeMaterials.Picker.spruce);
+    	scatteredPines.setTrunkProportionVariability(.15f);
+    	scatteredPines.setLowestVariableTrunkProportion(.3f);
+    	TreeRTGResizable variablePines = new TreeRTGResizable(scatteredPines);
+    	//variablePines.changeAverageHeightSqrt(+.5f);
+    	variablePines.changeHeightNoiseVariability(-.75f);
+    	DecoTree pineDeco = new DecoTree(variablePines);
+    	
+    	DecoTreeSet trees = new DecoTreeSet();
+    	trees.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.0f, 5.0f) ); //denser than usual
+    	trees.add(pineDeco, 3);
+    	trees.add(mapleDeco, 4);
+    	
+    	this.treeGenerator = trees;
 
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(80f);

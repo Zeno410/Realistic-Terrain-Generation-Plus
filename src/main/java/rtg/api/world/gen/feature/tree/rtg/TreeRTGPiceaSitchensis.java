@@ -35,6 +35,9 @@ public class TreeRTGPiceaSitchensis extends TreeRTG {
      * decoTree.setNoLeaves(false);<br>
      * this.addDeco(decoTree);
      */
+	
+	private float sizeDivider = 20f;
+	
     public TreeRTGPiceaSitchensis() {
 
         super();
@@ -49,7 +52,7 @@ public class TreeRTGPiceaSitchensis extends TreeRTG {
 	public float estimatedSize() {
 
     	float branchLength= (crownSize/3) + 1;
-    	return branchLength*branchLength/20f;
+    	return branchLength*branchLength/sizeDivider;
 	}
 	
 	@Override
@@ -58,6 +61,8 @@ public class TreeRTGPiceaSitchensis extends TreeRTG {
     	float extension = 2f;
     	return (int)(extension + branchLength);
 	}
+	
+	public void setSizeDivider(float newDivider) {sizeDivider = newDivider;}
 	
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
