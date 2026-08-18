@@ -78,6 +78,9 @@ public class DecoTreeSet extends AbstractDecoTree {
         // Now let's check the configs to see if we should increase/decrease this value.
         
         int newCount = this.applyConfigMultipliers((int)loopCount, biome);
+        if (newCount != (int)loopCount) {
+        	loopCount = newCount;
+        }
 
         if (loopCount <=0 ) {
             return;
@@ -99,7 +102,10 @@ public class DecoTreeSet extends AbstractDecoTree {
 
         if (event.getResult() != Event.Result.DENY) {
 
-            loopCount = event.getModifiedAmount();
+        	newCount = event.getModifiedAmount();
+            if (newCount != (int)loopCount) {
+            	loopCount = newCount;
+            }
             if (loopCount <= 0) { return; }
 
             TreeDensityLimiter treesRemaining = new TreeDensityLimiter(loopCount);

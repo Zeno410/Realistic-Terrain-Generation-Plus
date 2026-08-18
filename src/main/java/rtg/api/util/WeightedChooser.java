@@ -23,7 +23,8 @@ public class WeightedChooser<T> {
 	public T choice(Random rand) {
 		double totalWeights = totalWeights();
 		if (totalWeights <= 0) throw new RuntimeException("Choice from itemlist with 0 weights");
-		double target = totalWeights * rand.nextDouble();
+		double random = rand.nextDouble();
+		double target = totalWeights * random;
 		for (Valued<T> valued: weighted) {
 			target -= valued.value;
 			if (target <=0 ) {

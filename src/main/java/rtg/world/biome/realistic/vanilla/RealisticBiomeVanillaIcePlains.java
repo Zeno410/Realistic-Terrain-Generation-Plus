@@ -12,6 +12,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
 import rtg.api.util.Distribution;
+import rtg.api.util.Logger;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.surface.SurfaceBase;
@@ -50,7 +51,6 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
 
     @Override
     public SurfaceBase initSurface() {
-
         if (this.getConfig().USE_ARCTIC_SURFACE.get()) {
 
             return new SurfacePolar(getConfig(), Blocks.SNOW.getDefaultState(), //Block top
@@ -82,8 +82,8 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
     	icePlainsTree.setAbsoluteMinimumTrunk(0);
     	scatteredSpruce.setSmallTree(icePlainsTree);
     	scatteredSpruce.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 
-    			0.03f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
-    			0.05f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
+    			0.01f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
+    			0.02f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
     	scatteredSpruce.setStrengthNoiseFactorForLoops(true);
     	scatteredSpruce.setStrengthNoiseFactorXForLoops(false);
     	this.addDeco(scatteredSpruce);
