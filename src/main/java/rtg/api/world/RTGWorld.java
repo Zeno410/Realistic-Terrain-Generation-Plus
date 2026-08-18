@@ -51,12 +51,9 @@ public final class RTGWorld {
     private static final int CELLULAR_INSTANCE_COUNT = 5;
     private static final float TREE_FREQUENCY_DIVISOR = 837; // the noise divisor for tree frequency noise (repeats over this distance)
     private static final float TREE_MATERIALS_DIVISOR = 631;// the noise divisor for tree material noise (repeats over this distance)
+    public static final float VARIABILITY_INTENSITY = 0.8f;
 
     private static final Map<World, RTGWorld> INSTANCE_CACHE = new HashMap<>();
-    
-    // moving to a system where used instances are logged
-    public static final int RIVER_VARIATION_SIMPLEX_1 = 8;
-    public static final int RIVER_VARIATION_SIMPLEX_2 = 9;
 
     private final World world;
     private final RTGChunkGenSettings generatorSettings;
@@ -77,6 +74,18 @@ public final class RTGWorld {
             this.cellularNoiseInstances[i] = new SpacedCellularNoise(this.seed() + i);
         }
     }
+    
+    public SimplexNoise simplex0() {return simplexNoiseInstances[0];}
+    public SimplexNoise simplex1() {return simplexNoiseInstances[1];}
+    public SimplexNoise simplex2() {return simplexNoiseInstances[2];}
+    public SimplexNoise simplex3() {return simplexNoiseInstances[3];}
+    public SimplexNoise simplex4() {return simplexNoiseInstances[4];}
+    public SimplexNoise simplex5() {return simplexNoiseInstances[5];}
+    public SimplexNoise simplex6() {return simplexNoiseInstances[6];}
+    public SimplexNoise simplex7() {return simplexNoiseInstances[7];}
+    public SimplexNoise simplex8() {return simplexNoiseInstances[8];}
+    public SimplexNoise simplex9() {return simplexNoiseInstances[9];}
+    
 
     /**
      * Gets an instance of RTGWorld of a {@link World} from the cache. If one does not exist, create it and store it first.

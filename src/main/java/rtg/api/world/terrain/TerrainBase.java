@@ -550,37 +550,18 @@ public abstract class TerrainBase {
 
         return baseHeight + h * border;
     }
+    
 
-    private static float getRiverStrength(final BlockPos blockPos, final RTGWorld rtgWorld) {
-
-        final int worldX = blockPos.getX();
-        final int worldZ = blockPos.getZ();
-        double pX = worldX;
-        double pZ = worldZ;
-        ISimplexData2D jitterData = SimplexData2D.newDisk();
-
-        //New river curve function. No longer creates worldwide curve correlations along cardinal axes.
-        rtgWorld.simplexInstance(1).multiEval2D((float) worldX / 240.0, (float) worldZ / 240.0, jitterData);
-        pX += jitterData.getDeltaX() * rtgWorld.getRiverLargeBendSize();
-        pZ += jitterData.getDeltaY() * rtgWorld.getRiverLargeBendSize();
-
-        rtgWorld.simplexInstance(2).multiEval2D((float) worldX / 80.0, (float) worldZ / 80.0, jitterData);
-        pX += jitterData.getDeltaX() * rtgWorld.getRiverSmallBendSize();
-        pZ += jitterData.getDeltaY() * rtgWorld.getRiverSmallBendSize();
-
-        pX /= rtgWorld.getRiverSeparation();
-        pZ /= rtgWorld.getRiverSeparation();
-
-        //New cellular noise. river
-        double riverFactor = rtgWorld.cellularInstance(0).eval2D(pX, pZ).interiorValue();
-
-        // the output is a curved function of relative distance from the center, so adjust to make it flatter
-        riverFactor = bayesianAdjustment((float) riverFactor, 0.5f);
-        if (riverFactor > rtgWorld.getRiverValleyLevel()) {
-            return 0;
-        }// no river effect
-        return (float) (riverFactor / rtgWorld.getRiverValleyLevel() - 1d);
+    public static float variabilityMultiplier(float x, float y, float strength, RTGWorld rtgWorld) {
+    	float result = 0;
+    	result = rtgWorld.simplex5().noise2f(x/900f, y/900f)*.20f;
+    	result = rtgWorld.simplex6().noise2f(x/300f, y/300f)*.20f;
+    	result = rtgWorld.simplex7().noise2f(x/100f, y/100f)*.20f;
+    	result = rtgWorld.simplex8().noise2f(x/30f, y/30f)*.10f;
+    	result = rtgWorld.simplex9().noise2f(x/10f, y/10f)*.05f;
+    	return result*strength;
     }
+    
 
 	// constant to get the new river distances similar to the old basin comparisons.
     // monte carlo'd and then adjusted to taste.
@@ -625,9 +606,9 @@ public abstract class TerrainBase {
 	    final int worldZ = blockPos.getZ();
 	    double pX = worldX;
 	    double pZ = worldZ;
-    	double result = rtgWorld.simplexInstance(rtgWorld.RIVER_VARIATION_SIMPLEX_1).
+    	double result = rtgWorld.simplex8().
     			noise2d(pX/RIVER_VARIATION_PITCH_1, pZ/RIVER_VARIATION_PITCH_1);
-        result += rtgWorld.simplexInstance(rtgWorld.RIVER_VARIATION_SIMPLEX_2).
+        result += rtgWorld.simplex9().
    			noise2d(pX/RIVER_VARIATION_PITCH_2, pZ/RIVER_VARIATION_PITCH_2);
         // now to extremify the result
         // map to [0,1]

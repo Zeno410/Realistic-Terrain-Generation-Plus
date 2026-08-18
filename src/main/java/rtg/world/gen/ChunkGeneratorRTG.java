@@ -617,20 +617,40 @@ public class ChunkGeneratorRTG implements IChunkGenerator {
 
                 float river = TerrainBase.getRiverDistanceStrength(mpos.setPos(worldX + x, 0, worldZ + z), rtgWorld);
                 landscape.river[x * 16 + z] = -river;
+                
 
+            	List<Float> heights = new SparseList<Float>() ;
+                
                 for (int i = 0; i < weightedBiomes.size(); i++) {
                     Float v = weightedBiomes.get(i);
                     if (v != null) {
                         if (v > 0F) {
+                        	float biomeNoise;
                         	if (isMesaPlateau(i)) {
-                                landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, mesaPlateauWeight, river + 1F) * v;
+                        		biomeNoise = RTGAPI.getRTGBiome(i).rNoise(rtgWorld, worldX + x, worldZ + z, mesaPlateauWeight, river + 1F);
+                                landscape.noise[x * 16 + z] += biomeNoise * v;
                         	} else {
-                                landscape.noise[x * 16 + z] += RTGAPI.getRTGBiome(i).rNoise(this.rtgWorld, worldX + x, worldZ + z, v, river + 1F) * v;
+                        		biomeNoise = RTGAPI.getRTGBiome(i).rNoise(rtgWorld, worldX + x, worldZ + z, v, river + 1F);
+                                landscape.noise[x * 16 + z] += biomeNoise * v;
                             }
+                        	heights.set(i, biomeNoise);
                             //v = 0F;
                         }
                         //weightedBiomes.set(i, v);
                     }
+                }
+                // calculate interbiome variability
+                float variability = 0;
+                
+                for (int i = 0; i < heights.size(); i++) {
+                    Float height = heights.get(i);
+                    if (height != null&& height >0f) {
+                    	variability += weightedBiomes.get(i) * Math.abs(landscape.noise[x * 16 + z] - height);
+                    }
+                }
+                if (variability > .1) {
+                   landscape.noise[x * 16 + z] += variability*TerrainBase.variabilityMultiplier(worldX + x, worldZ + z, RTGWorld.VARIABILITY_INTENSITY, rtgWorld);
+                   //landscape.noise[x * 16 + z] += variability;
                 }
                 // for river debugging
                 //landscape.noise[x * 16 + z] = 80f + river*15f;
