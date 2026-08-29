@@ -1,13 +1,19 @@
 package rtg.api.world.deco;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import rtg.api.util.ChunkInfo;
+import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.IRealisticBiome;
+import rtg.event.EventHandlerCommon;
 
 import java.util.Random;
 
@@ -51,16 +57,20 @@ public class DecoWorldGen extends DecoBase {
         for (int i = 0; i <= loops; i++) {
 
             final BlockPos pos = getOffsetPos(chunkPos).add(rand.nextInt(16), 0, rand.nextInt(16));
-            final int y = rtgWorld.world().getHeight(pos).getY();
+            int y = rtgWorld.world().getHeight(pos).getY();
 
             if (y >= this.minY && y <= this.maxY && rand.nextInt(this.chance) == 0) {
-                if (TerrainGen.decorate(rtgWorld.world(), rand, chunkPos, eventtype)) {
+            	Block block1 = rtgWorld.world().getBlockState(pos.up(y).down()).getBlock();
+            	if (block1.equals(Blocks.LEAVES)) y--;
+            	block1 = rtgWorld.world().getBlockState(pos.up(y).down()).getBlock();
+            	// have not figured out a good way to get big mushroom events past EventHandlerCommon
+                if (eventtype == Decorate.EventType.BIG_SHROOM||TerrainGen.decorate(rtgWorld.world(), rand, chunkPos, eventtype)) {
                     this.worldgen.generate(rtgWorld.world(), rand, pos.up(y));
                 }
             }
         }
     }
-
+    
     public WorldGenerator getWorldGen() {
         return worldgen;
     }
