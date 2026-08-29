@@ -362,7 +362,10 @@ public class SkylightTracker {
 						//ignore water
 						if (examined.getBlock().equals(Blocks.WATER)) examined = Blocks.AIR.getDefaultState();
 						obstruction += examined.getLightOpacity();
-						if (obstruction > 14) break;// we're done, it's dark
+						if (obstruction > 1) {
+							obstruction = 255;
+							break;// we're done, it's dark
+						}
 						up ++;
 					}
 				}

@@ -1,7 +1,13 @@
 package rtg.api.world.deco;
 
+import java.util.Random;
+
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenCanopyTree;
+import rtg.api.util.ChunkInfo;
+import rtg.api.world.RTGWorld;
+import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGMediumDarkOak;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGMonstrous;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGSmallDarkOak;
@@ -16,7 +22,7 @@ public class DecoVariableDarkOak extends DecoVariableTree {
 		this.averageHeightSqrt -= .7f;
 		this.tallTreeMinimumHeight = 15;
 		this.mediumTreeMinimumHeight = 10;
-		this.smallTreeMinimumHeight = 6;
+		this.smallTreeMinimumHeight = 5;
 		
 		
 		/*	protected int tallTreeMinimumHeight = 21; // shortest allowed tall tree
@@ -35,4 +41,5 @@ public class DecoVariableDarkOak extends DecoVariableTree {
 	protected WorldGenAbstractTree vanillaTree() {
 		return new WorldGenCanopyTree(false);
 	}
+	
 }

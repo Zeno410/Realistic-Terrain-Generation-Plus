@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import rtg.api.util.ChunkInfo;
+import rtg.api.util.Logger;
 
 public class TreeRTGSmallDarkOak extends TreeRTGAbstractDarkOak {
 
@@ -77,7 +78,6 @@ public class TreeRTGSmallDarkOak extends TreeRTGAbstractDarkOak {
 	        	makeBranch(direction + rand.nextFloat()*variability,  baseSetter);
 	        	direction += increment;
 	        }
-	        
 		    return true;
 		}
 		

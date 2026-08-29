@@ -16,7 +16,9 @@ import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionRoofedForest;
+import rtg.api.world.deco.collection.trees.DecoCollectionRoofedForestTrees;
 import rtg.api.world.deco.helper.DecoHelperRandomSplit;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -76,11 +78,6 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeBase {
     public void overrideDecorations() {
         baseBiome().decorator.grassPerChunk = 3;
         baseBiome().decorator.flowersPerChunk = 1;
-    }
-
-    @Override
-    public boolean overridesHardcoded() {
-        return true;
     }
 
     public static class TerrainVanillaRoofedForest extends TerrainBase {

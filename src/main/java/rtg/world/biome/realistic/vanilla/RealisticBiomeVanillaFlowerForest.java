@@ -18,6 +18,7 @@ import rtg.api.world.deco.DecoFlowersRTG;
 import rtg.api.world.deco.DecoShrub;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoVariableMaterialTree;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.DecoTree.TreeCondition;
 import rtg.api.world.deco.helper.DecoHelper5050;
 import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
@@ -62,26 +63,32 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionBase(getConfig());
+    	this.treeGenerator = trees;
+        
+        trees.addDeco(variableTrees(-1f, 3f));
 
         // First, let's get a few shrubs in to break things up a bit.
         DecoShrub decoShrub = new DecoShrub();
         decoShrub.setMaxY(110);
         decoShrub.setLoopMultiplier(4f);
         decoShrub.setChance(3);
-        this.addDeco(decoShrub);
-
+        trees.addDeco(decoShrub);
+        
         // Flowers are the most aesthetically important feature of this biome, so let's add those next.
         DecoFlowersRTG decoFlowers1 = new DecoFlowersRTG()
             .addFlowers(POPPY, BLUE_ORCHID, ALLIUM, HOUSTONIA, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, DANDELION)
-            .setStrengthFactor(12f)
+            .setStrengthFactor(8f)
             .setHeightType(DecoFlowersRTG.HeightType.GET_HEIGHT_VALUE); // We're only bothered about surface flowers here.
-        this.addDeco(decoFlowers1);
+        trees.addDeco(decoFlowers1);
 
+        
         DecoFlowersRTG decoFlowers2 = new DecoFlowersRTG();
         decoFlowers2.addPlants(SUNFLOWER, SYRINGA, ROSE, PAEONIA); //Only 2-block-tall flowers.
         decoFlowers2.setChance(8);
         decoFlowers2.setHeightType(DecoFlowersRTG.HeightType.GET_HEIGHT_VALUE); // We're only bothered about surface flowers here.
-        this.addDeco(decoFlowers2);
+        //this.addDeco(decoFlowers2);
 
         // Trees first.
         
@@ -92,8 +99,6 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
         //this.addDecoCollection(new DecoCollectionSmallPineTreesForest(this.getConfig()));
 
         //decoBaseBiomeDecorations.setNotEqualsZeroChance(4);
-        
-        this.addDeco(variableTrees(0f, 1f));
 
         // Add some fallen trees of the oak and spruce variety (50/50 distribution).
         DecoFallenTree decoFallenOak = new DecoFallenTree();
@@ -113,17 +118,17 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
         decoFallenSpruce.setMinSize(3);
         decoFallenSpruce.setMaxSize(6);
         DecoHelper5050 decoFallenTree = new DecoHelper5050(decoFallenOak, decoFallenSpruce);
-        this.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
+        trees.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
     }
 
     @Override
     public void overrideDecorations() {
-        baseBiome().decorator.flowersPerChunk = -999;
+        //baseBiome().decorator.flowersPerChunk = -999;
     }
 
     @Override
     public boolean overridesHardcoded() {
-        return true;
+        return false;
     }    
     
     @Override
@@ -138,7 +143,7 @@ public class RealisticBiomeVanillaFlowerForest extends RealisticBiomeBase {
     	DecoTree result = new DecoVariableMaterialTree(TreeMaterials.inOakForest);
 
          result
-            .setStrengthFactorForLoops(.5f)
+            .setStrengthFactorForLoops(0.5f)
             .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
             .setTreeConditionNoise(noiseMin)
             .setTreeConditionNoise2(noiseMax)

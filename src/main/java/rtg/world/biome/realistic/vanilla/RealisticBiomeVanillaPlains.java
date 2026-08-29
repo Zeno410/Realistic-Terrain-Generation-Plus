@@ -13,6 +13,7 @@ import rtg.api.util.Distribution;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.helper.DecoHelperThisOrThat;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGQuercusRobur;
@@ -59,6 +60,10 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionBase(getConfig());
+    	this.treeGenerator = trees;
+    	
         //Sparse wheat
         DecoCrop decoCropWheat = new DecoCrop();
         decoCropWheat.setSize(4);
@@ -70,14 +75,7 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         decoCropWheat.setMaxY(this.getConfig().WHEAT_MAX_Y.get());
         this.addDeco(decoCropWheat, this.getConfig().ALLOW_WHEAT.get());
 
-        // Very sparse shrubs.
-        DecoShrub decoShrubOak = new DecoShrub();
-        decoShrubOak.setLogBlock(Blocks.LOG.getDefaultState());
-        decoShrubOak.setLeavesBlock(Blocks.LEAVES.getDefaultState());
-        decoShrubOak.setMaxY(110);
-        decoShrubOak.setLoops(1);
-        decoShrubOak.setChance(36);
-        this.addDeco(decoShrubOak);
+
 
         // The occasional flower.
         DecoFlowersRTG decoFlowersRTG = new DecoFlowersRTG()
@@ -85,6 +83,15 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
             .setMaxY(128);
         this.addDeco(decoFlowersRTG);
 
+        // Very sparse shrubs.
+        DecoShrub decoShrubOak = new DecoShrub();
+        decoShrubOak.setLogBlock(Blocks.LOG.getDefaultState());
+        decoShrubOak.setLeavesBlock(Blocks.LEAVES.getDefaultState());
+        decoShrubOak.setMaxY(110);
+        decoShrubOak.setLoops(1);
+        decoShrubOak.setChance(36);
+        trees.addDeco(decoShrubOak);
+        
         // Very rare fat oak/birch trees.
 
         TreeRTG roburTree1 = new TreeRTGQuercusRobur();
@@ -99,7 +106,7 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         oakTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         oakTrees.setDistribution(new Distribution(100f, 6f, 0.8f));
         oakTrees.setTreeConditionNoise(0.4f);
-        oakTrees.setTreeConditionChance(48);
+        oakTrees.setTreeConditionChance(8);
 
         TreeRTG roburTree2 = new TreeRTGQuercusRobur();
         roburTree2.setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH));
@@ -113,9 +120,9 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
         birchTrees.setTreeCondition(DecoTree.TreeCondition.NOISE_GREATER_AND_RANDOM_CHANCE);
         birchTrees.setDistribution(new Distribution(100f, 6f, 0.8f));
         birchTrees.setTreeConditionNoise(0.4f);
-        birchTrees.setTreeConditionChance(48);
+        birchTrees.setTreeConditionChance(8);
 
-        this.addDeco(new DecoHelperThisOrThat(4, DecoHelperThisOrThat.ChanceType.NOT_EQUALS_ZERO, oakTrees, birchTrees));
+        trees.addDeco(new DecoHelperThisOrThat(4, DecoHelperThisOrThat.ChanceType.NOT_EQUALS_ZERO, oakTrees, birchTrees));
         
         DecoReed decoReed = new DecoReed();
         decoReed.setCheckRiver(false);
@@ -127,9 +134,9 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeBase {
 
     @Override
     public void overrideDecorations() {
-        baseBiome().decorator.grassPerChunk = 5;
-        baseBiome().decorator.flowersPerChunk = -999;
-        baseBiome().decorator.treesPerChunk = -999;
+       // baseBiome().decorator.grassPerChunk = 5;
+        //baseBiome().decorator.flowersPerChunk = -999;
+        //baseBiome().decorator.treesPerChunk = -999;
     }
 
     @Override

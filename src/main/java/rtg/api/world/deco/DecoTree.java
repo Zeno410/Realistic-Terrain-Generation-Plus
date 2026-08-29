@@ -156,14 +156,14 @@ public class DecoTree extends AbstractDecoTree {
         loopCount = (this.strengthNoiseFactorForLoops) ? noise : loopCount;
         loopCount = (this.strengthNoiseFactorXForLoops) ? (noise * this.strengthFactorForLoops) : loopCount;
 
-        if (loopCount < 1) {
+        if (loopCount < 0) {
             return;
         }
 
         // Now let's check the configs to see if we should increase/decrease this value.
         loopCount = this.applyConfigMultipliers(loopCount, biome);
 
-        if (loopCount < 1) {
+        if (loopCount < 0) {
             return;
         }
 
@@ -511,7 +511,7 @@ public class DecoTree extends AbstractDecoTree {
     }
     
     protected float applyConfigMultipliers(final float trees, final IRealisticBiome biome) {
-        return (float)(trees * Math.min(RTGConfig.treeDensityMultiplier() * biome.getConfig().TREE_DENSITY_MULTIPLIER.get(), MAX_TREE_DENSITY));
+        return (float)(trees * (float)Math.min(RTGConfig.treeDensityMultiplier() * biome.getConfig().TREE_DENSITY_MULTIPLIER.get(), MAX_TREE_DENSITY));
     }
     
 	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
