@@ -13,7 +13,10 @@ import rtg.api.util.PlateauUtil;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
+import rtg.api.world.deco.collection.DecoCollectionSavanna;
+import rtg.api.world.deco.collection.trees.DecoCollectionSavannaTrees;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGAcaciaBucheri;
 import rtg.api.world.surface.SurfaceBase;
@@ -63,6 +66,10 @@ public class RealisticBiomeVanillaSavannaPlateau extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionBase(getConfig());
+    	this.treeGenerator = trees;
+
         this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
 
         DecoBoulder decoBoulder1 = new DecoBoulder();
@@ -83,22 +90,9 @@ public class RealisticBiomeVanillaSavannaPlateau extends RealisticBiomeBase {
         acaciaShrub.setMaxY(160);
         acaciaShrub.setLoopMultiplier(3f);
         acaciaShrub.setChance(9);
-        this.addDeco(acaciaShrub);
+        trees.addDeco(acaciaShrub);
 
-        TreeRTG acaciaTree = new TreeRTGAcaciaBucheri();
-        acaciaTree.setLogBlock(Blocks.LOG2.getDefaultState());
-        acaciaTree.setLeavesBlock(Blocks.LEAVES2.getDefaultState());
-        acaciaTree.setMinTrunkSize(12);
-        acaciaTree.setMaxTrunkSize(16);
-        //this.addTree(acaciaTree);
-
-        DecoTree acaciaTrees = new DecoTree(acaciaTree);
-        acaciaTrees.setStrengthFactorForLoops(2f);
-        acaciaTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
-        acaciaTrees.setTreeConditionChance(12);
-        acaciaTrees.setMaxY(90);
-        //this.addDeco(acaciaTrees);
-        this.addDeco(new DecoVariableAcacia());
+        trees.addDeco(new DecoVariableAcacia());
 
         DecoCactus decoCactus = new DecoCactus();
         decoCactus.setMaxY(160);

@@ -13,6 +13,7 @@ import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPinusNigra;
 import rtg.api.world.surface.SurfaceBase;
@@ -56,6 +57,10 @@ public class RealisticBiomeVanillaExtremeHillsEdge extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	DecoCollectionBase decoAllTrees = new DecoCollectionBase(getConfig());
+    	this.treeGenerator = decoAllTrees;
+    	
         TreeRTG nigraTree = new TreeRTGPinusNigra();
         nigraTree.setLogBlock(Blocks.LOG.getDefaultState());
         nigraTree.setLeavesBlock(Blocks.LEAVES.getDefaultState());
@@ -64,16 +69,16 @@ public class RealisticBiomeVanillaExtremeHillsEdge extends RealisticBiomeBase {
         nigraTree.setMinCrownSize(7);
         nigraTree.setMaxCrownSize(10);
 
-        DecoTree decoTrees = new DecoTree(nigraTree);
-        decoTrees.setStrengthFactorForLoops(4f);
-        decoTrees.setStrengthNoiseFactorXForLoops(true);
-        decoTrees.getDistribution().setNoiseDivisor(100f);
-        decoTrees.getDistribution().setNoiseFactor(6f);
-        decoTrees.getDistribution().setNoiseAddend(0.8f);
-        decoTrees.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
-        decoTrees.setTreeConditionChance(24);
-        decoTrees.setMaxY(100);
-        this.addDeco(decoTrees);
+        DecoTree decoNigra = new DecoTree(nigraTree);
+        decoNigra.setStrengthFactorForLoops(4f);
+        decoNigra.setStrengthNoiseFactorXForLoops(true);
+        decoNigra.getDistribution().setNoiseDivisor(100f);
+        decoNigra.getDistribution().setNoiseFactor(6f);
+        decoNigra.getDistribution().setNoiseAddend(0.8f);
+        decoNigra.setTreeCondition(DecoTree.TreeCondition.RANDOM_CHANCE);
+        decoNigra.setTreeConditionChance(24);
+        decoNigra.setMaxY(100);
+        decoAllTrees.addDeco(decoNigra);
 
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(100f);
@@ -84,12 +89,12 @@ public class RealisticBiomeVanillaExtremeHillsEdge extends RealisticBiomeBase {
         decoFallenTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.SPRUCE));
         decoFallenTree.setMinSize(3);
         decoFallenTree.setMaxSize(6);
-        this.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
+        decoAllTrees.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
 
         DecoShrub decoShrub = new DecoShrub();
         decoShrub.setMaxY(100);
         decoShrub.setLoopMultiplier(2f);
-        this.addDeco(decoShrub);
+        decoAllTrees.addDeco(decoShrub);
 
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.MOSSY_COBBLESTONE.getDefaultState());

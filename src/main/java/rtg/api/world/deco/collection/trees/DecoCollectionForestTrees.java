@@ -1,0 +1,144 @@
+package rtg.api.world.deco.collection.trees;
+
+import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.init.Blocks;
+import rtg.api.config.BiomeConfig;
+import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
+import rtg.api.world.RTGWorld;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.deco.DecoShrub;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.DecoTree.TreeCondition;
+import rtg.api.world.deco.DecoVariableBirch;
+import rtg.api.world.deco.DecoVariableFallenTree;
+import rtg.api.world.deco.DecoVariableMaterialTree;
+import rtg.api.world.deco.DecoVariableOak;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGPiceaPungens;
+
+
+
+/**
+ * @author WhichOnesPink
+ */
+public class DecoCollectionForestTrees extends DecoCollectionBase {
+
+    // Tends to return values between -3f to 5f, with some overflow.
+    private Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 4.5f); 
+    // effective range 2 to 6; 6.xx is truncated
+
+
+    private float tallMin = -1f;
+    private float tallMax = 3f;
+
+    public DecoCollectionForestTrees(BiomeConfig config) {
+
+        super(config);
+
+        this
+        .addDeco(variableTrees(tallMin, tallMax));
+        this
+            .addDeco(variableLogs(), config.ALLOW_LOGS.get()) // Add some fallen trees of the oak and spruce variety (50/50 distribution).
+            .addDeco(shrubsOak()) // Shrubs to fill in the blanks.
+            .addDeco(shrubsSpruce()) // Fewer spruce shrubs than oak.
+        ;
+       
+    }
+
+    
+    private DecoTree variableTrees(float noiseMin, float noiseMax) {
+    	
+    	DecoTree result = new DecoVariableMaterialTree(TreeMaterials.inOakForest);
+
+         result
+            .setStrengthFactorForLoops(6f)
+            .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
+            .setTreeConditionNoise(noiseMin)
+            .setTreeConditionNoise2(noiseMax)
+            .setTreeConditionChance(1)
+            .setMaxY(120)
+            .setStrengthNoiseFactorForLoops(true)
+            .setStrengthNoiseFactorXForLoops(false)
+            .setDistribution(treeFrequencyDistribution)
+            ;
+         
+         return result;
+    }
+    
+    private DecoTree oakTrees(float noiseMin, float noiseMax) {
+
+        DecoTree result =  new DecoVariableOak()
+            .setStrengthFactorForLoops(6f)
+            .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
+            .setTreeConditionNoise(noiseMin)
+            .setTreeConditionNoise2(noiseMax)
+            .setTreeConditionChance(1)
+            .setMaxY(120)
+            .setStrengthNoiseFactorForLoops(true)
+            .setStrengthNoiseFactorXForLoops(false)
+            ;
+        result.setDistribution(treeFrequencyDistribution);
+        return result;
+    }
+    
+    private DecoTree birchTrees(float noiseMin, float noiseMax) {
+
+        DecoTree result =  new DecoVariableBirch()
+            .setStrengthFactorForLoops(6f)
+            .setTreeCondition(TreeCondition.ALWAYS_GENERATE)
+            .setTreeConditionNoise(noiseMin)
+            .setTreeConditionNoise2(noiseMax)
+            .setTreeConditionChance(1)
+            .setMaxY(120)
+            .setStrengthNoiseFactorForLoops(true)
+            .setStrengthNoiseFactorXForLoops(false)// just in case
+            ;
+        result.setDistribution(treeFrequencyDistribution);
+        return result;
+    }
+
+    private DecoTree randomPungensTrees() {
+
+        TreeRTG piceaPungens = new TreeRTGPiceaPungens()
+            .setLogBlock(Blocks.LOG.getDefaultState())
+            .setLeavesBlock(Blocks.LEAVES.getDefaultState())
+            .setMinTrunkSize(2)
+            .setMaxTrunkSize(4)
+            .setMinCrownSize(5)
+            .setMaxCrownSize(8);
+
+        return new DecoTree(piceaPungens)
+            .setStrengthFactorForLoops(3f)
+            .setTreeCondition(TreeCondition.RANDOM_CHANCE)
+            .setTreeConditionChance(5)
+            .setMaxY(100);
+    }
+
+    private DecoVariableFallenTree variableLogs() {
+    	DecoVariableFallenTree result = new DecoVariableFallenTree(DecoVariableFallenTree.Woodland.OAK);
+            result = result.setMaxY(80)
+            .setMinSize(3)
+            .setMaxSize(8);
+        return result;
+    }
+
+    private DecoShrub shrubsOak() {
+        return new DecoShrub()
+            .setMaxY(140)
+            .setLoopMultiplier(2f)
+            .setChance(3);
+    }
+
+    private DecoShrub shrubsSpruce() {
+        return new DecoShrub()
+            .setLogBlock(BlockUtil.getStateLog(EnumType.SPRUCE))
+            .setLeavesBlock(BlockUtil.getStateLeaf(EnumType.SPRUCE))
+            .setMaxY(140)
+            .setLoopMultiplier(2f)
+            .setChance(9);
+    }    
+
+}
+

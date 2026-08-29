@@ -65,7 +65,8 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-        this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
+    	this.useTreeManager();
+    	treeGenerator = new DecoCollectionDesertRiver(this.getConfig());
         this.addDecoCollection(new DecoCollectionMesa(this.getConfig()));
     }
 

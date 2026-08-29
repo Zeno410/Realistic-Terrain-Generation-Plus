@@ -9,11 +9,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.Distribution;
 import rtg.api.util.PlateauUtil;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.DecoTree;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
 import rtg.api.world.deco.collection.DecoCollectionMesa;
+import rtg.api.world.gen.feature.tree.rtg.TreeRTGUmbrella;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -66,7 +70,9 @@ public class RealisticBiomeVanillaMesaPlateauM extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-        this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionDesertRiver(this.getConfig());
+    	treeGenerator = trees;
         this.addDecoCollection(new DecoCollectionMesa(this.getConfig()));
     }
 

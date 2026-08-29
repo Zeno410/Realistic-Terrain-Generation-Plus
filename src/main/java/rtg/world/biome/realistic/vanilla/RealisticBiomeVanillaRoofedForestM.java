@@ -12,6 +12,8 @@ import rtg.api.util.BlockUtil;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
+import rtg.api.world.deco.collection.trees.DecoCollectionRoofedForestTrees;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGRhizophoraMucronata;
 import rtg.api.world.surface.SurfaceBase;
@@ -54,6 +56,10 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	DecoCollectionRoofedForestTrees trees = new DecoCollectionRoofedForestTrees(getConfig());
+    	this.treeGenerator = trees;
+
         DecoBoulder decoBoulder = new DecoBoulder();
         decoBoulder.setBoulderBlock(Blocks.MOSSY_COBBLESTONE.getDefaultState());
         decoBoulder.setChance(20);
@@ -78,7 +84,7 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
         decoTrees.setTreeConditionNoise(0f);
         decoTrees.setTreeConditionChance(1);
         decoTrees.setMaxY(120);
-        this.addDeco(decoTrees);
+        trees.addDeco(decoTrees);
 
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.getDistribution().setNoiseDivisor(80f);
@@ -89,18 +95,18 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
         decoFallenTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
         decoFallenTree.setMinSize(4);
         decoFallenTree.setMaxSize(9);
-        this.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
+        trees.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
 
         DecoShrub decoShrub = new DecoShrub();
         decoShrub.setMaxY(110);
         decoShrub.setLoopMultiplier(1f);
-        this.addDeco(decoShrub);
+        trees.addDeco(decoShrub);
 
         DecoDeadBush decoDeadBush = new DecoDeadBush();
         decoDeadBush.setMaxY(128);
         decoDeadBush.setChance(16);
         decoDeadBush.setStrengthFactor(1f);
-        this.addDeco(decoDeadBush);
+        trees.addDeco(decoDeadBush);
 
         DecoMushrooms decoMushrooms = new DecoMushrooms();
         decoMushrooms.setMaxY(90);
@@ -108,6 +114,8 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeBase {
         this.addDeco(decoMushrooms);
     }
 
+    public boolean overridesHardcoded() {return false;}
+    
     public static class TerrainVanillaRoofedForestM extends TerrainBase {
 
         public TerrainVanillaRoofedForestM() {

@@ -63,9 +63,15 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeBase {
     
     @Override
     public void initDecos() {
+
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionRoofedForestTrees(getConfig());
+    	this.treeGenerator = trees;
         this.addDecoCollection(new DecoCollectionRoofedForest(this.getConfig()));
     }
 
+    public boolean overridesHardcoded() {return false;}
+    
     @Override
     public void overrideDecorations() {
         baseBiome().decorator.grassPerChunk = 3;

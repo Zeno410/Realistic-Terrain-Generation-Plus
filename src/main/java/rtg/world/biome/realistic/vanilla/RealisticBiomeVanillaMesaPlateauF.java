@@ -17,6 +17,7 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoTree;
 import rtg.api.world.deco.DecoWorldGen;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
 import rtg.api.world.deco.collection.DecoCollectionMesa;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGUmbrella;
@@ -72,8 +73,9 @@ public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-
-        this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionDesertRiver(this.getConfig());
+    	treeGenerator = trees;
         this.addDecoCollection(new DecoCollectionMesa(this.getConfig()));
 
         DecoTree decoTree = new DecoTree(new TreeRTGUmbrella());
@@ -83,7 +85,7 @@ public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeBase {
         decoTree.setTreeConditionFloat(4f);
         decoTree.setTreeConditionNoise(0f);
         decoTree.setMinY(74);
-        addDeco(decoTree);
+        trees.addDeco(decoTree);
     }
 
     @Override

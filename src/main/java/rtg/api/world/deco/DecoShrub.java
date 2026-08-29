@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import rtg.api.event.DecorateBiomeEventRTG;
 import rtg.api.util.BlockUtil;
 import rtg.api.util.ChunkInfo;
 import rtg.api.world.RTGWorld;
@@ -72,8 +73,7 @@ public class DecoShrub extends DecoBase {
 // TODO: [1.12] This seems overly complicated. Simplify.
     public void generate(final IRealisticBiome biome, final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage, ChunkInfo chunkInot) {
 
-        if (!hasVillage && TerrainGen.decorate(rtgWorld.world(), rand, chunkPos, Decorate.EventType.TREE)) {
-
+        if (!hasVillage) {
             // Shrub size.
             this.size = (this.size == -1) ? rand.nextInt(4) + 1 : this.size;
             if (this.minSize > 0 && this.maxSize > 0 && this.maxSize >= this.minSize) {

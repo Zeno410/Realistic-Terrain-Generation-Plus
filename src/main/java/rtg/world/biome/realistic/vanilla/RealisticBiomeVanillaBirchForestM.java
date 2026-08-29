@@ -15,10 +15,8 @@ import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
 import rtg.api.world.deco.DecoShrub;
-import rtg.api.world.deco.DecoTree;
-import rtg.api.world.deco.collection.DecoCollectionBirchForestM;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
-import rtg.api.world.gen.feature.tree.rtg.TreeRTGBetulaPapyrifera;
+import rtg.api.world.deco.collection.DecoCollectionBirchForest;
+import rtg.api.world.deco.collection.trees.DecoCollectionBirchForestMTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -64,41 +62,9 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-    	
-    	this.addDecoCollection(new DecoCollectionBirchForestM(this.getConfig()));
-
-        TreeRTG tallBirch = new TreeRTGBetulaPapyrifera();
-        tallBirch.setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH));
-        tallBirch.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.BIRCH));
-        tallBirch.setMinTrunkSize(16);
-        tallBirch.setMaxTrunkSize(23);
-        tallBirch.setMinCrownSize(4);
-        tallBirch.setMaxCrownSize(11);
-        //this.addTree(tallBirch);
-
-        DecoTree superTallBirch = new DecoTree(tallBirch);
-        superTallBirch.setStrengthFactorForLoops(16f);
-        superTallBirch.setStrengthNoiseFactorForLoops(true);
-        superTallBirch.getDistribution().setNoiseDivisor(80f);
-        superTallBirch.getDistribution().setNoiseFactor(60f);
-        superTallBirch.getDistribution().setNoiseAddend(-15f);
-        superTallBirch.setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE);
-        superTallBirch.setMaxY(100);
-        //this.addDeco(superTallBirch);
-
-        DecoFallenTree decoFallenTree = new DecoFallenTree();
-        decoFallenTree.setLogCondition(RANDOM_CHANCE);
-        decoFallenTree.setLogConditionChance(20);
-        decoFallenTree.setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH));
-        decoFallenTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.BIRCH));
-        decoFallenTree.setMinSize(3);
-        decoFallenTree.setMaxSize(6);
-        this.addDeco(decoFallenTree, this.getConfig().ALLOW_LOGS.get());
-
-        DecoShrub decoShrub = new DecoShrub();
-        decoShrub.setMaxY(110);
-        decoShrub.setLoopMultiplier(2f);
-        this.addDeco(decoShrub);
+    	this.useTreeManager();
+    	this.addDecoCollection(new DecoCollectionBirchForest(this.getConfig()));
+    	treeGenerator = new DecoCollectionBirchForestMTrees(this.getConfig());
     }
 
 //    @Override

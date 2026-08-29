@@ -12,6 +12,7 @@ import rtg.api.util.BlockUtil;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.*;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGPinusPonderosa;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGSalixMyrtilloides;
@@ -56,6 +57,10 @@ public class RealisticBiomeVanillaSwampland extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
+
+    	//this.useTreeManager();
+    	//DecoCollectionBase trees = new DecoCollectionBase(getConfig());
+    	//this.treeGenerator = trees;
 
         TreeRTG myrtilloidesTree = new TreeRTGSalixMyrtilloides();
         myrtilloidesTree.setLogBlock(Blocks.LOG.getDefaultState());
@@ -107,6 +112,7 @@ public class RealisticBiomeVanillaSwampland extends RealisticBiomeBase {
         decoPumpkin.setMaxY(90);
         decoPumpkin.setRandomFloat(50f);
         this.addDeco(decoPumpkin);
+        
     }
 
     public static class TerrainVanillaSwampland extends TerrainBase {

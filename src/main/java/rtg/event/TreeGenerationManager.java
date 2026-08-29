@@ -2,12 +2,14 @@ package rtg.event;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.ArrayList;
 
 import biomesoplenty.api.biome.BOPBiomes;
 import biomesoplenty.api.biome.IExtendedBiome;
 import biomesoplenty.api.generation.GeneratorStage;
 import biomesoplenty.api.generation.IGenerator;
 import net.minecraft.world.biome.Biome;
+import rtg.api.RTGAPI;
 //import rtg.api.util.Logger;
 
 public class TreeGenerationManager {
@@ -21,16 +23,24 @@ public class TreeGenerationManager {
 	 * and then gets flagged to activate the suppression while in RTG worlds.
 	 */
 	
+	private ArrayList<IGenerator> suppressedBOPGenerators = new ArrayList<>();
+	
 	public TreeGenerationManager() {
 	}
 
 	public boolean managingBiome(Biome considered) {
+		if (RTGAPI.getRTGBiome(considered).getConfig().DISABLE_RTG_DECORATIONS.get()) return false;
 		if (takenOverBiomes.contains(considered)) return true;
 		if (suppressingBOP&&suppressedBOPBiomes.contains(considered)) return true;
 		return false;
 	}
 	
+	public void manageBiome(Biome toManage) {
+		takenOverBiomes.add(toManage);
+	}
+	
 	public void suppressBOPBiome(Biome toSuppress) {
+		takenOverBiomes.add(toSuppress);
 		suppressedBOPBiomes.add(toSuppress);
 		resuppressBOPBiome(toSuppress);
 	}

@@ -21,53 +21,13 @@ import static rtg.api.world.deco.DecoFallenTree.LogCondition.RANDOM_CHANCE;
  * @author WhichOnesPink
  */
 public class DecoCollectionBirchForest extends DecoCollectionBase {
-
-    protected Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 4.5f); 
-    private float tallMin = -1f;
-    private float tallMax = 3f;
     
     public DecoCollectionBirchForest(BiomeConfig config) {
 
         super(config);
 
-        this
-            .addDeco(tallVariableTrees(tallMin, tallMax))
-            //.addDeco(randomTrees())
-            .addDeco(logs(), config.ALLOW_LOGS.get()) // Add some fallen birch trees.
-            .addDeco(shrubsOak()) // Oak shrubs to fill in the blanks.
-            .addDeco(flowers()) // Only 1-block tall flowers so we can see the trees better.
+        this.addDeco(flowers()) // Only 1-block tall flowers so we can see the trees better.
         ;
-    }
-
-    protected DecoTree tallVariableTrees(float noiseMin, float noiseMax) {
-    	
-        DecoTree result =  new DecoVariableMaterialTree(TreeMaterials.inBirchForest)
-                .setStrengthFactorForLoops(6f)
-                .setTreeCondition(DecoTree.TreeCondition.ALWAYS_GENERATE)
-                .setTreeConditionNoise(noiseMin)
-                .setTreeConditionNoise2(noiseMax)
-                .setTreeConditionChance(1)
-                .setStrengthNoiseFactorForLoops(true);
-        
-        result.setDistribution(treeFrequencyDistribution);
-        
-        return result;
-    }
-
-    private DecoFallenTree logs() {
-        return new DecoFallenTree()
-            .setLogCondition(RANDOM_CHANCE)
-            .setLogConditionChance(8)
-            .setLogBlock(BlockUtil.getStateLog(EnumType.BIRCH))
-            .setLeavesBlock(BlockUtil.getStateLeaf(EnumType.BIRCH))
-            .setMinSize(3)
-            .setMaxSize(6);
-    }
-
-    private DecoShrub shrubsOak() {
-        return new DecoShrub()
-            .setMaxY(120)
-            .setLoopMultiplier(1.5f);
     }
 
     private DecoFlowersRTG flowers() {

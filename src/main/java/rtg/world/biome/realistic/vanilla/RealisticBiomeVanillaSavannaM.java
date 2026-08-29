@@ -12,8 +12,10 @@ import rtg.api.util.BlockUtil;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
+import rtg.api.world.deco.collection.DecoCollectionBase;
 import rtg.api.world.deco.collection.DecoCollectionDesertRiver;
 import rtg.api.world.deco.collection.DecoCollectionSavanna;
+import rtg.api.world.deco.collection.trees.DecoCollectionSavannaTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -62,6 +64,11 @@ public class RealisticBiomeVanillaSavannaM extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	DecoCollectionBase trees = new DecoCollectionSavannaTrees(getConfig());
+    	this.treeGenerator = trees;
+
+        //this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
         this.addDecoCollection(new DecoCollectionDesertRiver(this.getConfig()));
         this.addDecoCollection(new DecoCollectionSavanna(this.getConfig()));
     }

@@ -14,6 +14,7 @@ import rtg.api.util.BlockUtil;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.deco.collection.DecoCollectionTaiga;
+import rtg.api.world.deco.collection.trees.DecoCollectionTaigaTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.api.world.biome.RealisticBiomeBase;
@@ -51,8 +52,11 @@ public class RealisticBiomeVanillaTaigaHills extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-
-        this.addDecoCollection(new DecoCollectionTaiga(this.getConfig(), 10f));
+    	this.useTreeManager();
+		DecoCollectionTaiga decos = new DecoCollectionTaiga(this.getConfig(), 10f);
+	    this.addDecoCollection(decos);
+	    DecoCollectionTaigaTrees decoTrees = new DecoCollectionTaigaTrees(this.getConfig()); 
+	    this.treeGenerator = decoTrees;
     }
 
     public boolean allowVanillaTrees() {return false;}

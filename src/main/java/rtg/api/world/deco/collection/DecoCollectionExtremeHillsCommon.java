@@ -19,53 +19,7 @@ public class DecoCollectionExtremeHillsCommon extends DecoCollectionBase {
     public DecoCollectionExtremeHillsCommon(BiomeConfig config) {
 
         super(config);
-
-        this.addDeco(logDecos(), config.ALLOW_LOGS.get()) // Logs.
-            .addDeco(shrubDecos()) // Shrubs.
-            .addDeco(boulders()); // Boulders.
-            //.addDeco(flowers()) // Flowers.
-            //.addDeco(mushrooms()) // Mushrooms.
-            //.addDeco(pumpkins()); // Pumpkins.
-    }
-
-    private DecoFallenTree logs(IBlockState log, IBlockState leaves) {
-
-        DecoFallenTree decoFallenTree = new DecoFallenTree();
-        decoFallenTree.getDistribution().setNoiseDivisor(100f);
-        decoFallenTree.getDistribution().setNoiseFactor(6f);
-        decoFallenTree.getDistribution().setNoiseAddend(0.8f);
-        decoFallenTree.setLogConditionChance(16);
-        decoFallenTree.setLogBlock(log);
-        decoFallenTree.setLeavesBlock(leaves);
-        decoFallenTree.setMinSize(4);
-        decoFallenTree.setMaxSize(7);
-        decoFallenTree.setMaxY(75);
-
-        return decoFallenTree;
-    }
-
-    private DecoHelper5050 logDecos() {
-        return new DecoHelper5050(
-            logs(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState()),
-            logs(BlockUtil.getStateLog(EnumType.SPRUCE), BlockUtil.getStateLeaf(EnumType.SPRUCE))
-        );
-    }
-
-    private DecoShrub shrubs(IBlockState log, IBlockState leaves) {
-        DecoShrub decoShrub = new DecoShrub();
-        decoShrub.setLogBlock(log);
-        decoShrub.setLeavesBlock(leaves);
-        decoShrub.setLoopMultiplier(4f);
-        decoShrub.setChance(2);
-        decoShrub.setMaxY(110);
-        return decoShrub;
-    }
-
-    private DecoHelper5050 shrubDecos() {
-        return new DecoHelper5050(
-            shrubs(Blocks.LOG.getDefaultState(), Blocks.LEAVES.getDefaultState()),
-            shrubs(BlockUtil.getStateLog(EnumType.SPRUCE), BlockUtil.getStateLeaf(EnumType.SPRUCE))
-        );
+        this.addDeco(boulders()); // Boulders.
     }
 
     private DecoBoulder boulders() {

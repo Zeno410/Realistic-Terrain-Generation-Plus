@@ -10,7 +10,7 @@ import rtg.api.config.BiomeConfig;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.collection.DecoCollectionBirchForest;
-import rtg.api.world.deco.collection.DecoCollectionBirchForestM;
+import rtg.api.world.deco.collection.trees.DecoCollectionBirchForestTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -51,7 +51,9 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-    	this.addDecoCollection(new DecoCollectionBirchForestM(this.getConfig()));
+    	this.useTreeManager();
+        this.addDecoCollection(new DecoCollectionBirchForest(this.getConfig()));
+        this.treeGenerator = new DecoCollectionBirchForestTrees(getConfig());
     }
 
 //    @Override

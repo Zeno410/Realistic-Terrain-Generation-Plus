@@ -2,6 +2,7 @@ package rtg.api.world.biome;
 
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraftforge.event.terraingen.DeferredBiomeDecorator;
 import rtg.RTGConfig;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
@@ -74,7 +76,9 @@ public interface IRealisticBiome {
 
     Collection<DecoBase> getDecos();
     
-    AbstractDeco getTreeDecos();
+    public AbstractDeco getTreeDecos();
+    
+    public BiomeDecorator getDecorator();
 
     /**
      * Adds a deco object to the list of biome decos.
@@ -128,6 +132,10 @@ public interface IRealisticBiome {
 
     }
 
+    default void useTreeManager() {
+    	EventHandlerCommon.treeGenerationManager.manageBiome(baseBiome());
+    }
+    
     default void rDecorate(final RTGWorld rtgWorld, final Random rand, final ChunkPos chunkPos, final float river, final boolean hasVillage,
     		IRealisticBiome treeBiome) {
     	ChunkInfo info = new ChunkInfo(chunkPos,rtgWorld);
@@ -140,28 +148,33 @@ public interface IRealisticBiome {
 				}
     		}
     	}
-        if (overridesHardcoded()) {
-            this.baseBiome().decorator.decorate(rtgWorld.world(), rand, baseBiome(), new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
-        } else {
-        	BlockPos basePos =  new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16);
-        	if (this.allowVanillaTrees()) {
-                this.baseBiome().decorate(rtgWorld.world(), rand, basePos);
-        	} else {
-        		// have to shut off tree decorations but not the rest
-        		//TreelessDecorator decorator = new TreelessDecorator();
-        		
-        		BiomeDecorator  biomeDecorator = this.baseBiome().decorator;
-        		biomeDecorator.extraTreeChance = 0f; 
-        		biomeDecorator.treesPerChunk = 0;
-        		biomeDecorator.chunkPos = basePos;
+        BlockPos basePos =  new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16);
+    	if (this.allowVanillaTrees()) {
+            this.baseBiome().decorate(rtgWorld.world(), rand, basePos);
+    	} else {
+    		// have to shut off tree decorations but not the rest
+    		
+    		BiomeDecorator  biomeDecorator = this.baseBiome().decorator;
+    		/*biomeDecorator.extraTreeChance = 0f; 
+    		biomeDecorator.treesPerChunk = 0;
+    		biomeDecorator.bigMushroomsPerChunk =0;*/
+    		// Biomes o Plenty has a different biome system shut off a different way; managed in TreeGenerator
+    		
+    		// insert RTG Trees if appropriate
+    		if (EventHandlerCommon.treeGenerationManager.managingBiome(this.baseBiome())) {
+    			treeBiome.getTreeDecos().generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
+    		}
+    		
+    		biomeDecorator.chunkPos = basePos;
+    		if (overridesHardcoded()) {
+    			// some biomes do decorations we don't want and can't stop in the generate() call; vanilla Flower and Roofed Forests
+                baseBiome().decorator.decorate(rtgWorld.world(), rand, baseBiome(),new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
+                //new LimitedBiomeDecorator(baseBiome().decorator).decorate(rtgWorld.world(), rand, baseBiome(),new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
+    		} else {
                 this.baseBiome().decorate(rtgWorld.world(), rand, new BlockPos(chunkPos.x * 16, 0, chunkPos.z * 16));
-        		//decorator.decorate(rtgWorld.world(), rand, this.baseBiome(), basePos);
-        		// insert RTG Trees if appropriate
-        		if (EventHandlerCommon.treeGenerationManager.managingBiome(this.baseBiome())) {
-        			treeBiome.getTreeDecos().generate(this, rtgWorld, rand, chunkPos, river, hasVillage, info);
-        		}
-        	}
-        }
+    		}
+    		
+    	}
     }
 
     /**

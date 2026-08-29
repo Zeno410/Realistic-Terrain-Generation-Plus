@@ -11,6 +11,8 @@ import net.minecraft.world.gen.ChunkProviderServer;
 
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import rtg.RTGConfig;
 import rtg.api.RTGAPI;
@@ -312,5 +314,11 @@ public final class RTGWorld {
 
         // Cached instances of RTGWorld need to be removed because they contain a strong reference to the World object, which should be GC'd.
         INSTANCE_CACHE.remove(world);
+    }
+    
+    // for cleanup on world closes
+    @EventHandler
+    public void serverStopped(FMLServerStoppedEvent event) {
+    	
     }
 }

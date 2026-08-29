@@ -72,7 +72,7 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-    	
+    	this.useTreeManager();
     	DecoVariableSpruce scatteredSpruce = new DecoVariableSpruce();
     	scatteredSpruce.changeAverageHeightSqrt(-2.0f);
     	scatteredSpruce.changeHeightNoiseVariability(-.75f);
@@ -86,7 +86,7 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
     			0.02f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
     	scatteredSpruce.setStrengthNoiseFactorForLoops(true);
     	scatteredSpruce.setStrengthNoiseFactorXForLoops(false);
-    	this.addDeco(scatteredSpruce);
+    	treeGenerator = scatteredSpruce;
     	
     }    
     

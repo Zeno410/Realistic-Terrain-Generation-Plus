@@ -49,7 +49,8 @@ public class RealisticBiomeVanillaExtremeHillsPlusM extends RealisticBiomeBase {
 
     @Override
     public void initDecos() {
-        this.addDecoCollection(new DecoCollectionExtremeHillsPlusM(this.getConfig()));
+    	this.useTreeManager();
+        treeGenerator = new DecoCollectionExtremeHillsPlusM(this.getConfig());
         this.addDecoCollection(new DecoCollectionExtremeHillsCommon(this.getConfig()));
     }
 

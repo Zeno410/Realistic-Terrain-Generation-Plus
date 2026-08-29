@@ -1,17 +1,21 @@
 package rtg.event;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.WeakHashMap;
 
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 
@@ -25,11 +29,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 
 import rtg.RTGConfig;
+import rtg.RTGConfig.Setting;
+import rtg.api.RTGAPI;
+import rtg.api.event.DecorateBiomeEventRTG;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.ChunkInfo;
 import rtg.api.util.ChunkTracker;
 import rtg.api.util.Direction;
 import rtg.api.util.Logger;
 import rtg.api.util.UtilityClass;
+import rtg.api.world.RTGWorld;
+import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.deco.DecoVariableTree;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGCeibaPentandra;
@@ -37,6 +47,7 @@ import rtg.api.world.gen.feature.tree.rtg.TreeRTGRhizophoraMucronata;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTGSalixMyrtilloides;
 import rtg.api.world.gen.feature.tree.rtg.RTGSaplingManager;
 import rtg.api.world.gen.feature.tree.rtg.TreeDensityLimiter;
+import rtg.world.WorldTypeRTG;
 import rtg.world.biome.BiomeProviderRTG;
 
 
@@ -76,15 +87,78 @@ public final class EventHandlerCommon
             }
         }
     }
+    
+    public static boolean allowNextGeneration;
+    
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void takeoverTreeGeneration(DecorateBiomeEvent.Decorate event)
     {
+    	if (!RTGConfig.treesInNonRTGWorlds()) return;// not doing this
         if (event.getType() == Decorate.EventType.TREE){
-        	// we have work to do
-        	//event.setResult(Event.Result.DENY);
+        	if (event instanceof DecorateBiomeEventRTG.DecorateRTG) return;// don't intervene when RTG is calling
+        	
+            if (event.getWorld().isRemote) return;// just in case;
+            
+            WorldChunkPos chunkID = new WorldChunkPos(event.getWorld(),event.getChunkPos());
+            if (chunkIDs.contains(chunkID)) {
+            	event.setResult(Event.Result.DENY);
+            	return;// we're already working on this chunk;
+            }
+            //Logger.info(event.getWorld().toString() + " " +event.getChunkPos().toString() + chunkID.hashCode());
+        	// get biome
+            BlockPos center = event.getChunkPos().getBlock(8, 64, 8);
+            Biome biome = event.getWorld().getBiomeProvider().getBiome(center);
+            if (!treeGenerationManager.managingBiome(biome)) return; // we're not doing this biome.
+        	IRealisticBiome rtgBiome = RTGAPI.getRTGBiome(biome);
+        	if (rtgBiome.getConfig().DISABLE_RTG_DECORATIONS.get()) return;// user has disabled this biome
+        	chunkIDs.add(chunkID);
+
+            if (event.getWorld().getWorldType().equals(WorldTypeRTG.getInstance())) {
+                //the chunk generator calls RTG trees
+            } else {
+            	ChunkInfo chunkInfo = new ChunkInfo(event.getChunkPos(), RTGWorld.getInstance(event.getWorld()));
+        	    rtgBiome.getTreeDecos().generate(rtgBiome, RTGWorld.getInstance(event.getWorld()), event.getRand(), event.getChunkPos(), 0, false, chunkInfo);
+            }
+        	chunkIDs.remove(chunkID);
+        	//Logger.info("done");
+        	event.setResult(Event.Result.DENY);
+        }
+        if (event.getType() == Decorate.EventType.BIG_SHROOM) {
+        	if (allowNextGeneration) {
+        		allowNextGeneration = false;
+        		return;
+        	}
+        	// Roofed Forests make their trees in the big mushroom event, so we have to block that.
+            BlockPos center = event.getChunkPos().getBlock(8, 64, 8);
+            Biome biome = event.getWorld().getBiomeProvider().getBiome(center);
+            if (biome == Biomes.ROOFED_FOREST||biome == Biomes.MUTATED_ROOFED_FOREST) {
+                if (treeGenerationManager.managingBiome(biome)) {
+                	event.setResult(Event.Result.DENY);
+                }
+            }
         }
     }
-    private static ChunkTracker lightChecked = new ChunkTracker(1500);
+    
+    private static HashSet<WorldChunkPos> chunkIDs =new HashSet<>();
+    
+    private static class WorldChunkPos {
+    	final World world;
+    	final ChunkPos chunkPos;
+    	WorldChunkPos(World _world, ChunkPos _chunkPos) {
+    		world = _world;
+    		chunkPos = _chunkPos;
+    	}
+    	
+    	public int hashCode() {return world.hashCode() + chunkPos.hashCode();}
+    	
+    	public boolean equals(Object candidate) {
+    		if (!(candidate instanceof WorldChunkPos)) return false;
+    		WorldChunkPos compared = (WorldChunkPos)candidate;
+    		return (world.equals(compared.world)&&chunkPos.equals(compared.chunkPos));
+    	}
+    }
+    
+    //private static ChunkTracker lightChecked = new ChunkTracker(1500);
     
     private static void fixLighting(World world, ChunkPos chunkPos) {
     	

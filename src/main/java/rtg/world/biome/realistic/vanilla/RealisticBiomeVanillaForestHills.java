@@ -13,6 +13,7 @@ import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.collection.DecoCollectionForest;
+import rtg.api.world.deco.collection.trees.DecoCollectionForestTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -58,6 +59,8 @@ public class RealisticBiomeVanillaForestHills extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
+    	this.useTreeManager();
+    	this.treeGenerator = new DecoCollectionForestTrees(this.getConfig());
         this.addDecoCollection(new DecoCollectionForest(this.getConfig()));
     }
 

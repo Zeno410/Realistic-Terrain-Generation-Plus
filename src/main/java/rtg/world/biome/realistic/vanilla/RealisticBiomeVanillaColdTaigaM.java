@@ -10,6 +10,7 @@ import rtg.api.config.BiomeConfig;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.collection.DecoCollectionTaiga;
+import rtg.api.world.deco.collection.trees.DecoCollectionTaigaTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
 
@@ -54,8 +55,13 @@ public class RealisticBiomeVanillaColdTaigaM extends RealisticBiomeBase {
     @Override
     public void initDecos() {
 
-    	// unlike the other cold taigas, *not* smaller than ordinary Taiga, to be different
-        this.addDecoCollection(new DecoCollectionTaiga(this.getConfig(), 8f));
+    	// unlike the other cold taigas, *not* smaller than ordinary Taiga, to be different    	
+    	this.useTreeManager();
+    	DecoCollectionTaiga decos = new DecoCollectionTaiga(this.getConfig(), 8f);
+        this.addDecoCollection(decos);
+    	// smaller for cold
+        DecoCollectionTaigaTrees decoTrees = new DecoCollectionTaigaTrees(this.getConfig()); 
+        this.treeGenerator = decoTrees;
     }
 
     public static class TerrainVanillaColdTaigaM extends TerrainBase {

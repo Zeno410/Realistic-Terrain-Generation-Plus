@@ -14,10 +14,8 @@ import net.minecraft.world.gen.layer.GenLayerRiverMix;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.Level;
-import rtg.RTG;
 import rtg.api.util.Logger;
 import rtg.api.util.UtilityClass;
-import rtg.api.util.storage.SparseList;
 import rtg.api.world.biome.IRealisticBiome;
 import rtg.world.WorldTypeRTG;
 
@@ -126,7 +124,7 @@ public final class RTGAPI {
         	ResourceLocation location = registries.next();
         	Biome biome = Biome.REGISTRY.getObject(location);
         	int ID  = Biome.REGISTRY.getIDForObject(biome);
-        	//Logger.error(biome.biomeName + " "+ ID);
+        	Logger.error(biome.biomeName + " "+ ID);
         	BIOME_IDS[ID] = getRTGBiome(biome);
         	BIOME_ID_MAPPING.put(biome, ID);
         }

@@ -4,6 +4,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraftforge.common.BiomeDictionary;
 import rtg.RTG;
@@ -23,6 +24,7 @@ import rtg.api.world.surface.SurfaceRiverOasis;
 import rtg.api.world.terrain.TerrainBase;
 import rtg.compat.ModCompat.Mods;
 import rtg.event.EventHandlerCommon;
+import rtg.world.biome.TreelessDecorator;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -43,6 +45,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
     private final TerrainBase terrain;
     private final SurfaceBase surface;
     private final SurfaceBase surfaceRiver;
+    private TreelessDecorator substituteDecorator;
     
     protected AbstractDeco treeGenerator; 
     /* This may become a key part of the system for averting runaway generation. Trees are often too large for vanilla's
@@ -91,12 +94,20 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
         this.decos = new ArrayList<>();
         
         treeGenerator = new DecoCollectionBase(this.config);
+        substituteDecorator = null;
 
         initDecos();
 
         overrideDecorations();
     }
 
+    public TreelessDecorator getDecorator() {
+    	if (substituteDecorator == null) {
+    		substituteDecorator = new TreelessDecorator(baseBiome());
+    	}
+        return substituteDecorator;
+    }
+    
     @Override
     public BiomeConfig getConfig() {
         return this.config;
