@@ -15,17 +15,28 @@ import net.minecraft.world.gen.feature.WorldGenPumpkin;
 
 public class TreelessDecorator extends BiomeDecorator {
 	
+	private boolean noBigMushrooms = false;
+	private BiomeDecorator decorator;
+	
+	public TreelessDecorator(Biome overriding) {
+		decorator = overriding.decorator;
+	}
+	
 	@Override
 	protected void genDecorations(Biome biomeIn, World worldIn, Random random) {
 		genDecorationsWithoutTrees( biomeIn,  worldIn, this.chunkPos, random);
 	}
+	
+	public void noBigMushrooms() {
+		noBigMushrooms = true;
+	}
 
     public void genDecorationsWithoutTrees(Biome biomeIn, World worldIn, BlockPos chunkPos, Random random) {
 
-		BiomeDecorator decorator = biomeIn.decorator;
         net.minecraft.util.math.ChunkPos forgeChunkPos = new net.minecraft.util.math.ChunkPos(chunkPos); // actual ChunkPos instead of BlockPos, used for events
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.terraingen.DecorateBiomeEvent.Pre(worldIn, random, forgeChunkPos));
         boolean remote = worldIn.isRemote;
+        if (remote) return;
         super.generateOres(worldIn, random);
 
         if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SAND))
@@ -53,7 +64,7 @@ public class TreelessDecorator extends BiomeDecorator {
         }
 
 
-        if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.BIG_SHROOM))
+        if(!noBigMushrooms&&net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.BIG_SHROOM))
         for (int k2 = 0; k2 < decorator.bigMushroomsPerChunk; ++k2)
         {
             int l6 = random.nextInt(16) + 8;
