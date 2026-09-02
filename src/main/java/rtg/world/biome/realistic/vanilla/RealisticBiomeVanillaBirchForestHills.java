@@ -16,6 +16,7 @@ import rtg.api.world.deco.collection.DecoCollectionBirchForest;
 import rtg.api.world.deco.collection.trees.DecoCollectionBirchForestTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.world.biome.realistic.vanilla.RealisticBiomeVanillaForestHills.SurfaceVanillaForestHills;
 
 import java.util.Random;
 
@@ -50,7 +51,7 @@ public class RealisticBiomeVanillaBirchForestHills extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaBirchForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.10f);
+        return new SurfaceVanillaForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.45f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.35f);
     }
 
     @Override

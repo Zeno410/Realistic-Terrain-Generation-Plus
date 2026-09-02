@@ -1,6 +1,7 @@
 package rtg.world.biome.realistic.vanilla;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
@@ -9,6 +10,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
+import rtg.api.util.noise.ISimplexData2D;
+import rtg.api.util.noise.SimplexData2D;
 import rtg.api.util.noise.SimplexNoise;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
@@ -52,7 +55,7 @@ public class RealisticBiomeVanillaForest extends RealisticBiomeBase {
             return new SurfaceVanillaPlains(getConfig(), biome.topBlock, biome.fillerBlock);
     	}
 
-        return new SurfaceVanillaForest(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.6f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.4f);
+        return new SurfaceVanillaForest(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.45f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.35f);
     }
     @Override
     public void initDecos() {
@@ -100,7 +103,11 @@ public class RealisticBiomeVanillaForest extends RealisticBiomeBase {
         private float mixHeight;
         private IBlockState mix2Block;
         private float mix2Height;
+        private IBlockState borderBlock =  BlockUtil.getStateDirt(DirtType.COARSE_DIRT);
+        private float borderWidth = .00f;// Does not seem to be helping
 
+        private float surfaceJitterDistance = 3f;
+        
         public SurfaceVanillaForest(BiomeConfig config, IBlockState top, IBlockState fill, float minCliff, float stoneCliff,
                                     float stoneHeight, float stoneStrength, float clayCliff, IBlockState mix, float mixHeight, IBlockState mix2, float mix2Height) {
 
@@ -122,7 +129,7 @@ public class RealisticBiomeVanillaForest extends RealisticBiomeBase {
         public void paintTerrain(ChunkPrimer primer, int i, int j, int x, int z, int depth, RTGWorld rtgWorld, float[] noise, float river, Biome[] base) {
 
             Random rand = rtgWorld.rand();
-            SimplexNoise simplex = rtgWorld.simplexInstance(0);
+            SimplexNoise simplex = rtgWorld.simplex0();
             float c = TerrainBase.calcCliff(x, z, noise, river);
             int cliff = 0;
             boolean m = false;
@@ -168,14 +175,24 @@ public class RealisticBiomeVanillaForest extends RealisticBiomeBase {
                             }
                         }
                         else {
-                            float mixNoise = simplex.noise2f(i / 12f, j / 12f);
+                            ISimplexData2D jitterData = SimplexData2D.newDisk();
+                            rtgWorld.simplex5().multiEval2D(i / 3.5d, j / 3.5d, jitterData);
+                            float adjustedI = i +(float)jitterData.getDeltaX()*this.surfaceJitterDistance;
+                            float adjustedJ = j +(float)jitterData.getDeltaY()*this.surfaceJitterDistance;
+                            float mixNoise = simplex.noise2f(adjustedI/ 12f, adjustedJ / 12f);
 
                             if (mixNoise < mix2Height) {
                                 primer.setBlockState(x, k, z, mix2Block);
                                 m = true;
+                            } else if (mixNoise < mix2Height + borderWidth) {
+                                primer.setBlockState(x, k, z, borderBlock);
+                                m = true;
                             }
                             else if (mixNoise > mixHeight) {
                                 primer.setBlockState(x, k, z, mixBlock);
+                                m = true;
+                            } else if (mixNoise > mixHeight - borderWidth) {
+                                primer.setBlockState(x, k, z, borderBlock);
                                 m = true;
                             }
                             else {

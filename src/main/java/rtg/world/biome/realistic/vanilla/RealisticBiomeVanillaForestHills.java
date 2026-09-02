@@ -53,7 +53,7 @@ public class RealisticBiomeVanillaForestHills extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.6f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.4f);
+        return new SurfaceVanillaForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.45f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.35f);
     }
 
     @Override

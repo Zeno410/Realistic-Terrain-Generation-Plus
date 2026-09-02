@@ -1,18 +1,21 @@
 package rtg.world.biome.realistic.vanilla;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.BlockUtil;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.collection.DecoCollectionBirchForest;
 import rtg.api.world.deco.collection.trees.DecoCollectionBirchForestTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.world.biome.realistic.vanilla.RealisticBiomeVanillaForestHills.SurfaceVanillaForestHills;
 
 import java.util.Random;
 
@@ -46,7 +49,7 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaBirchForestHillsM(getConfig(), biome.topBlock, biome.fillerBlock);
+        return new SurfaceVanillaForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.45f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.35f);
     }
 
     @Override

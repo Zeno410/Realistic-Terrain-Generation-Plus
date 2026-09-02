@@ -2,6 +2,7 @@ package rtg.world.biome.realistic.vanilla;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
@@ -19,6 +20,7 @@ import rtg.api.world.deco.collection.DecoCollectionBirchForest;
 import rtg.api.world.deco.collection.trees.DecoCollectionBirchForestMTrees;
 import rtg.api.world.surface.SurfaceBase;
 import rtg.api.world.terrain.TerrainBase;
+import rtg.world.biome.realistic.vanilla.RealisticBiomeVanillaForestHills.SurfaceVanillaForestHills;
 
 import java.util.Random;
 
@@ -57,7 +59,7 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeBase {
     @Override
     public SurfaceBase initSurface() {
 
-        return new SurfaceVanillaBirchForestM(getConfig(), biome.topBlock, biome.fillerBlock, 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(BlockDirt.DirtType.COARSE_DIRT), 0.15f);
+        return new SurfaceVanillaForestHills(getConfig(), Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 0f, 1.5f, 60f, 65f, 1.5f, BlockUtil.getStateDirt(DirtType.PODZOL), 0.45f, BlockUtil.getStateDirt(DirtType.PODZOL), -0.35f);
     }
 
     @Override
