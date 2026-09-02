@@ -75,6 +75,7 @@ public class RealisticBiomeBOPMeadow extends RealisticBiomeBase {
 
     @Override
     public void initConfig() {
+        this.getConfig().ALLOW_VILLAGES.set(true);
     }
 
     @Override
