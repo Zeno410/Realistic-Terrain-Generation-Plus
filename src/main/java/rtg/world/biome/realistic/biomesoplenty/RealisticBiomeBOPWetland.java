@@ -28,7 +28,7 @@ public class RealisticBiomeBOPWetland extends RealisticBiomeBase {
 
     @Override
     public Biome preferredBeach() {
-    	return Biomes.STONE_BEACH;
+    	return this.baseBiome();
     }
 
     @Override

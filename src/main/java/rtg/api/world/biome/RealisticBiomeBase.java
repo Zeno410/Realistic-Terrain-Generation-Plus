@@ -27,6 +27,9 @@ import rtg.event.EventHandlerCommon;
 import rtg.world.biome.TreelessDecorator;
 
 import javax.annotation.Nonnull;
+
+import biomesoplenty.api.biome.BOPBiomes;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +41,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
 
     private final Biome baseBiome;
     private final ResourceLocation baseBiomeResLoc;
-    private final int baseBiomeId;
+    //private final int baseBiomeId;
     private final RiverType riverType;
     private final BeachType beachType;
     private final BiomeConfig config;
@@ -80,7 +83,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
 
         this.baseBiome = baseBiome;
         this.baseBiomeResLoc = resloc;
-        this.baseBiomeId = Biome.getIdForBiome(baseBiome);
+        //this.baseBiomeId = Biome.getIdForBiome(baseBiome);
         this.riverType = riverType;
         this.beachType = beachType;
         
@@ -174,7 +177,7 @@ public abstract class RealisticBiomeBase implements IRealisticBiome {
 
     @Override
     public int baseBiomeId() {
-        return this.baseBiomeId;
+        return Biome.getIdForBiome(baseBiome);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class RealisticBiomeBOPMapleWoods extends RealisticBiomeBase {
 
     @Override
     public Biome preferredBeach() {
-    	return Biomes.STONE_BEACH;
+    	return BOPBiomes.gravel_beach.orNull();
     }
 
     @Override

@@ -32,8 +32,7 @@ public class RealisticBiomeBOPTropicalIsland extends RealisticBiomeBase {
 
     @Override
     public Biome preferredBeach() {
-
-        return BOPBiomes.white_beach.orNull();
+    	return BOPBiomes.white_beach.orNull();
     }
 
     @Override
