@@ -215,22 +215,13 @@ public abstract class TreeRTG extends AbstractTreeRTG {
         }
 
         for (int i = 0; i < trunkPos.size(); i++) {
-            if (!this.isGroundValid(world, trunkPos.get(i))) {
-                return false;
+            if (this.isGroundValid(world, trunkPos.get(i))) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
-
-    /*protected void placeLogBlock(World world, BlockPos pos, IBlockState logBlock, int generateFlag) {
-
-        if (this.isReplaceable(world, pos)) {
-            world.setBlockState(pos, logBlock, generateFlag);
-        }
-    }*/
-
-    // TODO: placeLog has been used ambiguously for both trunk and branch blocks. Fix.
     
     protected boolean placeLogBlock(World world, BlockPos pos, IBlockState alternateLogBlock, int generateFlag, SkylightTracker tracker) {
 
@@ -251,7 +242,7 @@ public abstract class TreeRTG extends AbstractTreeRTG {
     protected boolean placeLogBlock(World world, BlockPos pos, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testPlace(world, pos, branchBlock, 3);
+        	return tracker.testPlace(world, pos, branchBlock, generateFlag);
         }
         return false;
     }
@@ -259,7 +250,7 @@ public abstract class TreeRTG extends AbstractTreeRTG {
     protected boolean placeBranchBlock(World world, BlockPos pos, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testPlace(world, pos, branchBlock, 3);
+        	return tracker.testPlace(world, pos, branchBlock, generateFlag);
         }
         return false;
     }
@@ -283,7 +274,7 @@ public abstract class TreeRTG extends AbstractTreeRTG {
     protected boolean placeTrunkBlock(World world, BlockPos pos, SkylightTracker tracker) {
 
         if (this.isReplaceable(world, pos)) {
-        	return tracker.testTrunk(world, pos, logBlock, 3);
+        	return tracker.testTrunk(world, pos, logBlock, generateFlag);
         }
         return false;
     }

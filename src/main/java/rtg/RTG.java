@@ -83,6 +83,7 @@ public final class RTG {
     public void initPost(FMLPostInitializationEvent event) {
         BiomeInit.init();// initialise all biomes supported internally
         ModCompat.doBiomeCheck();
+        ModCompat.registerSaplings();
         PlateauUtil.init();
     }
 

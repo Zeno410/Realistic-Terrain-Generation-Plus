@@ -41,6 +41,13 @@ public class ModCompat {
     private ModCompat() {
     	
     }
+    
+    public static void registerSaplings() {
+    	if (Mods.biomesoplenty.isLoaded()) {
+    		RegisterBoP.saplings();
+    	}
+    }
+    	
 
     public static void doBiomeCheck() {
 

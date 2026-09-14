@@ -23,6 +23,18 @@ public class TreeMaterials {
 		this.branches = branches;
 	}
 	
+	public TreeMaterials(String name, IBlockState log, IBlockState leaves)  {
+		this(name,log,leaves,branches(log));
+	}
+	
+	public static IBlockState branches(IBlockState log) {
+		try {
+			return log.withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE);
+		} catch (Exception e) {
+		}
+		return log;
+	}
+	
 	public boolean equals(Object compared) {
 		if (!(compared instanceof TreeMaterials)) return false;
 		TreeMaterials comparedMaterials = (TreeMaterials)compared;
@@ -37,17 +49,24 @@ public class TreeMaterials {
 			BlockUtil.getStateLeaf(EnumType.JUNGLE),
 			BlockUtil.getStateLog(EnumType.JUNGLE).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
+
+	public static final TreeMaterials spruce = new TreeMaterials(
+			"Spruce",
+			Blocks.LOG.getStateFromMeta(1),
+			Blocks.LEAVES.getStateFromMeta(1),
+			Blocks.LOG.getStateFromMeta(13));
+	
 	public static class Picker {
-		public static final TreeMaterials spruce = new TreeMaterials(
-				"Spruce",
-				Blocks.LOG.getStateFromMeta(1),
-				Blocks.LEAVES.getStateFromMeta(1),
-				Blocks.LOG.getStateFromMeta(13));
 		public static final TreeMaterials oak = new TreeMaterials(
 				"Oak",
 				Blocks.LOG.getStateFromMeta(0),
 				Blocks.LEAVES.getStateFromMeta(0),
-				Blocks.LOG.getStateFromMeta(12));
+				Blocks.LOG.getStateFromMeta(12));	
+		public static final TreeMaterials spruce = new TreeMaterials(
+						"Spruce",
+						Blocks.LOG.getStateFromMeta(1),
+						Blocks.LEAVES.getStateFromMeta(1),
+						Blocks.LOG.getStateFromMeta(13));
 		public static final TreeMaterials birch = new TreeMaterials(
 				"Birch",
 				Blocks.LOG.getStateFromMeta(2),

@@ -24,29 +24,33 @@ public class BOPTreeMaterials extends TreeMaterials {
 		super(name,log,leaves,branches);
 	}
 	
+	public BOPTreeMaterials(String name, IBlockState log, IBlockState leaves)  {
+		super(name,log,leaves,branches(log));
+	}
+	
 	public static final TreeMaterials willow = new TreeMaterials(
 			"Willow",
 			BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW),
-			BlockBOPLeaves.paging.getVariantState(BOPTrees.WILLOW),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.WILLOW).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 			BlockBOPLog.paging.getVariantState(BOPWoods.WILLOW).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 		
 
 	public static final TreeMaterials yellowAutumn = new TreeMaterials(
 			"Snowy Birch",
 			Blocks.LOG.getStateFromMeta(2),
-			BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.YELLOW_AUTUMN).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 			Blocks.LOG.getStateFromMeta(14));
 	
 	public static final TreeMaterials mahogany = new TreeMaterials(
 			"Mahogany",
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY),
-			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAHOGANY),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAHOGANY).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAHOGANY).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
-	public static final TreeMaterials mystic = new TreeMaterials(
+	public static final TreeMaterials magic = new TreeMaterials(
 			"Mahogany",
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAGIC),
-			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAGIC),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.MAGIC).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 			BlockBOPLog.paging.getVariantState(BOPWoods.MAGIC).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
 	
 	public static final TreeMaterials sacredOak = new TreeMaterials(
@@ -62,6 +66,12 @@ public class BOPTreeMaterials extends TreeMaterials {
 			BlockBOPLeaves.paging.getVariantState(BOPTrees.PALM).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 			BlockBOPLog.paging.getVariantState(BOPWoods.PALM).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE)
 			//.withProperty(BlockLeaves.DECAYABLE, false)
+	);
+	
+	public static final TreeMaterials pink_cherry = new TreeMaterials(
+			"Pink Cherry",
+			BlockBOPLog.paging.getVariantState(BOPWoods.CHERRY),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.PINK_CHERRY).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false))
 	);
 	
 	public static final TreeMaterials jacaranda = new TreeMaterials(
@@ -81,7 +91,7 @@ public class BOPTreeMaterials extends TreeMaterials {
 	public static final TreeMaterials fir = new TreeMaterials(
 		"Fir",
 		BlockBOPLog.paging.getVariantState(BOPWoods.FIR),
-		BOPBlocks.leaves_1.getStateFromMeta(2),
+		BOPBlocks.leaves_1.getStateFromMeta(2).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false)),
 		BOPBlocks.log_0.getStateFromMeta(15));
 	
 	
@@ -106,8 +116,6 @@ public class BOPTreeMaterials extends TreeMaterials {
 			Blocks.LOG2.getStateFromMeta(13)
 	);
 	
-
-	
 	public static final TreeMaterials snowyForest = new TreeMaterials(
 			"Snowy Forest",
 			Blocks.LOG.getDefaultState(),
@@ -122,20 +130,13 @@ public class BOPTreeMaterials extends TreeMaterials {
 			BOPBlocks.log_3.getStateFromMeta(15)
 	);
 	
-	public static class Picker extends TreeMaterials.Picker {		
-
-		public static final TreeMaterials eucalyptus = new TreeMaterials(
-				"Eucalyptus",
-				BlockBOPLog.paging.getVariantState(BOPWoods.EUCALYPTUS),
-				BlockBOPLeaves.paging.getVariantState(BOPTrees.EUCALYPTUS),
-				BOPBlocks.log_3.getStateFromMeta(15)
-		);
-		
-
-		
-		
-	}
+	public static final TreeMaterials white_cherry = new TreeMaterials(
+			"Pink Cherry",
+			BlockBOPLog.paging.getVariantState(BOPWoods.CHERRY),
+			BlockBOPLeaves.paging.getVariantState(BOPTrees.WHITE_CHERRY).withProperty(BlockOldLeaf.CHECK_DECAY, Boolean.valueOf(false))
+	);
 	
+			
 	public static Function<Random,IBlockState> floweringOak() {
 		return new Function<Random,IBlockState>() {
 
