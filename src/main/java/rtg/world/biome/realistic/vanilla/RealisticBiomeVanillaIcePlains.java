@@ -82,8 +82,8 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeBase {
     	icePlainsTree.setAbsoluteMinimumTrunk(0);
     	scatteredSpruce.setSmallTree(icePlainsTree);
     	scatteredSpruce.setDistribution(new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 
-    			0.01f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
-    			0.02f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
+    			0.02f * this.getConfig().TREE_DENSITY_MULTIPLIER.get(), 
+    			0.01f  * this.getConfig().TREE_DENSITY_MULTIPLIER.get()));
     	scatteredSpruce.setStrengthNoiseFactorForLoops(true);
     	scatteredSpruce.setStrengthNoiseFactorXForLoops(false);
     	treeGenerator = scatteredSpruce;

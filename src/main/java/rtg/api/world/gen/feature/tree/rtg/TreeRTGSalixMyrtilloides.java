@@ -51,6 +51,7 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
             return false;
         }
 
+        if (pos.getY()<62) return false; //not in deep water
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
@@ -152,44 +153,4 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG {
         }
     }
 
-    /*@Override
-    protected boolean isGroundValid(World world, BlockPos trunkPos, boolean sandAllowed) {
-
-        int x = trunkPos.getX();
-        int y = trunkPos.getY();
-        int z = trunkPos.getZ();
-        IBlockState cb;
-        BlockPos posTemp;
-        boolean earth = false;
-        boolean water = false;
-
-        Logger.info("acceptable");
-        for (IBlockState example: validGroundBlocks) {
-            Logger.info("{}",example.toString());
-        }
-        Logger.info("end");
-        for (int c1 = -2; c1 <= 2; c1++) {
-            for (int c3 = -2; c3 <= 2; c3++) {
-                for (int c2 = -1; c2 <= 1; c2++) {
-                    posTemp = new BlockPos(x + c1, y + c2, z + c3);
-                    cb = world.getBlockState(posTemp);
-                    if (cb == Blocks.WATER.getDefaultState()) {
-                        water = true;
-                    } else {
-	                    for (IBlockState example: validGroundBlocks) {
-	                        boolean match = example.equals(cb);
-	                        if (match) earth = true;
-	                        Logger.info("{} {} {}",example.toString(), cb.toString(), match);
-	                    }
-                    }
-                }
-            }
-        }
-
-        if (!(earth && water)) {
-            return false;
-        }
-
-        return true;
-    }*/
 }

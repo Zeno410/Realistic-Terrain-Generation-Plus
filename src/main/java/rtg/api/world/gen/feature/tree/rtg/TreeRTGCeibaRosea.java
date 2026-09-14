@@ -72,7 +72,7 @@ public class TreeRTGCeibaRosea extends TreeRTG {
             return false;
         }
 
-        RTGTreeData treeData = new RTGTreeData();
+        if (pos.getY()<60) return false; // not in deep water
 
         int x = pos.getX();
         int y = pos.getY();

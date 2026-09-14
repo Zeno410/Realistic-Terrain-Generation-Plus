@@ -13,6 +13,8 @@ public class TreeBOPMediumEucalyptus extends TreeBOPBaseEucalyptus {
 		super();
         this.trunkSize = 8;
         this.crownSize = 10;
+        this.lowestVariableTrunkProportion += .1;
+        this.trunkProportionVariability = .15f;
 	}
 	
 	public float estimatedSize() {
@@ -54,7 +56,7 @@ public class TreeBOPMediumEucalyptus extends TreeBOPBaseEucalyptus {
 
     	double initialDirection = rand.nextDouble()*2.0*Math.PI;
     	for (int j = 0; j < branches; j++) {
-    		double verticalAngle = 1.2 + jigger(rand,0.15);
+    		double verticalAngle = 1.1 + jigger(rand,0.15);
     		RTG3DBranch branch = new RTG3DBranch(
     				initialDirection + jigger(rand,.2),
     				verticalAngle, 

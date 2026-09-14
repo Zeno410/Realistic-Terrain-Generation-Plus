@@ -428,17 +428,15 @@ public class TreeRTGQuercusRobur extends TreeRTG {
         boolean isSoil = state.getBlock().canSustainPlant(state, this.world(), down, net.minecraft.util.EnumFacing.UP, ((net.minecraft.block.BlockSapling) Blocks.SAPLING));
 
         if (!isSoil) {
-            //Logger.debug("Invalid tree location! Ground block is not soil.");
             return Optional.empty();
         }
         else {
-            int i = this.checkBlockLine(this.basePos, this.basePos.up(heightLimit - 1));
+            int i = this.checkBlockLine(this.basePos.up(), this.basePos.up(heightLimit - 1));
 
             if (i == -1) {
                 return Optional.of(heightLimit);
             }
-            else if (i < 6) {
-                //Logger.debug("Invalid tree location! checkBlockLine() == false");
+            else if (i < 5) {
                 return Optional.empty();
             }
             else {
@@ -455,6 +453,7 @@ public class TreeRTGQuercusRobur extends TreeRTG {
         return state.getBlock().isAir(state, world, pos)
             || state.getBlock().isLeaves(state, world, pos)
             || state.getBlock() == Blocks.SAPLING
+            || RTGSaplingManager.isSapling(state)
             || state.getBlock().isWood(world, pos);
     }
 

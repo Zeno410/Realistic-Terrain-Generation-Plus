@@ -2,9 +2,6 @@ package rtg.world.biome.realistic.biomesoplenty;
 
 import java.util.Random;
 
-import biomesoplenty.api.biome.BOPBiomes;
-import biomesoplenty.api.enums.BOPTrees;
-import biomesoplenty.common.block.BlockBOPLeaves;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockLog.EnumAxis;
@@ -17,6 +14,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import rtg.api.config.BiomeConfig;
 import rtg.api.util.BlockUtil;
 import rtg.api.util.Distribution;
+import rtg.api.world.gen.feature.tree.bop.TreeBOPMediumEucalyptus;
 import rtg.api.world.gen.feature.tree.bop.TreeBOPTropicalRainforest;
 import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
@@ -59,21 +57,33 @@ public class RealisticBiomeBOPTropicalRainforest extends RealisticBiomeBase {
     	DecoTree jungleDeco = new DecoTree(jungleTree);
     	
     	TreeRTG darkTree = new TreeRTGBetulaPopulifolia();
-    	darkTree.setLogBlock(BlockUtil.getStateLog(EnumType.JUNGLE));
-    	darkTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.JUNGLE));
-    	darkTree.setBranchBlock(BlockUtil.getStateLog(EnumType.JUNGLE).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
+    	darkTree.setLogBlock(BlockUtil.getStateLog(EnumType.DARK_OAK));
+    	darkTree.setLeavesBlock(BlockUtil.getStateLeaf(EnumType.DARK_OAK));
+    	darkTree.setBranchBlock(BlockUtil.getStateLog(EnumType.DARK_OAK).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
     	darkTree.setMinCrownSize(8);
     	darkTree.setMaxCrownSize(10);
     	darkTree.setMinTrunkSize(10);
     	darkTree.setMaxTrunkSize(14);
     	
     	DecoTree darkDeco = new DecoTree(darkTree);
+    	
+    	TreeRTG oakalyptus = new TreeBOPMediumEucalyptus();
+    	oakalyptus.setLogBlock(BlockUtil.getStateLog(EnumType.OAK));
+    	oakalyptus.setBranchBlock(BlockUtil.getStateLog(EnumType.OAK).withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE));
+
+    	oakalyptus.setMinCrownSize(6);
+    	oakalyptus.setMaxCrownSize(8);
+    	oakalyptus.setMinTrunkSize(12);
+    	oakalyptus.setMaxTrunkSize(14);
+    	
+    	DecoTree oakalyptusDeco = new DecoTree(oakalyptus);
 
     	DecoTreeSet treeCombination = new DecoTreeSet();
     	treeCombination.add(mahoganyDeco,5);
-    	treeCombination.add(jungleDeco,3);
-    	treeCombination.add(darkDeco,2);
-		Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 6.5f); 
+    	treeCombination.add(jungleDeco,6);
+    	treeCombination.add(darkDeco,4);
+    	treeCombination.add(oakalyptusDeco,3);
+		Distribution treeFrequencyDistribution = new Distribution(RTGWorld.getTreeFrequencyNoiseDivisor(), 2.5f, 7.5f); 
 		treeCombination.setDistribution(treeFrequencyDistribution);
 		
     	treeGenerator = treeCombination;

@@ -64,6 +64,7 @@ public class TreeBOPJacaranda  extends TreeRTG  {
 	    y--;// fix fencepost error
 	    BlockPos branchBase = new BlockPos(x,y,z);
 	
+	    level = 0;
 	    Vec3d up = new Vec3d(0,1,0);
 	    build(world,rand,up,branchBase,branchBase,this.crownSize -1 ,tracker);// the flourish system increases the expected size
 
@@ -72,7 +73,10 @@ public class TreeBOPJacaranda  extends TreeRTG  {
 	}
 	
 	protected void build (World world, Random rand, Vec3d direction, BlockPos start, BlockPos crownBase, float length, SkylightTracker tracker) {
-		if (level++>7) throw new RuntimeException();
+		if (level++>9) {
+			level--;
+			return;
+		}
 		Vec3d fromCrownBase = new Vec3d(start.getX()-crownBase.getX(),start.getY()-crownBase.getY(),start.getZ()-crownBase.getZ());
 		if (fromCrownBase.lengthSquared() >.01) fromCrownBase = fromCrownBase.normalize();
 		if (length <= 3) {

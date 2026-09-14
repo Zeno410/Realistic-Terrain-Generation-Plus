@@ -79,14 +79,14 @@ public abstract class TreeBOPBaseEucalyptus extends TreeRTG {
 	    	// decide whether to  split
 	    	if (3.0 + rand.nextDouble()*2.0< branch.remainingLength())  {
 	    		// split
-	    		double targetLength = branch.remainingLength() - (Math.min(6.0,branch.remainingLength()/(2.0)) + jigger(rand,.5));
+	    		double targetLength = branch.remainingLength() - (branch.remainingLength()*.35) + jigger(rand,.5);
 	    		RTG3DBranch leafcover = new RTG3DBranch(branch);
 	    		while (branch.remainingLength() > targetLength) {
 	    			if (beefy) {
 		    			if (!this.placeBranchBlock(world, branch.movedOrthogonally(), lightTracker)) return;// abort if blocked
 	    			} else {
 		    			if (!this.placeBranchBlock(world, branch.moved(), lightTracker)) return;// abort if blocked
-		    			while(leafcover.notDone()&& leafcover.remainingLength()< branch.remainingLength()) {
+		    			while(leafcover.notDone()&& leafcover.remainingLength()> branch.remainingLength()) {
 		    				this.placeLeavesBlock(world, leafcover.movedOrthogonally(), lightTracker);
 		    			}
 	    			}
