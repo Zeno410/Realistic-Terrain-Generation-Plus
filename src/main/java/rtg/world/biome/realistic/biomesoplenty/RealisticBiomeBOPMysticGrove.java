@@ -6,12 +6,15 @@ import biomesoplenty.api.block.BOPBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.config.BiomeConfig;
+import rtg.api.util.AccessFloat;
 import rtg.api.util.Distribution;
+import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.RealisticBiomeBase;
 import rtg.api.world.deco.DecoFallenTree;
@@ -48,7 +51,7 @@ public class RealisticBiomeBOPMysticGrove extends RealisticBiomeBase {
 
     @Override
     public TerrainBase initTerrain() {
-
+    	
         return new TerrainBOPMysticGrove();
     }
 
@@ -77,7 +80,7 @@ public class RealisticBiomeBOPMysticGrove extends RealisticBiomeBase {
     	DecoVariableBirch mysticDeco = new DecoVariableBirch();
     	mysticDeco.changeAverageHeightSqrt(-1);
     	mysticDeco.changeHeightNoiseVariability(-1);
-    	mysticDeco.setMaterials(BOPTreeMaterials.mystic);
+    	mysticDeco.setMaterials(BOPTreeMaterials.magic);
     	
     	TreeRTG jacarandaTree = new TreeBOPJacaranda();
     	TreeRTGResizable variableJacaranda = new TreeRTGResizable(jacarandaTree);

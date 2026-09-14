@@ -124,7 +124,6 @@ public final class RTGAPI {
         	ResourceLocation location = registries.next();
         	Biome biome = Biome.REGISTRY.getObject(location);
         	int ID  = Biome.REGISTRY.getIDForObject(biome);
-        	Logger.error(biome.biomeName + " "+ ID);
         	BIOME_IDS[ID] = getRTGBiome(biome);
         	BIOME_ID_MAPPING.put(biome, ID);
         }

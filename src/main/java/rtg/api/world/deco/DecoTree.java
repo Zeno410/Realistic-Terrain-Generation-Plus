@@ -1,9 +1,12 @@
 package rtg.api.world.deco;
 
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate;
@@ -18,6 +21,7 @@ import rtg.api.util.Logger;
 import rtg.api.world.RTGWorld;
 import rtg.api.world.biome.IRealisticBiome;
 import rtg.api.world.gen.feature.tree.rtg.TreeDensityLimiter;
+import rtg.api.world.gen.feature.tree.rtg.TreeMaterials;
 import rtg.api.world.gen.feature.tree.rtg.TreeRTG;
 
 import java.util.Random;
@@ -45,6 +49,7 @@ public class DecoTree extends AbstractDecoTree {
     protected int maxY; // Upper height restriction.
     protected IBlockState logBlock;
     protected IBlockState leavesBlock;
+    protected IBlockState branchBlock;
     protected int minSize; // Min tree height (only used with certain tree presets)
     protected int maxSize; // Max tree height (only used with certain tree presets)
     protected int minTrunkSize; // Min tree height (only used with certain tree presets)
@@ -409,9 +414,22 @@ public class DecoTree extends AbstractDecoTree {
     public DecoTree setLogBlock(IBlockState logBlock) {
 
         this.logBlock = logBlock;
+        try {
+			this.branchBlock = logBlock.withProperty(BlockLog.LOG_AXIS, EnumAxis.NONE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+        if (branchBlock == null) branchBlock = logBlock;
         return this;
     }
+    
+    public DecoTree setBranchBlock(IBlockState branchBlock) {
 
+        this.branchBlock = branchBlock;
+        return this;
+    }
+    
     public IBlockState getLeavesBlock() {
 
         return leavesBlock;
@@ -423,6 +441,13 @@ public class DecoTree extends AbstractDecoTree {
         return this;
     }
 
+    
+    public void setMaterials(TreeMaterials materials) {
+    	setLogBlock(materials.log);
+    	setBranchBlock(materials.branches);
+    	setLeavesBlock(materials.leaves);
+    	
+    }
     public int getMinSize() {
 
         return minSize;
@@ -517,10 +542,20 @@ public class DecoTree extends AbstractDecoTree {
 	public void doVariableGenerate(Random rand, ChunkInfo chunkInfo, BlockPos column, int y, TreeDensityLimiter treesRemaining) { 
 		// this is here to allow combining trees together for sharing a forest density and allowing variable tree sizes
         this.tree.setLogBlock(this.logBlock);
+        this.tree.setBranchBlock(this.branchBlock);
         this.tree.setLeavesBlock(this.leavesBlock);
         this.tree.setTrunkSize(getRangedRandom(rand, this.minTrunkSize, this.maxTrunkSize));
         this.tree.setCrownSize(getRangedRandom(rand, this.minCrownSize, this.maxCrownSize));
         this.tree.setNoLeaves(this.noLeaves);
         tree.doVariableGenerate(rand, chunkInfo, column, y, treesRemaining);
+	}
+	
+	public boolean doGenerate(World world, Random rand, BlockPos pos, int actualHeight) {
+        this.tree.setLogBlock(this.logBlock);
+        this.tree.setBranchBlock(this.branchBlock);
+        this.tree.setLeavesBlock(this.leavesBlock);
+        this.tree.setNoLeaves(this.noLeaves);
+		this.tree.setTreeSize(actualHeight, rand);
+		return tree.generate(world, rand, pos);
 	}
 }
